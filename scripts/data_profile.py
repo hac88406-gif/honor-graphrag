@@ -34,6 +34,20 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 GRAPH_DIR = PROJECT_ROOT / "data" / "graph"
 OUT = PROJECT_ROOT / "data" / "data_profile.md"
 
+# 全项目统一的关系计数口径图例（2026-10-14 起）：引用任何 COUNTERS / SYNERGIZES 数字必须注明层级
+LEGEND = [
+    "> **关系计数口径（全项目统一，2026-10-14 起）**：本项目关系计数分三层，"
+    "引用任何 COUNTERS / SYNERGIZES 数字时**必须注明层级**——",
+    "> - **源数据层**：`data/raw/<snapshot>/parsed/relations_all.json` —— 798 行（COUNTERS 532 / SYNERGIZES 266）",
+    "> - **导出层**：`data/graph/relations.json` —— 798 行（COUNTERS 532 / SYNERGIZES 266）；"
+    "与源数据层同数、**未去重**",
+    "> - **入库后层**：Neo4j —— 793 边（COUNTERS 527 / SYNERGIZES 266）；"
+    "= 导出层按唯一键 `起点+类型+终点+patch` MERGE 去重，差 5 条重复边",
+    "> **注意**：「793 / 527」是**去重后口径**，只在入库 MERGE 时实现；`relations.json` 文件本身仍是 798 行。",
+    "> **本文件主表为「源数据层」口径；「入库后」口径见下方对照小节。**",
+    "",
+]
+
 
 def load(name: str):
     return json.loads((GRAPH_DIR / name).read_text(encoding="utf-8"))
@@ -53,6 +67,24 @@ def main() -> int:
     rev_hr2 = collections.Counter(r["to_id"] for r in rels if r["block"] == "hr2")
     out_total = collections.Counter(r["from_id"] for r in rels if r["type"] == "COUNTERS")
     in_total = collections.Counter(r["to_id"] for r in rels if r["type"] == "COUNTERS")
+
+    # 入库后口径：COUNTERS 按唯一键 (from_id, to_id, patch) 去重（= Neo4j MERGE 键）
+    seen: set[tuple] = set()
+    dedup = []
+    for r in rels:
+        if r["type"] != "COUNTERS":
+            continue
+        k = (r["from_id"], r["to_id"], r["patch"])
+        if k in seen:
+            continue
+        seen.add(k)
+        dedup.append(r)
+    dup_pairs = collections.Counter(
+        (r["from_id"], r["to_id"], r["patch"]) for r in rels if r["type"] == "COUNTERS"
+    )
+    merged = sorted(k for k, v in dup_pairs.items() if v > 1)
+    out_dedup = collections.Counter(r["from_id"] for r in dedup)
+    in_dedup = collections.Counter(r["to_id"] for r in dedup)
 
     rows = []
     for h in heroes:
@@ -84,6 +116,7 @@ def main() -> int:
     L.append(f"> 生成日期：{date.today()}　数据源：`data/graph/heroes.json` + `relations.json`")
     L.append("> 本文件由 `scripts/data_profile.py` 生成，勿手工编辑。")
     L.append("")
+    L.extend(LEGEND)
     L.append("## 口径（消除方向歧义）")
     L.append("")
     L.append("| 官方区块 | 页面含义 | 图谱边方向 |")
@@ -96,21 +129,42 @@ def main() -> int:
     L.append("")
     L.append("## 汇总")
     L.append("")
-    L.append(f"- 英雄数：{len(rows)}；COUNTERS 出边合计 {sum(r['out_total'] for r in rows)}，"
-             f"入边合计 {sum(r['in_total'] for r in rows)}（每条边同时是某英雄的出边、另一英雄的入边，两者应相等）")
+    L.append(f"- 英雄数：{len(rows)}；COUNTERS 出边合计 **{sum(r['out_total'] for r in rows)}（源数据层）**，"
+             f"入边合计 **{sum(r['in_total'] for r in rows)}（源数据层）**"
+             f"（每条边同时是某英雄的出边、另一英雄的入边，两者应相等）")
     L.append(f"- 每英雄本页 hr2 / hr3 恒为 2（官方数据口径，官方每页只给 2 条压制 + 2 条被压制）")
     L.append(f"- **hr3 反向引用 = 0 的英雄：{len(zero_hr3_rev)} 个**")
     L.append(f"- **COUNTERS 入边 = 0 的英雄：{len(zero_in)} 个**")
     L.append(f"- **COUNTERS 出边 = 0 的英雄：{len(zero_out)} 个**")
     L.append("")
-    L.append("## 出度 Top 15（本英雄压制别人最多，图谱合计 = 正向 + 反向引用）")
+    L.append("## 入库后口径对照（Neo4j，唯一键去重）")
+    L.append("")
+    L.append(f"- COUNTERS：源数据层 **{sum(r['out_total'] for r in rows)}** → 入库后 **{len(dedup)}**"
+             f"（差 **{sum(r['out_total'] for r in rows) - len(dedup)}** 条重复边）")
+    L.append("- 被合并的重复边（同一对英雄被两处官方页各述一次、方向一致，按唯一键 MERGE 为 1 条）：")
+    L.append("")
+    L.append("| 边（源数据层，重复次数） | 入库后 |")
+    L.append("| --- | --- |")
+    for a, b, patch in merged:
+        L.append(f"| {name.get(a, a)} → {name.get(b, b)}（{dup_pairs[(a, b, patch)]} 条） | 1 条 |")
+    L.append("")
+    L.append("- 受影响英雄的度数（源数据层 → 入库后）：")
+    L.append("")
+    L.append("| 英雄 | 出度（源 → 入库后） | 入度（源 → 入库后） |")
+    L.append("| --- | --- | --- |")
+    for r in rows:
+        if r["out_total"] != out_dedup[r["id"]] or r["in_total"] != in_dedup[r["id"]]:
+            L.append(f"| {r['name']} | {r['out_total']} → {out_dedup[r['id']]} "
+                     f"| {r['in_total']} → {in_dedup[r['id']]} |")
+    L.append("")
+    L.append("## 出度 Top 15（本英雄压制别人最多，图谱合计 = 正向 + 反向引用；**源数据层口径**）")
     L.append("")
     L.append("| # | 英雄 | 分路 | 本页 hr2 | 反向引用 hr3 | 出度合计 |")
     L.append("| --- | --- | --- | --- | --- | --- |")
     for i, r in enumerate(by_out[:15], 1):
         L.append(f"| {i} | {r['name']} | {r['roles']} | {r['hr2_own']} | {r['hr3_rev']} | **{r['out_total']}** |")
     L.append("")
-    L.append("## 入度 Top 15（本英雄被压制最多）")
+    L.append("## 入度 Top 15（本英雄被压制最多；**源数据层口径**）")
     L.append("")
     L.append("| # | 英雄 | 分路 | 本页 hr3 | 反向引用 hr2 | 入度合计 |")
     L.append("| --- | --- | --- | --- | --- | --- |")
@@ -133,7 +187,7 @@ def main() -> int:
     L.append("")
     L.append("、".join(r["name"] for r in sorted(zero_out, key=lambda x: x["name"])) or "无")
     L.append("")
-    L.append("## 全量明细")
+    L.append("## 全量明细（**源数据层口径**）")
     L.append("")
     L.append("| 英雄 | 分路 | hr2 本页 | hr3 反向引用 | 出度合计 | hr3 本页 | hr2 反向引用 | 入度合计 |")
     L.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
@@ -147,8 +201,10 @@ def main() -> int:
     OUT.write_text("\n".join(L), encoding="utf-8")
 
     print(f"[profile] 已写 {OUT}")
-    print(f"[profile] 英雄 {len(rows)}；出边合计 {sum(r['out_total'] for r in rows)}；"
-          f"入边合计 {sum(r['in_total'] for r in rows)}")
+    print(f"[profile] 英雄 {len(rows)}；出边合计（源数据层）{sum(r['out_total'] for r in rows)}；"
+          f"入边合计（源数据层）{sum(r['in_total'] for r in rows)}")
+    print(f"[profile] COUNTERS 入库后口径（去重）{len(dedup)}；合并重复边 {len(merged)} 条 -> "
+          f"{[(name.get(a, a), name.get(b, b)) for a, b, _ in merged]}")
     print(f"[profile] hr3 反向引用=0：{len(zero_hr3_rev)} 个 -> "
           f"{[r['name'] for r in zero_hr3_rev]}")
     print(f"[profile] 入度=0：{len(zero_in)} 个 -> {[r['name'] for r in zero_in]}")

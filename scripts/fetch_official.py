@@ -525,7 +525,17 @@ def write_fetch_report(meta: dict, heroes: list[dict], cov: dict, failures: list
         f"- 抓取耗时：{meta['elapsed_seconds']}s（限速 {meta['rate_limit_seconds']}s/请求）",
         f"- 官方英雄总数：{meta['hero_total']}，本次成功解析：{meta['hero_fetched']}，失败：{meta['hero_failed']}",
         f"- 装备：{meta['item_total']} 件；铭文：{meta['inscription_total']} 个",
-        f"- 关系总数（已含 hr3 方向反转）：{meta['relation_total']} 条",
+        f"- 关系总数（已含 hr3 方向反转）：{meta['relation_total']} 条（**源数据层口径**）",
+        "",
+        "> **关系计数口径（全项目统一，2026-10-14 起）**：本项目关系计数分三层，引用任何 "
+        "COUNTERS / SYNERGIZES 数字时**必须注明层级**——",
+        "> - **源数据层**：`data/raw/<snapshot>/parsed/relations_all.json` —— "
+        "798 行（COUNTERS 532 / SYNERGIZES 266）",
+        "> - **导出层**：`data/graph/relations.json` —— 798 行（COUNTERS 532 / SYNERGIZES 266）；"
+        "与源数据层同数、**未去重**",
+        "> - **入库后层**：Neo4j —— 793 边（COUNTERS 527 / SYNERGIZES 266）；"
+        "= 导出层按唯一键 `起点+类型+终点+patch` MERGE 去重，差 5 条重复边",
+        "> 本报告的计数均为**源数据层**。",
         "",
         "## 三项关系数据覆盖率",
         "",

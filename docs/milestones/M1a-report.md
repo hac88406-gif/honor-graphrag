@@ -4,6 +4,12 @@
 > 格式依据：规格书 11.3（四项缺一视为未完成）。
 > **状态：已完成，按 11.4-4 停下等待需求方数据审核，未进入 M1b。**
 
+> **关系计数口径（全项目统一，2026-10-14 起）**：引用任何 COUNTERS / SYNERGIZES 数字必须注明层级——
+> - **源数据层**：`data/raw/<snapshot>/parsed/relations_all.json` —— 全量抓取 798 行（COUNTERS 532 / SYNERGIZES 266）
+> - **导出层**：`data/graph/relations.json` —— 按入库范围导出（M1a = 5 英雄子集 **120 行**；M1b = 全量 798 行）
+> - **入库后层**：Neo4j —— 按唯一键 `起点+类型+终点+patch` MERGE 去重（M1a = **119 边**；M1b = 793 边）
+> **注意**：本报告的「120 行 / 119 边」是 5 英雄子集口径；全量口径见 M1b 报告。
+
 ---
 
 ## 1. 变更文件清单
@@ -52,7 +58,7 @@
 - 快照目录：data/raw/20261014-214848/
 - 官方英雄总数：133，本次成功解析：133，失败：0
 - 装备：115 件；铭文：93 个
-- 关系总数（已含 hr3 方向反转）：798 条
+- 关系总数（已含 hr3 方向反转）：798 条（**源数据层**，全量抓取）
 | 最佳搭档 hr1 | 133 | 100.0% |
 | 压制英雄 hr2 | 133 | 100.0% |
 | 被压制英雄 hr3 | 133 | 100.0% |
@@ -84,13 +90,13 @@ patch 为空节点数： 0
 ```
 
 > **核账方式（用脚本/查询统计，不靠手数）** —— 数据源 `relations.json` 与 Neo4j 边数**相差 1**，是去重所致，非口径不一致：
-> - 数据源实测 **120 行**（COUNTERS **100** / SYNERGIZES 20）。核账命令：
+> - 导出层实测 **120 行**（COUNTERS **100** / SYNERGIZES 20；M1a 为 5 英雄子集）。核账命令：
 >   `python -c "import json,collections;d=json.load(open('data/graph/relations.json',encoding='utf-8'));print(len(d),dict(collections.Counter(r['type'] for r in d)))"`
-> - Neo4j 实测 **119 条边**（COUNTERS **99** / SYNERGIZES 20）。核账查询：
+> - 入库后层（Neo4j）实测 **119 条边**（COUNTERS **99** / SYNERGIZES 20）。核账查询：
 >   `MATCH ()-[r:COUNTERS|SYNERGIZES]->() RETURN type(r) AS t, count(r) AS c`
 > - 差值 1 条 = 兰陵王→鲁班七号 COUNTERS 被两处官方页各述一次，按唯一键 `起点+类型+终点+patch` MERGE 合并（见 §4.3）。
 > - 因此：**§2.2 输出的 `COUNTERS: 99` 是 Neo4j 去重后的边数，不是 relations.json 的行数**；`REVIEW.md` §2 各英雄条目数合计 120（30+35+7+31+17）与 `relations.json` 一致。
-> - §3 表中的「关系 206」是 Neo4j **全部四类边**之和（COUNTERS 99 + SYNERGIZES 20 + RECOMMENDS_ITEM 57 + RECOMMENDS_INSCRIPTION 30）。
+> - §3 表中的「关系 206」是**入库后层（Neo4j）全部四类边**之和（COUNTERS 99 + SYNERGIZES 20 + RECOMMENDS_ITEM 57 + RECOMMENDS_INSCRIPTION 30）。
 
 ### 2.3 Chroma 导入（连续执行两次 `python scripts/init_chroma.py`）
 
@@ -178,7 +184,7 @@ M1a 交付物齐备性：
 | `data/fetch_report.md`（覆盖率 + 解析失败清单） | 完成 |
 | `data/DATA_SCOPE.md`（20 重点英雄，按 1.12 规则） | 完成（**待需求方确认清单**） |
 | 入库脚本（幂等）+ Neo4j 约束索引 + Chroma 导入脚本 | 完成 |
-| 入库 5 英雄完整数据 + 装备 115 + 铭文 93 + 10 篇语料 | 完成（节点 291、关系 206、chunk 24） |
+| 入库 5 英雄完整数据 + 装备 115 + 铭文 93 + 10 篇语料 | 完成（**入库后层**：节点 291、关系 206；Chroma chunk 24） |
 | `data/hero_aliases.json`（5 英雄，每英雄 ≥5 别名）+ `data/REVIEW.md` | 完成（每英雄 6 别名） |
 
 ---
