@@ -61,6 +61,7 @@ class Settings(BaseSettings):
     ENTITY_CONFIDENCE_THRESHOLD: float = 0.7
 
     # ---------- 检索 ----------
+    GRAPH_TOP_K: int = 10                # 图谱模板查询 LIMIT（规格书 4.4 示例为 10）
     VECTOR_TOP_K: int = 5                # 向量检索返回条数
     BM25_TOP_K: int = 5                  # BM25 混合检索返回条数
     RRF_K: int = 60                      # RRF 融合常数

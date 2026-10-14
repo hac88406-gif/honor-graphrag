@@ -11,6 +11,7 @@ embedding function，会回退到默认的 ONNX 模型（all-MiniLM-L6-v2）并�
 """
 from __future__ import annotations
 
+from functools import lru_cache
 from pathlib import Path
 
 from app.config import settings
@@ -20,8 +21,49 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 COLLECTION_NAME = "guides"
 
 
-def load_embedding_function():
-    """规格书 1.3：bge-large-zh-v1.5，本地 CPU。优先加载本地目录，避免运行时联网。"""
+class BgeEmbeddingFunction:
+    """实现 chromadb 1.x 的 EmbeddingFunction 协议（__call__/name/get_config/build_from_config）。"""
+
+    def __init__(self, model, model_ref: str) -> None:
+        self._model = model
+        self._ref = model_ref
+
+    def __call__(self, input):  # noqa: A002 - 协议固定形参名
+        vecs = self._model.encode(
+            list(input), normalize_embeddings=True, convert_to_numpy=True
+        )
+        return vecs.tolist()
+
+    def embed_query(self, input):  # noqa: A002
+        # bge 检索侧建议加指令前缀；M2 检索层细化，这里先与入库同分布
+        return self.__call__(input)
+
+    def default_space(self) -> str:
+        return "cosine"
+
+    def supported_spaces(self) -> list[str]:
+        return ["cosine", "l2", "ip"]
+
+    @staticmethod
+    def name() -> str:
+        return "bge-large-zh-v1.5"
+
+    def get_config(self) -> dict:
+        return {"model_ref": self._ref, "device": settings.EMBEDDING_DEVICE}
+
+    @staticmethod
+    def build_from_config(config: dict):
+        return load_embedding_function()
+
+
+@lru_cache(maxsize=1)
+def load_embedding_function() -> BgeEmbeddingFunction:
+    """规格书 1.3：bge-large-zh-v1.5，本地 CPU。优先加载本地目录，避免运行时联网。
+
+    进程内缓存：模型约 1.2GB，每次 get_collection() 都新建 SentenceTransformer 会让
+    单次检索耗时以十秒计（M2 检索层每条查询都会取 collection）。缓存的是**同一个
+    EF 实例**，不改变「必须显式传入 EF」这一契约。
+    """
     from sentence_transformers import SentenceTransformer
 
     local_dir = PROJECT_ROOT / settings.EMBEDDING_MODEL_DIR
@@ -29,42 +71,7 @@ def load_embedding_function():
     if not local_dir.exists():
         print(f"[chroma] 本地模型目录不存在（{local_dir}），回退到 HF 名 {model_ref}")
     model = SentenceTransformer(model_ref, device=settings.EMBEDDING_DEVICE)
-
-    class BgeEmbeddingFunction:
-        """实现 chromadb 1.x 的 EmbeddingFunction 协议（__call__/name/get_config/build_from_config）。"""
-
-        def __init__(self) -> None:
-            self._model = model
-            self._ref = model_ref
-
-        def __call__(self, input):  # noqa: A002 - 协议固定形参名
-            vecs = self._model.encode(
-                list(input), normalize_embeddings=True, convert_to_numpy=True
-            )
-            return vecs.tolist()
-
-        def embed_query(self, input):  # noqa: A002
-            # bge 检索侧建议加指令前缀；M2 检索层细化，这里先与入库同分布
-            return self.__call__(input)
-
-        def default_space(self) -> str:
-            return "cosine"
-
-        def supported_spaces(self) -> list[str]:
-            return ["cosine", "l2", "ip"]
-
-        @staticmethod
-        def name() -> str:
-            return "bge-large-zh-v1.5"
-
-        def get_config(self) -> dict:
-            return {"model_ref": self._ref, "device": settings.EMBEDDING_DEVICE}
-
-        @staticmethod
-        def build_from_config(config: dict):
-            return BgeEmbeddingFunction()
-
-    return BgeEmbeddingFunction()
+    return BgeEmbeddingFunction(model, model_ref)
 
 
 def get_client():
