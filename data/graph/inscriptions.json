@@ -1,0 +1,839 @@
+[
+  {
+    "id": "1501",
+    "name": "圣人",
+    "color": "红",
+    "level": 5,
+    "des": "法术攻击力+5.3",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1503",
+    "name": "传承",
+    "color": "红",
+    "level": 5,
+    "des": "物理攻击力+3.2",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1504",
+    "name": "异变",
+    "color": "红",
+    "level": 5,
+    "des": "物理攻击力+2物理穿透+3.6",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1505",
+    "name": "纷争",
+    "color": "红",
+    "level": 5,
+    "des": "物理攻击力+2.5物理吸血+0.5%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1510",
+    "name": "无双",
+    "color": "红",
+    "level": 5,
+    "des": "暴击率+0.7%暴击效果+3.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1512",
+    "name": "宿命",
+    "color": "红",
+    "level": 5,
+    "des": "攻速加成+1%最大生命+33.7物理防御力+2.3",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1514",
+    "name": "梦魇",
+    "color": "红",
+    "level": 5,
+    "des": "法术攻击力+4.2法术穿透+2.4",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1517",
+    "name": "凶兆",
+    "color": "红",
+    "level": 5,
+    "des": "法术攻击力+4.2攻速加成+0.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1519",
+    "name": "祸源",
+    "color": "红",
+    "level": 5,
+    "des": "暴击率+1.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1520",
+    "name": "红月",
+    "color": "红",
+    "level": 5,
+    "des": "攻速加成+1.6%暴击率+0.5%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2501",
+    "name": "长生",
+    "color": "黄",
+    "level": 5,
+    "des": "最大生命+75",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2503",
+    "name": "贪婪",
+    "color": "黄",
+    "level": 5,
+    "des": "法术吸血+1.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2504",
+    "name": "夺萃",
+    "color": "黄",
+    "level": 5,
+    "des": "物理吸血+1.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2506",
+    "name": "兽痕",
+    "color": "黄",
+    "level": 5,
+    "des": "暴击率+0.5%最大生命+60",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2510",
+    "name": "冥想",
+    "color": "黄",
+    "level": 5,
+    "des": "最大生命+60生命回复+4.5",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2511",
+    "name": "繁荣",
+    "color": "黄",
+    "level": 5,
+    "des": "物理吸血+1%法术防御力+4.1",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2512",
+    "name": "轮回",
+    "color": "黄",
+    "level": 5,
+    "des": "法术攻击力+2.4法术吸血+1%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2515",
+    "name": "调和",
+    "color": "黄",
+    "level": 5,
+    "des": "最大生命+45生命回复+5.2移速+0.4%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2517",
+    "name": "隐匿",
+    "color": "黄",
+    "level": 5,
+    "des": "物理攻击力+1.6移速+1%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2520",
+    "name": "狩猎",
+    "color": "黄",
+    "level": 5,
+    "des": "攻速加成+1%移速+1%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3501",
+    "name": "霸者",
+    "color": "蓝",
+    "level": 5,
+    "des": "物理防御力+9",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3503",
+    "name": "均衡",
+    "color": "蓝",
+    "level": 5,
+    "des": "物理防御力+5法术防御力+5",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3509",
+    "name": "虚空",
+    "color": "蓝",
+    "level": 5,
+    "des": "最大生命+37.5冷却缩减+0.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3510",
+    "name": "灵山",
+    "color": "蓝",
+    "level": 5,
+    "des": "法术防御力+9",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3511",
+    "name": "献祭",
+    "color": "蓝",
+    "level": 5,
+    "des": "法术攻击力+2.4冷却缩减+0.7%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3514",
+    "name": "鹰眼",
+    "color": "蓝",
+    "level": 5,
+    "des": "物理攻击力+0.9物理穿透+6.4",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3515",
+    "name": "心眼",
+    "color": "蓝",
+    "level": 5,
+    "des": "攻速加成+0.6%法术穿透+6.4",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3516",
+    "name": "怜悯",
+    "color": "蓝",
+    "level": 5,
+    "des": "冷却缩减+1%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3517",
+    "name": "敬畏",
+    "color": "蓝",
+    "level": 5,
+    "des": "法术吸血+0.7%物理防御力+5.9",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3518",
+    "name": "回声",
+    "color": "蓝",
+    "level": 5,
+    "des": "物理防御力+2.7法术防御力+2.7冷却缩减+0.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1403",
+    "name": "衰败",
+    "color": "红",
+    "level": 4,
+    "des": "攻速加成+1.2%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1405",
+    "name": "暴戾",
+    "color": "红",
+    "level": 4,
+    "des": "物理攻击力+1.5最大生命+13.5",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1407",
+    "name": "荆棘",
+    "color": "红",
+    "level": 4,
+    "des": "物理攻击力+1.5攻速加成+0.4%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1408",
+    "name": "风暴",
+    "color": "红",
+    "level": 4,
+    "des": "攻速加成+0.6%暴击率+0.3%暴击效果+1.1%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1410",
+    "name": "戒律",
+    "color": "红",
+    "level": 4,
+    "des": "法术攻击力+2.5暴击率+0.3%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1412",
+    "name": "阳炎",
+    "color": "红",
+    "level": 4,
+    "des": "法术攻击力+2.5法术穿透+1.4",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1414",
+    "name": "惩戒",
+    "color": "红",
+    "level": 4,
+    "des": "暴击率+1%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1415",
+    "name": "狂热",
+    "color": "红",
+    "level": 4,
+    "des": "暴击率+0.5%暴击效果+2%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2401",
+    "name": "气数",
+    "color": "黄",
+    "level": 4,
+    "des": "最大生命+45",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2402",
+    "name": "刹那",
+    "color": "黄",
+    "level": 4,
+    "des": "最大生命+13.5移速+0.7%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2403",
+    "name": "复苏",
+    "color": "黄",
+    "level": 4,
+    "des": "生命回复+9",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2404",
+    "name": "渴血",
+    "color": "黄",
+    "level": 4,
+    "des": "法术攻击力+1.4法术吸血+0.8%法术防御力+1.6",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2405",
+    "name": "吞噬",
+    "color": "黄",
+    "level": 4,
+    "des": "攻速加成+0.4%物理吸血+0.8%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2406",
+    "name": "正义",
+    "color": "黄",
+    "level": 4,
+    "des": "物理攻击力+0.6最大生命+36",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2409",
+    "name": "滋生",
+    "color": "黄",
+    "level": 4,
+    "des": "最大生命+36物理防御力+1.6",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2412",
+    "name": "急救",
+    "color": "黄",
+    "level": 4,
+    "des": "攻速加成+0.4%暴击率+0.3%移速+0.5%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3401",
+    "name": "铁躯",
+    "color": "蓝",
+    "level": 4,
+    "des": "物理防御力+5.4",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3402",
+    "name": "无畏",
+    "color": "蓝",
+    "level": 4,
+    "des": "法术防御力+5.4",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3403",
+    "name": "奇袭",
+    "color": "蓝",
+    "level": 4,
+    "des": "攻速加成+0.4%冷却缩减+0.5%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3405",
+    "name": "庇护",
+    "color": "蓝",
+    "level": 4,
+    "des": "生命回复+4.5物理防御力+3.2",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3409",
+    "name": "憎恶",
+    "color": "蓝",
+    "level": 4,
+    "des": "法术吸血+0.5%法术防御力+3.2",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3411",
+    "name": "侵蚀",
+    "color": "蓝",
+    "level": 4,
+    "des": "法术攻击力+0.9法术穿透+3.8",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3412",
+    "name": "潜能",
+    "color": "蓝",
+    "level": 4,
+    "des": "最大生命+15.7生命回复+3.1冷却缩减+0.3%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3414",
+    "name": "野性",
+    "color": "蓝",
+    "level": 4,
+    "des": "最大生命+13.5物理穿透+3.8",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1301",
+    "name": "致命",
+    "color": "红",
+    "level": 3,
+    "des": "物理攻击力+1.3",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1302",
+    "name": "恐惧",
+    "color": "红",
+    "level": 3,
+    "des": "法术攻击力+2.1",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1303",
+    "name": "振奋",
+    "color": "红",
+    "level": 3,
+    "des": "攻速加成+0.5%暴击率+0.3%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1305",
+    "name": "拯救",
+    "color": "红",
+    "level": 3,
+    "des": "物理攻击力+1物理穿透+1",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1307",
+    "name": "一闪",
+    "color": "红",
+    "level": 3,
+    "des": "暴击率+0.3%暴击效果+1.3%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1308",
+    "name": "信念",
+    "color": "红",
+    "level": 3,
+    "des": "法术攻击力+1.7法术吸血+0.2%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2303",
+    "name": "饮血",
+    "color": "黄",
+    "level": 3,
+    "des": "物理吸血+0.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2304",
+    "name": "转换",
+    "color": "黄",
+    "level": 3,
+    "des": "法术吸血+0.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2305",
+    "name": "强健",
+    "color": "黄",
+    "level": 3,
+    "des": "物理攻击力+0.4最大生命+24",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2307",
+    "name": "感应",
+    "color": "黄",
+    "level": 3,
+    "des": "法术攻击力+0.8法术吸血+0.4%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2308",
+    "name": "绽放",
+    "color": "黄",
+    "level": 3,
+    "des": "最大生命+12生命回复+4.2",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2310",
+    "name": "神速",
+    "color": "黄",
+    "level": 3,
+    "des": "物理吸血+0.4%移速+0.3%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3303",
+    "name": "贯穿",
+    "color": "蓝",
+    "level": 3,
+    "des": "物理穿透+3.2",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3304",
+    "name": "破魔",
+    "color": "蓝",
+    "level": 3,
+    "des": "法术穿透+3.2",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3306",
+    "name": "风怒",
+    "color": "蓝",
+    "level": 3,
+    "des": "物理攻击力+0.4法术防御力+2.9",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3307",
+    "name": "收割",
+    "color": "蓝",
+    "level": 3,
+    "des": "物理防御力+1.1物理穿透+2.6",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3308",
+    "name": "崩坏",
+    "color": "蓝",
+    "level": 3,
+    "des": "法术攻击力+0.6法术穿透+2.6",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3310",
+    "name": "突进",
+    "color": "蓝",
+    "level": 3,
+    "des": "生命回复+2.4冷却缩减+0.3%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1201",
+    "name": "白刃",
+    "color": "红",
+    "level": 2,
+    "des": "物理攻击力+0.7攻速加成+0.2%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1203",
+    "name": "震击",
+    "color": "红",
+    "level": 2,
+    "des": "暴击率+0.5%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1204",
+    "name": "痛苦",
+    "color": "红",
+    "level": 2,
+    "des": "法术攻击力+1.2暴击率+0.1%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1205",
+    "name": "践踏",
+    "color": "红",
+    "level": 2,
+    "des": "攻速加成+0.6%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2201",
+    "name": "生长",
+    "color": "黄",
+    "level": 2,
+    "des": "最大生命+21",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2202",
+    "name": "愈合",
+    "color": "黄",
+    "level": 2,
+    "des": "生命回复+4.2",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2203",
+    "name": "刚毅",
+    "color": "黄",
+    "level": 2,
+    "des": "物理攻击力+0.3物理吸血+0.4%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2204",
+    "name": "吸收",
+    "color": "黄",
+    "level": 2,
+    "des": "法术攻击力+0.4法术吸血+0.4%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3201",
+    "name": "坚壁",
+    "color": "蓝",
+    "level": 2,
+    "des": "物理防御力+2.5",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3202",
+    "name": "幻盾",
+    "color": "蓝",
+    "level": 2,
+    "des": "法术防御力+2.5",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3204",
+    "name": "破甲",
+    "color": "蓝",
+    "level": 2,
+    "des": "攻速加成+0.2%物理穿透+1.8",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3205",
+    "name": "洞察",
+    "color": "蓝",
+    "level": 2,
+    "des": "暴击率+0.1%法术穿透+1.8",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1101",
+    "name": "勇气",
+    "color": "红",
+    "level": 1,
+    "des": "物理攻击力+0.6",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1102",
+    "name": "斗志",
+    "color": "红",
+    "level": 1,
+    "des": "法术攻击力+1.1",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "1103",
+    "name": "猛攻",
+    "color": "红",
+    "level": 1,
+    "des": "攻速加成+0.4%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2101",
+    "name": "活力",
+    "color": "黄",
+    "level": 1,
+    "des": "最大生命+15",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2102",
+    "name": "治疗",
+    "color": "黄",
+    "level": 1,
+    "des": "生命回复+3",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "2105",
+    "name": "疾行",
+    "color": "黄",
+    "level": 1,
+    "des": "移速+0.3%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3103",
+    "name": "穿刺",
+    "color": "蓝",
+    "level": 1,
+    "des": "物理穿透+1.6",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3104",
+    "name": "专注",
+    "color": "蓝",
+    "level": 1,
+    "des": "法术穿透+1.6",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  },
+  {
+    "id": "3105",
+    "name": "应激",
+    "color": "蓝",
+    "level": 1,
+    "des": "冷却缩减+0.2%",
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/ming.json"
+  }
+]

@@ -1,0 +1,922 @@
+[
+  {
+    "id": "1111",
+    "name": "铁剑",
+    "category": "攻击",
+    "price": 275,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1112",
+    "name": "匕首",
+    "category": "攻击",
+    "price": 300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1113",
+    "name": "搏击拳套",
+    "category": "攻击",
+    "price": 300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1114",
+    "name": "吸血之镰",
+    "category": "攻击",
+    "price": 300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1116",
+    "name": "雷鸣刃",
+    "category": "攻击",
+    "price": 820,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1121",
+    "name": "风暴巨剑",
+    "category": "攻击",
+    "price": 850,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1122",
+    "name": "日冕",
+    "category": "攻击",
+    "price": 760,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1123",
+    "name": "狂暴双刃",
+    "category": "攻击",
+    "price": 760,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1124",
+    "name": "陨星",
+    "category": "攻击",
+    "price": 760,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1131",
+    "name": "碎星锤",
+    "category": "攻击",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1126",
+    "name": "末世",
+    "category": "攻击",
+    "price": 2100,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1127",
+    "name": "名刀·司命",
+    "category": "攻击",
+    "price": 2060,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1128",
+    "name": "寒霜袭侵",
+    "category": "攻击",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1129",
+    "name": "速击之枪",
+    "category": "攻击",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "11210",
+    "name": "制裁之刃",
+    "category": "攻击",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1132",
+    "name": "泣血之刃",
+    "category": "攻击",
+    "price": 2020,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1133",
+    "name": "无尽战刃",
+    "category": "攻击",
+    "price": 2060,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1134",
+    "name": "宗师之力",
+    "category": "攻击",
+    "price": 2100,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1135",
+    "name": "闪电匕首",
+    "category": "攻击",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1136",
+    "name": "影刃",
+    "category": "攻击",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1137",
+    "name": "暗影战斧",
+    "category": "攻击",
+    "price": 2090,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1138",
+    "name": "强者破军",
+    "category": "攻击",
+    "price": 2540,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "11311",
+    "name": "纯净苍穹",
+    "category": "攻击",
+    "price": 2140,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1141",
+    "name": "逐日之弓",
+    "category": "攻击",
+    "price": 2100,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1125",
+    "name": "破魔刀",
+    "category": "攻击",
+    "price": 2060,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1154",
+    "name": "穿云弓",
+    "category": "攻击",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1155",
+    "name": "仁者破晓",
+    "category": "攻击",
+    "price": 2500,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1211",
+    "name": "咒术典籍",
+    "category": "法术",
+    "price": 275,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1212",
+    "name": "蓝宝石",
+    "category": "法术",
+    "price": 275,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1214",
+    "name": "圣者法典",
+    "category": "法术",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1221",
+    "name": "大棒",
+    "category": "法术",
+    "price": 820,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1222",
+    "name": "血族之书",
+    "category": "法术",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1227",
+    "name": "炽热支配",
+    "category": "法术",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "12211",
+    "name": "梦魇之牙",
+    "category": "法术",
+    "price": 2050,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1231",
+    "name": "虚无法杖",
+    "category": "法术",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1232",
+    "name": "博学者之怒",
+    "category": "法术",
+    "price": 2140,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1239",
+    "name": "辉月",
+    "category": "法术",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1233",
+    "name": "回响之杖",
+    "category": "法术",
+    "price": 2050,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1234",
+    "name": "凝冰之息",
+    "category": "法术",
+    "price": 2100,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1235",
+    "name": "痛苦面具",
+    "category": "法术",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1236",
+    "name": "巫术法杖",
+    "category": "法术",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1226",
+    "name": "圣杯",
+    "category": "法术",
+    "price": 2020,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1237",
+    "name": "时之预言",
+    "category": "法术",
+    "price": 2150,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1238",
+    "name": "贤者天书",
+    "category": "法术",
+    "price": 2610,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1240",
+    "name": "噬神之书",
+    "category": "法术",
+    "price": 2060,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1311",
+    "name": "红玛瑙",
+    "category": "防御",
+    "price": 300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1312",
+    "name": "布甲",
+    "category": "防御",
+    "price": 275,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1313",
+    "name": "抗魔披风",
+    "category": "防御",
+    "price": 275,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1321",
+    "name": "力量腰带",
+    "category": "防御",
+    "price": 850,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1323",
+    "name": "神隐斗篷",
+    "category": "防御",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1324",
+    "name": "雪山圆盾",
+    "category": "防御",
+    "price": 750,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1325",
+    "name": "守护者之铠",
+    "category": "防御",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1327",
+    "name": "反伤刺甲",
+    "category": "防御",
+    "price": 2020,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1328",
+    "name": "血魔之怒",
+    "category": "防御",
+    "price": 2180,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1331",
+    "name": "红莲斗篷",
+    "category": "防御",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1332",
+    "name": "霸者重装",
+    "category": "防御",
+    "price": 2450,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1341",
+    "name": "冰霜冲击",
+    "category": "防御",
+    "price": 2030,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1333",
+    "name": "不祥征兆",
+    "category": "防御",
+    "price": 2020,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1334",
+    "name": "不死鸟之眼",
+    "category": "防御",
+    "price": 2020,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1335",
+    "name": "魔女斗篷",
+    "category": "防御",
+    "price": 2020,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1336",
+    "name": "极寒风暴",
+    "category": "防御",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "13310",
+    "name": "冰痕之握",
+    "category": "防御",
+    "price": 2060,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1337",
+    "name": "贤者的庇护",
+    "category": "防御",
+    "price": 2280,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1338",
+    "name": "暴烈之甲",
+    "category": "防御",
+    "price": 2050,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1411",
+    "name": "神速之靴",
+    "category": "移动",
+    "price": 250,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1421",
+    "name": "影忍之足",
+    "category": "移动",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1422",
+    "name": "抵抗之靴",
+    "category": "移动",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1423",
+    "name": "冷静之靴",
+    "category": "移动",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1424",
+    "name": "秘法之靴",
+    "category": "移动",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1425",
+    "name": "急速战靴",
+    "category": "移动",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1426",
+    "name": "疾步之靴",
+    "category": "移动",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1511",
+    "name": "狩猎宽刃",
+    "category": "打野",
+    "price": 250,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1521",
+    "name": "游击弯刀",
+    "category": "打野",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1522",
+    "name": "巡守利斧",
+    "category": "打野",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1523",
+    "name": "追击刀锋",
+    "category": "打野",
+    "price": 700,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1531",
+    "name": "符文大剑",
+    "category": "打野",
+    "price": 2100,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1532",
+    "name": "巨人之握",
+    "category": "打野",
+    "price": 2100,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1533",
+    "name": "贪婪之噬",
+    "category": "打野",
+    "price": 2100,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1727",
+    "name": "日暮之流",
+    "category": "法术",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1728",
+    "name": "金色圣剑",
+    "category": "法术",
+    "price": 2070,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1534",
+    "name": "怒龙剑盾",
+    "category": "防御",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1345",
+    "name": "荆棘护手",
+    "category": "防御",
+    "price": 750,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1347",
+    "name": "永夜守护",
+    "category": "防御",
+    "price": 2020,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1349",
+    "name": "原初遗珠",
+    "category": "防御",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1350",
+    "name": "侵掠·怒魂",
+    "category": "防御",
+    "price": 3300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1351",
+    "name": "徐行·凛冬",
+    "category": "防御",
+    "price": 3190,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1156",
+    "name": "迅疾·日渊",
+    "category": "攻击",
+    "price": 3320,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1157",
+    "name": "不动·天穹",
+    "category": "攻击",
+    "price": 3280,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1242",
+    "name": "难知·月神",
+    "category": "法术",
+    "price": 3340,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1224",
+    "name": "魔道之石",
+    "category": "法术",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1243",
+    "name": "云灵木",
+    "category": "法术",
+    "price": 840,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1115",
+    "name": "迅捷长矛",
+    "category": "攻击",
+    "price": 760,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1244",
+    "name": "破茧之衣",
+    "category": "法术",
+    "price": 2120,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1158",
+    "name": "血魂刃",
+    "category": "攻击",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1159",
+    "name": "逐风",
+    "category": "攻击",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1353",
+    "name": "旭日初光",
+    "category": "防御",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1701",
+    "name": "学识宝石",
+    "category": "游走",
+    "price": 300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1711",
+    "name": "极影",
+    "category": "游走",
+    "price": 1900,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1714",
+    "name": "近卫",
+    "category": "游走",
+    "price": 850,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1721",
+    "name": "极影·救赎",
+    "category": "游走",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1747",
+    "name": "极影·星泉",
+    "category": "游走",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1723",
+    "name": "极影·奔狼",
+    "category": "游走",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1737",
+    "name": "极影·形昭",
+    "category": "游走",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1724",
+    "name": "近卫·救赎",
+    "category": "游走",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1725",
+    "name": "近卫·星泉",
+    "category": "游走",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1753",
+    "name": "近卫·奔狼",
+    "category": "游走",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1754",
+    "name": "近卫·形昭",
+    "category": "游走",
+    "price": 2080,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1317",
+    "name": "急速铠甲",
+    "category": "防御",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1217",
+    "name": "秘法残页",
+    "category": "法术",
+    "price": 300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "11110",
+    "name": "附魔之羽",
+    "category": "攻击",
+    "price": 300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1218",
+    "name": "元流结晶",
+    "category": "法术",
+    "price": 300,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "13212",
+    "name": "天地石",
+    "category": "防御",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "11211",
+    "name": "精钢锻刀",
+    "category": "攻击",
+    "price": 850,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "13211",
+    "name": "玛瑙护心镜",
+    "category": "防御",
+    "price": 800,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  },
+  {
+    "id": "1161",
+    "name": "幽影袖箭",
+    "category": "攻击",
+    "price": 2040,
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/js/item.json"
+  }
+]

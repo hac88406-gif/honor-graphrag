@@ -1,0 +1,1378 @@
+{
+  "105": {
+    "name": "廉颇",
+    "id_name": "lianpo",
+    "roles": [
+      "对抗路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/lianpo.shtml",
+    "data_source": "official"
+  },
+  "106": {
+    "name": "小乔",
+    "id_name": "xiaoqiao",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/xiaoqiao.shtml",
+    "data_source": "official"
+  },
+  "107": {
+    "name": "赵云",
+    "id_name": "zhaoyun",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhaoyun.shtml",
+    "data_source": "official"
+  },
+  "108": {
+    "name": "墨子",
+    "id_name": "mozi",
+    "roles": [
+      "中路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/mozi.shtml",
+    "data_source": "official"
+  },
+  "109": {
+    "name": "妲己",
+    "id_name": "daji",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/daji.shtml",
+    "data_source": "official"
+  },
+  "110": {
+    "name": "嬴政",
+    "id_name": "yingzheng",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yingzheng.shtml",
+    "data_source": "official"
+  },
+  "111": {
+    "name": "孙尚香",
+    "id_name": "sunshangxiang",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/sunshangxiang.shtml",
+    "data_source": "official"
+  },
+  "112": {
+    "name": "鲁班七号",
+    "id_name": "lubanqihao",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/lubanqihao.shtml",
+    "data_source": "official"
+  },
+  "113": {
+    "name": "庄周",
+    "id_name": "zhuangzhou",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhuangzhou.shtml",
+    "data_source": "official"
+  },
+  "114": {
+    "name": "刘禅",
+    "id_name": "liushan",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/liushan.shtml",
+    "data_source": "official"
+  },
+  "115": {
+    "name": "高渐离",
+    "id_name": "gaojianli",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/gaojianli.shtml",
+    "data_source": "official"
+  },
+  "116": {
+    "name": "阿轲",
+    "id_name": "ake",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/ake.shtml",
+    "data_source": "official"
+  },
+  "117": {
+    "name": "钟无艳",
+    "id_name": "zhongwuyan",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhongwuyan.shtml",
+    "data_source": "official"
+  },
+  "118": {
+    "name": "孙膑",
+    "id_name": "sunbin",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/sunbin.shtml",
+    "data_source": "official"
+  },
+  "119": {
+    "name": "扁鹊",
+    "id_name": "bianque",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/bianque.shtml",
+    "data_source": "official"
+  },
+  "167": {
+    "name": "孙悟空",
+    "id_name": "sunwukong",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/sunwukong.shtml",
+    "data_source": "official"
+  },
+  "549": {
+    "name": "心魔六耳",
+    "id_name": "xinmoliuer",
+    "roles": [
+      "打野",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/xinmoliuer.shtml",
+    "data_source": "official"
+  },
+  "120": {
+    "name": "白起",
+    "id_name": "baiqi",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/baiqi.shtml",
+    "data_source": "official"
+  },
+  "121": {
+    "name": "芈月",
+    "id_name": "miyue",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/miyue.shtml",
+    "data_source": "official"
+  },
+  "123": {
+    "name": "吕布",
+    "id_name": "lvbu",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/lvbu.shtml",
+    "data_source": "official"
+  },
+  "124": {
+    "name": "周瑜",
+    "id_name": "zhouyv",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhouyv.shtml",
+    "data_source": "official"
+  },
+  "126": {
+    "name": "夏侯惇",
+    "id_name": "xiahoudun",
+    "roles": [
+      "对抗路",
+      "游走",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/xiahoudun.shtml",
+    "data_source": "official"
+  },
+  "127": {
+    "name": "甄姬",
+    "id_name": "zhenji",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhenji.shtml",
+    "data_source": "official"
+  },
+  "128": {
+    "name": "曹操",
+    "id_name": "caocao",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/caocao.shtml",
+    "data_source": "official"
+  },
+  "129": {
+    "name": "典韦",
+    "id_name": "dianwei",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/dianwei.shtml",
+    "data_source": "official"
+  },
+  "130": {
+    "name": "宫本武藏",
+    "id_name": "gongbenwuzang",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/gongbenwuzang.shtml",
+    "data_source": "official"
+  },
+  "131": {
+    "name": "李白",
+    "id_name": "libai",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/libai.shtml",
+    "data_source": "official"
+  },
+  "132": {
+    "name": "马可波罗",
+    "id_name": "makeboluo",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/makeboluo.shtml",
+    "data_source": "official"
+  },
+  "133": {
+    "name": "狄仁杰",
+    "id_name": "direnjie",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/direnjie.shtml",
+    "data_source": "official"
+  },
+  "134": {
+    "name": "达摩",
+    "id_name": "damo",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/damo.shtml",
+    "data_source": "official"
+  },
+  "135": {
+    "name": "项羽",
+    "id_name": "xiangyu",
+    "roles": [
+      "对抗路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/xiangyu.shtml",
+    "data_source": "official"
+  },
+  "136": {
+    "name": "武则天",
+    "id_name": "wuzetian",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/wuzetian.shtml",
+    "data_source": "official"
+  },
+  "139": {
+    "name": "老夫子",
+    "id_name": "laofuzi",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/laofuzi.shtml",
+    "data_source": "official"
+  },
+  "140": {
+    "name": "关羽",
+    "id_name": "guanyu",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/guanyu.shtml",
+    "data_source": "official"
+  },
+  "141": {
+    "name": "貂蝉",
+    "id_name": "diaochan",
+    "roles": [
+      "中路",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/diaochan.shtml",
+    "data_source": "official"
+  },
+  "142": {
+    "name": "安琪拉",
+    "id_name": "anqila",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/anqila.shtml",
+    "data_source": "official"
+  },
+  "144": {
+    "name": "程咬金",
+    "id_name": "chengyaojin",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/chengyaojin.shtml",
+    "data_source": "official"
+  },
+  "146": {
+    "name": "露娜",
+    "id_name": "luna",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/luna.shtml",
+    "data_source": "official"
+  },
+  "148": {
+    "name": "姜子牙",
+    "id_name": "jiangziya",
+    "roles": [
+      "中路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/jiangziya.shtml",
+    "data_source": "official"
+  },
+  "149": {
+    "name": "刘邦",
+    "id_name": "liubang",
+    "roles": [
+      "对抗路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/liubang.shtml",
+    "data_source": "official"
+  },
+  "150": {
+    "name": "韩信",
+    "id_name": "hanxin",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/hanxin.shtml",
+    "data_source": "official"
+  },
+  "152": {
+    "name": "王昭君",
+    "id_name": "wangzhaojun",
+    "roles": [
+      "中路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/wangzhaojun.shtml",
+    "data_source": "official"
+  },
+  "153": {
+    "name": "兰陵王",
+    "id_name": "lanlingwang",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/lanlingwang.shtml",
+    "data_source": "official"
+  },
+  "154": {
+    "name": "花木兰",
+    "id_name": "huamulan",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/huamulan.shtml",
+    "data_source": "official"
+  },
+  "156": {
+    "name": "张良",
+    "id_name": "zhangliang",
+    "roles": [
+      "中路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhangliang.shtml",
+    "data_source": "official"
+  },
+  "157": {
+    "name": "不知火舞",
+    "id_name": "buzhihuowu",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/buzhihuowu.shtml",
+    "data_source": "official"
+  },
+  "162": {
+    "name": "娜可露露",
+    "id_name": "nakelulu",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/nakelulu.shtml",
+    "data_source": "official"
+  },
+  "163": {
+    "name": "橘右京",
+    "id_name": "jvyoujing",
+    "roles": [
+      "打野",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/jvyoujing.shtml",
+    "data_source": "official"
+  },
+  "166": {
+    "name": "亚瑟",
+    "id_name": "yase",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yase.shtml",
+    "data_source": "official"
+  },
+  "168": {
+    "name": "牛魔",
+    "id_name": "niumo",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/niumo.shtml",
+    "data_source": "official"
+  },
+  "169": {
+    "name": "后羿",
+    "id_name": "houyi",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/houyi.shtml",
+    "data_source": "official"
+  },
+  "170": {
+    "name": "刘备",
+    "id_name": "liubei",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/liubei.shtml",
+    "data_source": "official"
+  },
+  "171": {
+    "name": "张飞",
+    "id_name": "zhangfei",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhangfei.shtml",
+    "data_source": "official"
+  },
+  "173": {
+    "name": "李元芳",
+    "id_name": "liyuanfang",
+    "roles": [
+      "发育路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/liyuanfang.shtml",
+    "data_source": "official"
+  },
+  "174": {
+    "name": "虞姬",
+    "id_name": "yuji",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yuji.shtml",
+    "data_source": "official"
+  },
+  "175": {
+    "name": "钟馗",
+    "id_name": "zhongkui",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhongkui.shtml",
+    "data_source": "official"
+  },
+  "178": {
+    "name": "杨戬",
+    "id_name": "yangjian",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yangjian.shtml",
+    "data_source": "official"
+  },
+  "183": {
+    "name": "雅典娜",
+    "id_name": "yadianna",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yadianna.shtml",
+    "data_source": "official"
+  },
+  "184": {
+    "name": "蔡文姬",
+    "id_name": "caiwenji",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/caiwenji.shtml",
+    "data_source": "official"
+  },
+  "186": {
+    "name": "太乙真人",
+    "id_name": "taiyizhenren",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/taiyizhenren.shtml",
+    "data_source": "official"
+  },
+  "180": {
+    "name": "哪吒",
+    "id_name": "nezha",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/nezha.shtml",
+    "data_source": "official"
+  },
+  "190": {
+    "name": "诸葛亮",
+    "id_name": "zhugeliang",
+    "roles": [
+      "中路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhugeliang.shtml",
+    "data_source": "official"
+  },
+  "192": {
+    "name": "黄忠",
+    "id_name": "huangzhong",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/huangzhong.shtml",
+    "data_source": "official"
+  },
+  "191": {
+    "name": "大乔",
+    "id_name": "daqiao",
+    "roles": [
+      "游走",
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/daqiao.shtml",
+    "data_source": "official"
+  },
+  "187": {
+    "name": "东皇太一",
+    "id_name": "donghuangtaiyi",
+    "roles": [
+      "游走",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/donghuangtaiyi.shtml",
+    "data_source": "official"
+  },
+  "182": {
+    "name": "干将莫邪",
+    "id_name": "ganjiangmoye",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/ganjiangmoye.shtml",
+    "data_source": "official"
+  },
+  "189": {
+    "name": "鬼谷子",
+    "id_name": "guiguzi",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/guiguzi.shtml",
+    "data_source": "official"
+  },
+  "193": {
+    "name": "铠",
+    "id_name": "kai",
+    "roles": [
+      "打野",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/kai.shtml",
+    "data_source": "official"
+  },
+  "196": {
+    "name": "百里守约",
+    "id_name": "bailishouyue",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/bailishouyue.shtml",
+    "data_source": "official"
+  },
+  "195": {
+    "name": "百里玄策",
+    "id_name": "bailixuance",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/bailixuance.shtml",
+    "data_source": "official"
+  },
+  "194": {
+    "name": "苏烈",
+    "id_name": "sulie",
+    "roles": [
+      "游走",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/sulie.shtml",
+    "data_source": "official"
+  },
+  "198": {
+    "name": "梦奇",
+    "id_name": "mengqi",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/mengqi.shtml",
+    "data_source": "official"
+  },
+  "179": {
+    "name": "女娲",
+    "id_name": "nvwa",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/nvwa.shtml",
+    "data_source": "official"
+  },
+  "501": {
+    "name": "明世隐",
+    "id_name": "mingshiyin",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/mingshiyin.shtml",
+    "data_source": "official"
+  },
+  "199": {
+    "name": "公孙离",
+    "id_name": "gongsunli",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/gongsunli.shtml",
+    "data_source": "official"
+  },
+  "176": {
+    "name": "杨玉环",
+    "id_name": "yangyuhuan",
+    "roles": [
+      "中路",
+      "游走",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yangyuhuan.shtml",
+    "data_source": "official"
+  },
+  "502": {
+    "name": "裴擒虎",
+    "id_name": "peiqinhu",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/peiqinhu.shtml",
+    "data_source": "official"
+  },
+  "197": {
+    "name": "弈星",
+    "id_name": "yixing",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yixing.shtml",
+    "data_source": "official"
+  },
+  "503": {
+    "name": "狂铁",
+    "id_name": "kuangtie",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/kuangtie.shtml",
+    "data_source": "official"
+  },
+  "504": {
+    "name": "米莱狄",
+    "id_name": "milaidi",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/milaidi.shtml",
+    "data_source": "official"
+  },
+  "125": {
+    "name": "元歌",
+    "id_name": "yuange",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yuange.shtml",
+    "data_source": "official"
+  },
+  "510": {
+    "name": "孙策",
+    "id_name": "sunce",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/sunce.shtml",
+    "data_source": "official"
+  },
+  "137": {
+    "name": "司马懿",
+    "id_name": "simayi",
+    "roles": [
+      "打野",
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/simayi.shtml",
+    "data_source": "official"
+  },
+  "509": {
+    "name": "盾山",
+    "id_name": "dunshan",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/dunshan.shtml",
+    "data_source": "official"
+  },
+  "508": {
+    "name": "伽罗",
+    "id_name": "jialuo",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/jialuo.shtml",
+    "data_source": "official"
+  },
+  "312": {
+    "name": "沈梦溪",
+    "id_name": "shenmengxi",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/shenmengxi.shtml",
+    "data_source": "official"
+  },
+  "507": {
+    "name": "李信",
+    "id_name": "lixin",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/lixin.shtml",
+    "data_source": "official"
+  },
+  "513": {
+    "name": "上官婉儿",
+    "id_name": "shangguanwaner",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/shangguanwaner.shtml",
+    "data_source": "official"
+  },
+  "515": {
+    "name": "嫦娥",
+    "id_name": "change",
+    "roles": [
+      "中路",
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/change.shtml",
+    "data_source": "official"
+  },
+  "511": {
+    "name": "猪八戒",
+    "id_name": "zhubajie",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhubajie.shtml",
+    "data_source": "official"
+  },
+  "529": {
+    "name": "盘古",
+    "id_name": "pangu",
+    "roles": [
+      "打野",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/pangu.shtml",
+    "data_source": "official"
+  },
+  "505": {
+    "name": "瑶",
+    "id_name": "yao",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yao.shtml",
+    "data_source": "official"
+  },
+  "506": {
+    "name": "云中君",
+    "id_name": "yunzhongjun",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yunzhongjun.shtml",
+    "data_source": "official"
+  },
+  "522": {
+    "name": "曜",
+    "id_name": "dongfangyao",
+    "roles": [
+      "打野",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/dongfangyao.shtml",
+    "data_source": "official"
+  },
+  "518": {
+    "name": "马超",
+    "id_name": "machao",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/machao.shtml",
+    "data_source": "official"
+  },
+  "523": {
+    "name": "西施",
+    "id_name": "xishi",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/xishi.shtml",
+    "data_source": "official"
+  },
+  "525": {
+    "name": "鲁班大师",
+    "id_name": "lubandashi",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/lubandashi.shtml",
+    "data_source": "official"
+  },
+  "524": {
+    "name": "蒙犽",
+    "id_name": "mengya",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/mengya.shtml",
+    "data_source": "official"
+  },
+  "531": {
+    "name": "镜",
+    "id_name": "jing",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/jing.shtml",
+    "data_source": "official"
+  },
+  "527": {
+    "name": "蒙恬",
+    "id_name": "mengtian",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/mengtian.shtml",
+    "data_source": "official"
+  },
+  "533": {
+    "name": "阿古朵",
+    "id_name": "aguduo",
+    "roles": [
+      "打野",
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/aguduo.shtml",
+    "data_source": "official"
+  },
+  "536": {
+    "name": "夏洛特",
+    "id_name": "xialuote",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/xialuote.shtml",
+    "data_source": "official"
+  },
+  "528": {
+    "name": "澜",
+    "id_name": "lan",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/lan.shtml",
+    "data_source": "official"
+  },
+  "537": {
+    "name": "司空震",
+    "id_name": "sikongzhen",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/sikongzhen.shtml",
+    "data_source": "official"
+  },
+  "155": {
+    "name": "艾琳",
+    "id_name": "ailin",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/ailin.shtml",
+    "data_source": "official"
+  },
+  "538": {
+    "name": "云缨",
+    "id_name": "yunying",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yunying.shtml",
+    "data_source": "official"
+  },
+  "540": {
+    "name": "金蝉",
+    "id_name": "jinchan",
+    "roles": [
+      "中路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/jinchan.shtml",
+    "data_source": "official"
+  },
+  "542": {
+    "name": "暃",
+    "id_name": "fei",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/fei.shtml",
+    "data_source": "official"
+  },
+  "534": {
+    "name": "桑启",
+    "id_name": "sangqi",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/sangqi.shtml",
+    "data_source": "official"
+  },
+  "548": {
+    "name": "戈娅",
+    "id_name": "geya",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/geya.shtml",
+    "data_source": "official"
+  },
+  "521": {
+    "name": "海月",
+    "id_name": "haiyue",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/haiyue.shtml",
+    "data_source": "official"
+  },
+  "544": {
+    "name": "赵怀真",
+    "id_name": "zhaohuaizhen",
+    "roles": [
+      "打野",
+      "对抗路",
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/zhaohuaizhen.shtml",
+    "data_source": "official"
+  },
+  "545": {
+    "name": "莱西奥",
+    "id_name": "laixiao",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/laixiao.shtml",
+    "data_source": "official"
+  },
+  "564": {
+    "name": "姬小满",
+    "id_name": "jixiaoman",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/jixiaoman.shtml",
+    "data_source": "official"
+  },
+  "514": {
+    "name": "亚连",
+    "id_name": "yalian",
+    "roles": [
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yalian.shtml",
+    "data_source": "official"
+  },
+  "159": {
+    "name": "朵莉亚",
+    "id_name": "duoliya",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/duoliya.shtml",
+    "data_source": "official"
+  },
+  "563": {
+    "name": "海诺",
+    "id_name": "hainuo",
+    "roles": [
+      "中路",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/hainuo.shtml",
+    "data_source": "official"
+  },
+  "519": {
+    "name": "敖隐",
+    "id_name": "aoyin",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/aoyin.shtml",
+    "data_source": "official"
+  },
+  "517": {
+    "name": "大司命",
+    "id_name": "dasiming",
+    "roles": [
+      "打野",
+      "对抗路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/dasiming.shtml",
+    "data_source": "official"
+  },
+  "582": {
+    "name": "元流之子(法师)",
+    "id_name": "yuanliuzhizi_magic",
+    "roles": [
+      "中路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yuanliuzhizi_magic.shtml",
+    "data_source": "official"
+  },
+  "581": {
+    "name": "元流之子(坦克)",
+    "id_name": "yuanliuzhizi_tank",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yuanliuzhizi_tank.shtml",
+    "data_source": "official"
+  },
+  "577": {
+    "name": "少司缘",
+    "id_name": "shaosiyuan",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/shaosiyuan.shtml",
+    "data_source": "official"
+  },
+  "558": {
+    "name": "影",
+    "id_name": "ying",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/ying.shtml",
+    "data_source": "official"
+  },
+  "177": {
+    "name": "苍",
+    "id_name": "cang",
+    "roles": [
+      "发育路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/cang.shtml",
+    "data_source": "official"
+  },
+  "550": {
+    "name": "空空儿",
+    "id_name": "kongkonger",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/kongkonger.shtml",
+    "data_source": "official"
+  },
+  "584": {
+    "name": "元流之子(射手)",
+    "id_name": "yuanliuzhizi_archer",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yuanliuzhizi_archer.shtml",
+    "data_source": "official"
+  },
+  "151": {
+    "name": "孙权",
+    "id_name": "sunquan",
+    "roles": [
+      "发育路"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/sunquan.shtml",
+    "data_source": "official"
+  },
+  "172": {
+    "name": "蚩奼",
+    "id_name": "chicha",
+    "roles": [
+      "对抗路",
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/chicha.shtml",
+    "data_source": "official"
+  },
+  "585": {
+    "name": "元流之子(辅助)",
+    "id_name": "yuanliuzhizi_support",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yuanliuzhizi_support.shtml",
+    "data_source": "official"
+  },
+  "188": {
+    "name": "大禹",
+    "id_name": "dayu",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/dayu.shtml",
+    "data_source": "official"
+  },
+  "583": {
+    "name": "元流之子(刺客)",
+    "id_name": "yuanliuzhizi_assassin",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/yuanliuzhizi_assassin.shtml",
+    "data_source": "official"
+  },
+  "547": {
+    "name": "卢雅那",
+    "id_name": "luyana",
+    "roles": [
+      "游走"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/luyana.shtml",
+    "data_source": "official"
+  },
+  "138": {
+    "name": "王维",
+    "id_name": "wangwei",
+    "roles": [
+      "打野"
+    ],
+    "patch": "2026-10",
+    "source": "https://pvp.qq.com/web201605/herodetail/wangwei.shtml",
+    "data_source": "official"
+  }
+}
