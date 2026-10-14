@@ -45,6 +45,10 @@ class IntentResult:
     slots: dict = field(default_factory=dict)
     need_clarify: bool = False
     method: str = "rule"          # rule | llm
+    # 本次问句命中的**全部**意图（按 _RULES 优先级序），intent 取第一个。
+    # 需求方 2026-10-15 条件三：多意图命中必须留痕——否则「铠的出装和铭文」只返回 ITEM_BUILD
+    # 丢掉 INSCRIPTION 且无任何记录，属静默失败。M6 归因「答案不全」时据此判断是否只取了一个意图。
+    matched_intents: list[str] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------- 关键词表
@@ -52,13 +56,19 @@ class IntentResult:
 _TIER = ("版本", "强度", "谁强", "上分", "排行", "强势", "t0", "梯队", "值得练")
 _INSCRIPTION = ("铭文", "符文")
 _ITEM = ("出装", "装备", "出什么", "怎么出", "鞋子", "六神装", "核心装", "第一件")
-_GAMEPLAY = ("打法", "玩法", "思路", "连招", "意识", "怎么玩", "技巧", "攻略", "上手", "教程", "教学")
+_GAMEPLAY = ("打法", "玩法", "思路", "连招", "意识", "怎么玩", "咋玩", "技巧", "攻略", "上手", "教程", "教学")
 _COUNTER_BY = (
     "被谁克制", "被谁克", "谁克制", "谁压", "被谁压", "怕谁", "被谁打", "被谁counter",
-    "被克制", "谁能打", "谁打得过", "怕什么", "被哪些",
+    "被克制", "谁能打", "谁打得过", "怕什么", "被哪些", "天敌", "打不过谁", "怎么克制",
+    # 「谁能针对 X」语义是「谁克制 X」（要一份压制者名单），归 COUNTER_BY 而非 MATCHUP。
+    # 与 _MATCHUP 的「针对」共存时靠优先级裁决：_COUNTER_BY 先于 _MATCHUP，
+    # 「谁能针对铠」→ COUNTER_BY、「怎么针对铠」→ MATCHUP（详见 tests/unit/test_intent_routing.py）。
+    "谁能针对", "谁针对", "谁能克", "谁能压制", "谁可以针对", "谁能治", "被什么",
 )
-_COUNTER_OF = ("克制谁", "克制哪", "克谁", "打谁", "压制谁", "能打谁", "克制什么", "欺负谁")
-_SYNERGY = ("搭档", "配合", "搭配谁", "和谁配", "跟谁配", "组合", "开黑", "一起玩")
+_COUNTER_OF = (
+    "克制谁", "克制哪", "克谁", "打谁", "压制谁", "能打谁", "克制什么", "欺负谁", "打得过谁",
+)
+_SYNERGY = ("搭档", "搭配", "配合", "搭配谁", "和谁配", "跟谁配", "组合", "开黑", "一起玩")
 _MATCHUP = ("怎么打", "如何打", "咋打", "对线", "怎么对", "克制我", "针对", "怎么破", "如何破")
 
 # 判定「与王者有关」的宽口径词表（用于把「今天天气怎么样」判成 OUT_OF_SCOPE，
@@ -72,6 +82,25 @@ _DOMAIN = (
 
 def _hit(text: str, words: tuple[str, ...]) -> bool:
     return any(w in text for w in words)
+
+
+# 优先级表：既是「先命中先返回」的裁决顺序，也是 matched_intents 的排序依据。
+# 「谁能针对铠」一案即由 COUNTER_BY 先于 MATCHUP 裁决（需求方 2026-10-15 审核）。
+_RULES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("TIER_META", _TIER),
+    ("INSCRIPTION", _INSCRIPTION),
+    ("ITEM_BUILD", _ITEM),
+    ("GAMEPLAY", _GAMEPLAY),
+    ("COUNTER_BY", _COUNTER_BY),
+    ("COUNTER_OF", _COUNTER_OF),
+    ("SYNERGY", _SYNERGY),
+    ("MATCHUP", _MATCHUP),
+)
+
+
+def _matched_intents(t: str) -> list[str]:
+    """命中关键词表的所有意图，按 _RULES 优先级序（条件三：多意图留痕用）。"""
+    return [name for name, words in _RULES if _hit(t, words)]
 
 
 # ---------------------------------------------------------------- 槽位
@@ -129,24 +158,21 @@ def route_rules(text: str, entities: list[LinkedEntity]) -> IntentResult:
     heroes = [e for e in entities if e.entity_type == "hero"]
     roles = [e for e in entities if e.entity_type == "role"]
 
-    if _hit(t, _TIER):
-        return IntentResult("TIER_META", _base_slots(heroes, roles), method="rule")
-    if _hit(t, _INSCRIPTION):
-        return IntentResult("INSCRIPTION", _base_slots(heroes, roles), method="rule")
-    if _hit(t, _ITEM):
-        return IntentResult("ITEM_BUILD", _base_slots(heroes, roles), method="rule")
-    if _hit(t, _GAMEPLAY):
-        return IntentResult("GAMEPLAY", _base_slots(heroes, roles), method="rule")
-    if _hit(t, _COUNTER_BY):
-        return IntentResult("COUNTER_BY", _base_slots(heroes, roles), method="rule")
-    if _hit(t, _COUNTER_OF):
-        return IntentResult("COUNTER_OF", _base_slots(heroes, roles), method="rule")
-    if _hit(t, _SYNERGY):
-        return IntentResult("SYNERGY", _base_slots(heroes, roles), method="rule")
-    if _hit(t, _MATCHUP):
-        slots = _matchup_slots(t, heroes)
-        # 4.3：MATCHUP 需要两个英雄（对位双方）。只有敌方时槽位不完整 -> 澄清反问。
-        return IntentResult("MATCHUP", slots, need_clarify="hero_ally" not in slots, method="rule")
+    matched = _matched_intents(t)
+    if matched:
+        chosen = matched[0]
+        if len(matched) > 1:
+            # 条件三：多意图命中必须留痕。当前只取第一个、不做合并（需求方明确「不要求现在就做多意图合并」），
+            # 但必须看得见——否则「铠的出装和铭文」这类问句会静默丢掉一个意图。
+            logger.warning("多意图命中：%r 命中 %s，取 %s（其余仅留痕，未合并）", text, matched, chosen)
+        if chosen == "MATCHUP":
+            slots = _matchup_slots(t, heroes)
+            # 4.3：MATCHUP 需要两个英雄（对位双方）。只有敌方时槽位不完整 -> 澄清反问。
+            return IntentResult(
+                "MATCHUP", slots, need_clarify="hero_ally" not in slots,
+                method="rule", matched_intents=matched,
+            )
+        return IntentResult(chosen, _base_slots(heroes, roles), method="rule", matched_intents=matched)
 
     if heroes or roles:
         # 认出了实体但没识别出意图（如只输入「东皇太一」）-> 澄清（4.9「槽位不完整」）

@@ -48,6 +48,16 @@
 - `2026-10-14 | 别名表 data/hero_aliases.json 由 M1a 的 5 个样例英雄扩展到 38 个英雄（覆盖简称/俗称、同音错字、昵称/梗） | M1b 遗留项：全量入库时其余 128 英雄 aliases 暂空，实体链接层按需补齐；38 个含全部演示点名英雄（亚瑟/貂蝉/东皇太一）+ 高频单字英雄（铠/瑶）+ 高频错字对（凯/貂禅/兰凌王/后裔/安其拉） | 影响 build_graph_data.py 产出的 heroes.json aliases 与 M2 实体链接单测语料`
 - `2026-10-14 | M2 目录落地：新增 app/retrieval/（neo4j_client/cypher_templates/chroma_client/bm25/entity_linking/intent）与 app/schemas/、tests/unit/；app/agent/nodes 属 M3 交付物，M2 不创建 | 附录 A 的目录结构中 M2 实际需要的是 retrieval 与 schemas；tests/unit 承载实体链接/模板/方向性测试（附录 A 明示）。agent 编排层为 M3，提前建空目录无内容可放 | 影响仓库结构与附录 A 落地进度；M2 报告已说明 agent/nodes 的归属`
 
+## 2026-10-15（M2 审核后：条件落实 + M3 前置）
+
+- `2026-10-15 | 意图路由测试作为 M3 第一项交付，先于 M3 编排层落地 | 需求方 2026-10-15 裁定：M3 的条件边完全按 intent 分发，intent 有误会让 M3 调试变成噩梦；「规则优先」决定的全部风险都在覆盖率上，M2 交付时零测试不可接受 | 影响 tests/unit/test_intent_routing.py（79 用例）；M3 编排层开工前置条件`
+- `2026-10-15 | 规则路径初步准确率：覆盖契约集 43/43 = 100%；规格书 8.1 自带示例问句 11/11；**自由口语抽样 16/20 = 80%** | 条件二要求给出前置信号。前两组 100% 有共同开发（规则与用例同源）导致的虚高，**以自由口语抽样 80% 作为更可信的泛化估计**；低于 85% 的部分即 M6 待补清单 | 影响 M6 评测基线；4 条口语盲区（「能克制」「走一路」「用什么英雄」「拿X我选谁」）已列入 M6 待补`
+- `2026-10-15 | IntentResult 增加 matched_intents 字段，命中多个词表时全部记录（按优先级序），并在日志 warning 留痕 | 条件三：当前「先命中先返回」会让「铠的出装和铭文」只返回一个意图、丢掉另一个且无记录——用户拿到半个答案而系统不知道，属静默失败。需求方明确「不要求现在就做多意图合并，但必须看得见」 | 影响 app/retrieval/intent.py 的 route_rules/_RULES；M6 归因「答案不全」时据此判断是否只取了一个意图；已由 test_multi_intent_hit_is_traced 固化`
+- `2026-10-15 | 裁定「谁能针对 X」→ COUNTER_BY、「怎么针对 X」→ MATCHUP | 需求方点名的跨意图误判风险：「谁能针对铠」要的是一份压制者名单（同 COUNTER_BY），「怎么针对铠」要的是应对方法（同 MATCHUP）。两者都含「针对」，靠优先级裁决——把「谁能针对/谁针对/谁能克/谁能压制」加入 _COUNTER_BY，_COUNTER_BY 先于 _MATCHUP | 影响 app/retrieval/intent.py 的 _COUNTER_BY；已由 test_who_counters_kai_ruling 固化（并断言该问句 matched_intents 同时含两者）`
+- `2026-10-15 | 移除分路口语的单字别名「上」「中」（保留「上单/中单」等双字形式） | 单字别名会在「上海」「中国」这类与王者无关的词里误命中分路，把 OUT_OF_SCOPE 问句抬成 ENTITY_UNKNOWN（走澄清而非拒答）——是意图路由的静默误判源。规格书 4.3 点名要求覆盖的是「上单/中单」 | 影响 app/retrieval/entity_linking.py 的 LANE_ALIASES；已由 test_intent_routing 的「北京到上海多远」用例固化；test_entity_linking.py 不依赖单字别名`
+- `2026-10-15 | LLM 意图路径（route_llm）设去留期限：**M6 评测后必须决定「启用」或「删除」，不得无限期挂着** | 需求方记录性要求：一个永远不执行的代码路径 = 未测试代码 = 隐患。当前 route(use_llm=False) 为默认，LLM 路径仅实现未启用 | 影响 app/retrieval/intent.py 的 route_llm/_LLM_SYSTEM；M6 评测报告须给出该路径的裁决（若意图准确率 < 85% 则切换启用并复测，否则删除）`
+- `2026-10-15 | Chroma 弃用警告登记：测试输出出现 DeprecationWarning「legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'」，说明 EF 走的是兼容路径，未来 Chroma 版本可能移除 | 需求方记录性要求：这正是 EF 重启回归测试存在的理由。**升级 Chroma 版本时必须复跑 tests/unit/test_retrieval_chroma.py::test_ef_restart_regression**，确认 EF 契约未被破坏 | 影响 chromadb 版本升级流程与 README 升级说明；该用例断言写入→重启→重取 collection→同句结果一致`
+
 ## 后续里程碑待补
 
 - M2：BM25 中文分词配置、实体链接候选策略细节 → **已于 2026-10-14 M2 落实**（见上节）
