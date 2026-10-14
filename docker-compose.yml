@@ -1,0 +1,23 @@
+# Neo4j 5.x（规格书 4.12：外部依赖仅此一个；Q5 裁定首选 Docker）
+# 启动：docker compose up -d
+# 若 Docker 守护进程不可用：改用 Neo4j Desktop 本机直装（明确不用 Aura Free）。
+services:
+  neo4j:
+    image: neo4j:5-community
+    container_name: honor-neo4j
+    restart: unless-stopped
+    ports:
+      - "7474:7474"   # HTTP 管理台（演示时可查看）
+      - "7687:7687"   # Bolt 驱动连接
+    environment:
+      NEO4J_AUTH: neo4j/honor-graphrag   # 仅本地演示弱口令，README 数据声明注明
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 1G
+      NEO4J_server_memory_pagecache_size: 256m
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+
+volumes:
+  neo4j_data:
+  neo4j_logs:

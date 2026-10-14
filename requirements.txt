@@ -1,0 +1,36 @@
+# ============================================================
+# 王者荣耀 GraphRAG 问答 Agent — 依赖清单（核心）
+# Python 3.12；重依赖（torch / sentence-transformers）见 requirements-ml.txt
+# ============================================================
+
+# --- Web 框架 ---
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9          # /api/docs/upload multipart 必需
+
+# --- 配置与校验 ---
+pydantic>=2.7
+pydantic-settings>=2.3           # config.py + .env 统一读取
+python-dotenv>=1.0
+
+# --- 数据组件 ---
+neo4j>=5.24                      # Neo4j 5.x 官方驱动
+chromadb>=0.5.5                  # 嵌入式 PersistentClient，零外部依赖
+
+# --- HTTP 客户端（抓取脚本 / 评测 / 探活） ---
+requests>=2.31
+httpx>=0.27
+
+# --- Agent 编排（M3 起使用，此处一次装齐） ---
+langgraph>=0.2.0
+langgraph-checkpoint-sqlite>=2.0.0   # SqliteSaver 官方包
+
+# --- 检索（M2 起使用） ---
+pypinyin>=0.51                   # 实体链接：拼音模糊匹配（规格书 4.3）
+rank_bm25>=0.2.2                 # BM25 混合检索（规格书 4.6 可选加分项，裁定为 v1 加上）
+jieba>=0.42                      # BM25 中文分词
+
+# --- 测试与评测 ---
+pytest>=8.0
+pytest-asyncio>=0.23
+pyyaml>=6.0                      # M6 评测集 cases.yaml

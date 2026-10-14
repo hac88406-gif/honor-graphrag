@@ -1,0 +1,24 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 本地配置（含口令，不入库）
+.env
+
+# 可重建的运行时数据
+data/chroma/
+data/raw/
+*.log
+
+# 本地 Embedding 模型（1.3GB，由 scripts/download_embedding_model.py 重建）
+models/
+
+# 前端
+frontend/node_modules/
+frontend/dist/
+
+# 系统
+.DS_Store
+Thumbs.db
