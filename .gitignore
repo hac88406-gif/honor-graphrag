@@ -10,6 +10,7 @@ __pycache__/
 # 可重建的运行时数据
 data/chroma/
 data/raw/
+data/checkpoints.sqlite*
 *.log
 
 # 本地 Embedding 模型（1.3GB，由 scripts/download_embedding_model.py 重建）
