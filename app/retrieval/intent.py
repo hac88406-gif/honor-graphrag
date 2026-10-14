@@ -150,6 +150,24 @@ def _base_slots(heroes: list[LinkedEntity], roles: list[LinkedEntity]) -> dict:
     return slots
 
 
+# ---------------------------------------------------------------- 槽位（路由与继承共用）
+
+def slots_for(intent: str, text: str, entities: list[LinkedEntity]) -> dict:
+    """按意图算槽位。路由与指代消解继承（4.10 规则 2「只替换实体」）共用同一实现，
+    避免两处口径漂移——这是本项目反复踩过的「同一指标多个口径」类问题。
+    """
+    heroes = [e for e in entities if e.entity_type == "hero"]
+    roles = [e for e in entities if e.entity_type == "role"]
+    if intent == "MATCHUP":
+        return _matchup_slots(normalize(text), heroes)
+    return _base_slots(heroes, roles)
+
+
+def need_clarify_for(intent: str, slots: dict) -> bool:
+    """槽位不完整判定（4.3：MATCHUP 需对位双方，只有一方时澄清反问而非拒答）。"""
+    return intent == "MATCHUP" and "hero_ally" not in slots
+
+
 # ---------------------------------------------------------------- 规则路径
 
 
@@ -165,14 +183,14 @@ def route_rules(text: str, entities: list[LinkedEntity]) -> IntentResult:
             # 条件三：多意图命中必须留痕。当前只取第一个、不做合并（需求方明确「不要求现在就做多意图合并」），
             # 但必须看得见——否则「铠的出装和铭文」这类问句会静默丢掉一个意图。
             logger.warning("多意图命中：%r 命中 %s，取 %s（其余仅留痕，未合并）", text, matched, chosen)
-        if chosen == "MATCHUP":
-            slots = _matchup_slots(t, heroes)
-            # 4.3：MATCHUP 需要两个英雄（对位双方）。只有敌方时槽位不完整 -> 澄清反问。
-            return IntentResult(
-                "MATCHUP", slots, need_clarify="hero_ally" not in slots,
-                method="rule", matched_intents=matched,
-            )
-        return IntentResult(chosen, _base_slots(heroes, roles), method="rule", matched_intents=matched)
+        slots = slots_for(chosen, t, entities)
+        return IntentResult(
+            chosen,
+            slots,
+            need_clarify=need_clarify_for(chosen, slots),
+            method="rule",
+            matched_intents=matched,
+        )
 
     if heroes or roles:
         # 认出了实体但没识别出意图（如只输入「东皇太一」）-> 澄清（4.9「槽位不完整」）

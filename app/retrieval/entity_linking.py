@@ -114,6 +114,9 @@ class _Index:
     entries: dict[str, tuple[_Entry, str]]   # 归一化 key -> (条目, method)
     keys: list[str]                          # 按长度降序（保证最长匹配优先）
     heroes: dict[str, _Entry]                # id -> 英雄条目
+    # id -> 条目（全类型）。M3 指代消解用：4.10 的 last_entities 只存规范 ID，
+    # 继承时需按 ID 回填名称，否则下游槽位/答案只有 ID 没有可读名字。
+    by_id: dict[str, _Entry]
 
 
 def _load_json(path: Path):
@@ -123,6 +126,7 @@ def _load_json(path: Path):
 def _build_index() -> _Index:
     entries: dict[str, tuple[_Entry, str]] = {}
     heroes: dict[str, _Entry] = {}
+    by_id: dict[str, _Entry] = {}
 
     # --- 英雄：规范名 + 别名表（heroes.json 的 aliases 已由 build_graph_data.py 合并
     #     data/hero_aliases.json，这里两者都读并取并集，避免任一侧漏更新） ---
@@ -134,6 +138,7 @@ def _build_index() -> _Index:
     for h in _load_json(HEROES_FILE):
         entry = _Entry("hero", h["id"], h["name"], tuple(h.get("roles", [])))
         heroes[h["id"]] = entry
+        by_id[h["id"]] = entry
         entries.setdefault(normalize(h["name"]), (entry, "exact"))
         for alias in list(h.get("aliases", [])) + alias_map.get(h["name"], []):
             entries.setdefault(normalize(alias), (entry, "alias"))
@@ -143,14 +148,16 @@ def _build_index() -> _Index:
         if not path.exists():
             continue
         for row in _load_json(path):
-            entries.setdefault(normalize(row["name"]), (_Entry(kind, row["id"], row["name"]), "exact"))
+            entry = _Entry(kind, row["id"], row["name"])
+            by_id[row["id"]] = entry
+            entries.setdefault(normalize(row["name"]), (entry, "exact"))
 
     # --- 分路口语 ---
     for alias, lane in LANE_ALIASES.items():
         entries.setdefault(normalize(alias), (_Entry("role", None, lane), "alias"))
 
     keys = sorted(entries, key=len, reverse=True)
-    return _Index(entries, keys, heroes)
+    return _Index(entries, keys, heroes, by_id)
 
 
 @lru_cache(maxsize=1)
@@ -313,3 +320,23 @@ def link(text: str) -> LinkingResult:
 def link_heroes(text: str) -> list[LinkedEntity]:
     """只取英雄类实体（意图路由与模板查询用）。"""
     return [e for e in link(text).entities if e.entity_type == "hero"]
+
+
+def entity_by_id(entity_id: str) -> LinkedEntity | None:
+    """按规范 ID 反查实体（M3 指代消解用）。
+
+    4.10 的 `last_entities` 只存规范 ID；下一轮继承时必须按 ID 回填可读名称，
+    否则槽位与答案里只剩一串数字 ID。查不到返回 None（不编造桩实体）。
+    """
+    entry = _get_index().by_id.get(entity_id)
+    if entry is None:
+        return None
+    etype = entry.kind if entry.kind in ("hero", "item", "inscription") else "role"
+    return LinkedEntity(
+        raw=entry.name,
+        canonical_id=entry.id,
+        canonical_name=entry.name,
+        entity_type=etype,
+        confidence=1.0,
+        method="exact",
+    )

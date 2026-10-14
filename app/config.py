@@ -67,5 +67,11 @@ class Settings(BaseSettings):
     RRF_K: int = 60                      # RRF 融合常数
     USE_BM25: bool = True                # 规格书 10 号裁定：v1 加上 BM25
 
+    # ---------- LangGraph checkpointer（规格书 4.8-4：SqliteSaver，thread_id = session_id） ----------
+    # 多轮记忆落本地 SQLite 文件（替代手写 Redis，2.3/2.4 已裁定）；文件可重建，不入库
+    CHECKPOINT_DB: str = "data/checkpoints.sqlite"
+    # 指代消解视为「简短追问」的长度上限（规格书 4.10 规则 2：长度 < 8 字）
+    COREF_SHORT_LEN: int = 8
+
 
 settings = Settings()

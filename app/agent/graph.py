@@ -1,0 +1,232 @@
+"""LangGraph 编排图组装（规格书 4.8 七条特性）。
+
+七条特性与本文件的对应关系（这是「为什么用 LangGraph 而不是 if/else」的答案清单）：
+  1. StateGraph + 显式 TypedDict State  -> `app/agent/state.py` 的 `AgentState`
+  2. 条件边 `add_conditional_edges`      -> `route_after_intent` / `route_after_confidence`
+  3. 并行分支（混合意图下图谱与向量并行） -> `route_after_intent` 返回**列表**（LangGraph 在同一超步并行执行）
+  4. Checkpointer 持久化（thread_id=session_id）-> `app/memory/checkpointer.py`
+  5. 降级节点（Neo4j 失败不抛 500）      -> `app/agent/nodes/graph_query.py`
+  6. 流式事件 `astream_events`           -> `stream_events`
+  7. 可选 human-in-the-loop `interrupt`  -> `app/agent/nodes/clarify.py`（hitl=True 时生效）
+
+图结构（与 `draw_mermaid()` 导出一致，README 用）：
+
+    START -> entity_linking -> intent_routing
+    intent_routing --条件边--> graph_query / vector_search（并行）/ clarify / reject
+    graph_query & vector_search -> fuse -> confidence
+    confidence --条件边--> generate / reject
+    generate / clarify / reject -> memory -> END
+"""
+from __future__ import annotations
+
+import logging
+from typing import Any, AsyncIterator
+
+from langgraph.graph import END, START, StateGraph
+
+from app.agent.nodes.clarify import clarify_node, reject_node
+from app.agent.nodes.confidence import confidence_node
+from app.agent.nodes.entity_linking import entity_linking_node
+from app.agent.nodes.fuse import fuse_node
+from app.agent.nodes.generate import generate_node
+from app.agent.nodes.graph_query import graph_query_node
+from app.agent.nodes.intent import intent_node
+from app.agent.nodes.memory import memory_node
+from app.agent.nodes.vector_search import vector_search_node
+from app.agent.routing import HYBRID_INTENTS, branches_for
+from app.agent.state import AgentState
+from app.memory.checkpointer import get_checkpointer
+
+logger = logging.getLogger(__name__)
+
+# 节点名常量：流式事件（5.3 SSE 协议）与 mermaid 导出都按这些名字对齐。
+# 写成常量而非散落字符串，避免改名时出现「事件名改了、图里没改」的不一致。
+NODE_ENTITY = "entity_linking"
+NODE_INTENT = "intent_routing"
+NODE_GRAPH = "graph_query"
+NODE_VECTOR = "vector_search"
+NODE_FUSE = "fuse"
+NODE_CONFIDENCE = "confidence"
+NODE_GENERATE = "generate"
+NODE_CLARIFY = "clarify"
+NODE_REJECT = "reject"
+NODE_MEMORY = "memory"
+
+NODE_NAMES: tuple[str, ...] = (
+    NODE_ENTITY, NODE_INTENT, NODE_GRAPH, NODE_VECTOR,
+    NODE_FUSE, NODE_CONFIDENCE, NODE_GENERATE, NODE_CLARIFY, NODE_REJECT, NODE_MEMORY,
+)
+
+# 条件边的候选目标（path_map 用列表声明，返回列表即并行）
+_AFTER_INTENT_TARGETS = [NODE_GRAPH, NODE_VECTOR, NODE_CLARIFY, NODE_REJECT]
+_AFTER_GRAPH_TARGETS = [NODE_VECTOR, NODE_FUSE]
+_AFTER_CONFIDENCE_TARGETS = [NODE_GENERATE, NODE_REJECT]
+
+
+# ---------------------------------------------------------------- 条件边路由
+
+
+def route_after_intent(state: AgentState) -> list[str] | str:
+    """意图 -> 检索分支（4.8-2 条件边 / 4.8-3 并行）。
+
+    返回**列表**时 LangGraph 在同一超步并行执行这些节点（混合意图下图谱与向量并行）。
+    澄清与拒答在检索**之前**分流：实体没认出来时不该白跑一趟检索（4.3/4.9）。
+    """
+    intent = state.get("intent", "")
+    if state.get("need_clarify") or intent == "ENTITY_UNKNOWN":
+        return NODE_CLARIFY
+    if intent == "OUT_OF_SCOPE":
+        return NODE_REJECT
+
+    branches = branches_for(intent)
+    # 分支表没覆盖到的意图（理论上不存在，枚举封闭）也不允许静默卡住：走 fuse 让置信度层兜底
+    return branches or NODE_FUSE
+
+
+def route_after_confidence(state: AgentState) -> str:
+    """置信度 -> 生成 / 拒答（4.9：拒答判定由确定性规则给出，此处只按结果分流）。"""
+    return NODE_REJECT if state.get("response_type") == "reject" else NODE_GENERATE
+
+
+def route_after_graph_query(state: AgentState) -> str:
+    """图谱查询 -> 融合 / 向量兜底（4.8-5「降级为纯向量检索」的落点）。
+
+    **为什么降级要在这里补一条边**：意图分两路（4.4 主路径列）——图谱单路
+    （COUNTER_BY/COUNTER_OF/SYNERGY/INSCRIPTION）与混合路（ITEM_BUILD/MATCHUP）。
+    图谱单路意图**本来不排 vector_search**，所以 Neo4j 一断，`degraded=True` 只是把
+    `graph_evidence` 清空，链路里根本没有向量检索 —— 「降级为纯向量检索」等于没落地，
+    用户会因为「图谱没了」而被拒答，而 Chroma 里其实躺着相关攻略文本。
+    这条边把「降级」变成真的会执行的动作：
+      - 混合意图：vector_search 已在同一超步并行跑过 -> 直接进 fuse（不重复检索）；
+      - 图谱单路意图：补一次 vector_search -> fuse。
+    """
+    if state.get("degraded") and state.get("intent") not in HYBRID_INTENTS:
+        return NODE_VECTOR
+    return NODE_FUSE
+
+
+# ---------------------------------------------------------------- 图组装
+
+
+def build_graph(checkpointer: Any = None):
+    """组装并编译编排图。
+
+    checkpointer 为 None 时编译出无记忆版本（仅用于画图/结构测试）；
+    生产与多轮测试必须传入 checkpointer，否则 `last_*` 记忆不跨轮保留。
+    """
+    graph = StateGraph(AgentState)
+
+    graph.add_node(NODE_ENTITY, entity_linking_node)
+    graph.add_node(NODE_INTENT, intent_node)
+    graph.add_node(NODE_GRAPH, graph_query_node)
+    graph.add_node(NODE_VECTOR, vector_search_node)
+    graph.add_node(NODE_FUSE, fuse_node)
+    graph.add_node(NODE_CONFIDENCE, confidence_node)
+    graph.add_node(NODE_GENERATE, generate_node)
+    graph.add_node(NODE_CLARIFY, clarify_node)
+    graph.add_node(NODE_REJECT, reject_node)
+    graph.add_node(NODE_MEMORY, memory_node)
+
+    graph.add_edge(START, NODE_ENTITY)
+    graph.add_edge(NODE_ENTITY, NODE_INTENT)
+
+    # 条件边：按 intent 分流；返回列表即并行（4.8-2 / 4.8-3）
+    graph.add_conditional_edges(NODE_INTENT, route_after_intent, _AFTER_INTENT_TARGETS)
+
+    # 图谱查询后：正常进 fuse；降级（Neo4j 不可用）且原意图不含向量路时补一次向量检索
+    graph.add_conditional_edges(NODE_GRAPH, route_after_graph_query, _AFTER_GRAPH_TARGETS)
+    graph.add_edge(NODE_VECTOR, NODE_FUSE)
+    graph.add_edge(NODE_FUSE, NODE_CONFIDENCE)
+
+    graph.add_conditional_edges(NODE_CONFIDENCE, route_after_confidence, _AFTER_CONFIDENCE_TARGETS)
+
+    for terminal in (NODE_GENERATE, NODE_CLARIFY, NODE_REJECT):
+        graph.add_edge(terminal, NODE_MEMORY)
+    graph.add_edge(NODE_MEMORY, END)
+
+    return graph.compile(checkpointer=checkpointer)
+
+
+_compiled = None
+
+
+async def get_graph():
+    """进程级编译单例（带 checkpointer，供 FastAPI 与流式使用）。"""
+    global _compiled
+    if _compiled is None:
+        _compiled = build_graph(await get_checkpointer())
+    return _compiled
+
+
+async def reset_graph() -> None:
+    """丢弃编译单例（checkpointer 变更或测试后调用）。"""
+    global _compiled
+    _compiled = None
+
+
+# ---------------------------------------------------------------- 调用入口
+
+
+def _config(session_id: str) -> dict:
+    # 4.8-4：thread_id = session_id，多轮记忆按会话隔离
+    return {"configurable": {"thread_id": session_id}}
+
+
+async def run(question: str, session_id: str, *, hitl: bool = False) -> dict:
+    """同步跑完一轮，返回最终 State（`/api/chat/sync` 用）。
+
+    hitl=False（默认）：澄清直接返回文本，不暂停图 —— M6 评测批量跑分依赖这条路径。
+    """
+    graph = await get_graph()
+    return await graph.ainvoke(
+        {"question": question, "session_id": session_id, "hitl": hitl},
+        _config(session_id),
+    )
+
+
+async def stream_events(question: str, session_id: str, *, hitl: bool = False) -> AsyncIterator[dict]:
+    """`astream_events` -> 规格书 5.3 的 SSE 事件（节点级）。
+
+    事件映射：
+      on_chain_start(节点)   -> node_start
+      on_chain_end(fuse)     -> evidence（逐条推送来源）
+      结束时                 -> token（整段答案，M3 无 LLM 故不分片）/ citation / done
+    """
+    graph = await get_graph()
+    config = _config(session_id)
+    inputs = {"question": question, "session_id": session_id, "hitl": hitl}
+
+    async for ev in graph.astream_events(inputs, config, version="v2"):
+        kind = ev.get("event")
+        name = ev.get("name")
+        if kind == "on_chain_start" and name in NODE_NAMES:
+            yield {"event": "node_start", "data": {"node": name}}
+        elif kind == "on_chain_end" and name == NODE_FUSE:
+            output = (ev.get("data") or {}).get("output") or {}
+            for e in output.get("evidence", []):
+                payload = e.model_dump() if hasattr(e, "model_dump") else e
+                yield {"event": "evidence", "data": {"evidence": payload}}
+
+    # 终态从 checkpointer 取：末尾节点（memory）只返回记忆增量，拿不到 answer/citations
+    snapshot = await graph.aget_state(config)
+    values = snapshot.values or {}
+    if values.get("answer"):
+        # M3 无 LLM 生成，答案是一次性组装好的整段文本，故作为单个 token 事件推送；
+        # M4 接入云端 LLM 后改为逐字推送（SSE 协议不变）。
+        yield {"event": "token", "data": {"text": values["answer"]}}
+    yield {
+        "event": "citation",
+        "data": {"citations": [c.model_dump() for c in values.get("citations", [])]},
+    }
+    yield {
+        "event": "done",
+        "data": {
+            "type": values.get("response_type"),
+            "confidence": values.get("confidence"),
+        },
+    }
+
+
+def draw_mermaid(*, checkpointer: Any = None) -> str:
+    """导出图结构的 Mermaid 文本（M3 验收项；README 的架构图用它）。"""
+    return build_graph(checkpointer).get_graph().draw_mermaid()
