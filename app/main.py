@@ -1,12 +1,13 @@
 """FastAPI 应用入口（规格书附录 A：app/main.py）。
 
-M0 阶段仅挂载 /api/health；chat / graph / docs 路由随对应里程碑引入。
+已挂载：`/api/health`（M0）、`/api/chat/sync`（M3 最小骨架，5.2 要求必须存在）。
+graph / docs 路由与 SSE 版 `/api/chat` 随 M4/M5 引入。
 """
 from __future__ import annotations
 
 from fastapi import FastAPI
 
-from app.api import health
+from app.api import chat, health
 
 app = FastAPI(
     title="Honor GraphRAG QA Agent",
@@ -15,6 +16,7 @@ app = FastAPI(
 )
 
 app.include_router(health.router, prefix="/api")
+app.include_router(chat.router, prefix="/api")
 
 
 @app.get("/")
