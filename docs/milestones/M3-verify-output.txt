@@ -1,0 +1,126 @@
+﻿=== M3 交付证据（真实运行输出，2026-10-15）===
+快照 = 20261014-230459    Neo4j = honor-neo4j (docker, up)
+
+--- [1] 意图路由准确率（tests/unit/test_intent_routing.py，79 用例）---
+
+[intent-routing] 规则路径准确率 = 43/43 = 100.0%（自建问句集）
+[intent-routing] 自由口语抽样准确率 = 16/20 = 80.0%（非验收口径）
+79 passed in 1.01s
+
+
+
+--- [2] pytest 全量（tests）---
+........................................................................ [ 40%]
+........................................................................ [ 80%]
+....................................                                     [100%]
+============================== warnings summary ===============================
+tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
+  D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
+    return json.dumps(create_collection_configuration_to_json(config, metadata))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+180 passed, 1 warning in 19.63s
+
+--- [3] 数据层复跑校验（scripts/verify_data_layer.py）---
+========================================================================
+[verify] 数据层复跑校验  快照 = 20261014-230459
+========================================================================
+
+【1】源数据层（data/raw/{snapshot}/parsed，未去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+
+【2】导出层（data/graph/relations.json，按页展开，仍不去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+  [ OK ] 导出层行数 == 源数据层行数（798，未去重）
+  [ OK ] 英雄节点数 == 抓取英雄数（133，全量 133）
+  导出层关系：source 空 = 0，patch 空 = 0，reason 空 = 0
+  [ OK ] 导出层全部关系都有 source
+  [ OK ] 导出层全部关系都有 patch
+  源数据层重复边（会被 MERGE 合并）：COUNTERS 5 条，SYNERGIZES 0 条
+
+【3】入库后层（Neo4j，MERGE 唯一键 = 起点+类型+终点+patch，已去重）
+  [重导入] 幂等写入 data/graph/*.json ...
+  本次写入：{'full_heroes': 133, 'stub_heroes': 0, 'items': 115, 'inscriptions': 93, 'hero_rel_rows': 798, 'item_edge_rows': 1574, 'ins_edge_rows': 798, 'skipped_item_refs': 20, 'skipped_ins_refs': 0}
+  节点：{'Hero': 133, 'Inscription': 93, 'Item': 115}
+  关系：{'COUNTERS': 527, 'RECOMMENDS_INSCRIPTION': 798, 'RECOMMENDS_ITEM': 1574, 'SYNERGIZES': 266}
+  [ OK ] 幂等：连续两次导入后节点数/关系数逐项不变
+  去重口径推导：源 COUNTERS 532 - 合并 5 = 527
+              源 SYNERGIZES 266 - 合并 0 = 266
+  [ OK ] 入库后 COUNTERS（527）== 去重后口径
+  [ OK ] 入库后 SYNERGIZES（266）== 去重后口径
+  完整性检查（空 = NULL 或 空串）：
+    Hero.source 空            = 0
+    Hero.patch 空             = 0
+    Item.source 空            = 0
+    Inscription.source 空     = 0
+    关系.source 空              = 0
+    关系.patch 空               = 0
+    COUNTERS.reason 空        = 0
+    SYNERGIZES.reason 空      = 0
+
+【4】向量库（Chroma collection 'guides'）
+  collection.count() = 540（文档数，M1b 验收要求 ≥ 100）
+  缺 patch 元数据 = 0，缺 hero_ids = 0，缺 source_url = 0
+  patch 分布 = {'2026-10': 540}
+  [ OK ] 向量库文档数 540 ≥ 100
+  [ OK ] 向量库元数据（patch / hero_ids / source_url）完整
+
+========================================================================
+[verify] 结论：PASS —— 数据层复跑校验全部通过，检索层未破坏数据
+========================================================================
+
+--- [4] API 冒烟（scripts/verify_api_smoke.py）---
+========================================================================
+【A】正常路径（Neo4j 可用）
+========================================================================
+
+POST /api/chat/sync  question='铠被谁克制'
+  HTTP 200
+  type=low_confidence  intent=COUNTER_BY  confidence=0.0
+  entities=['铠']
+  citations=4  clarify_options=[]
+  debug.matched_intents=['COUNTER_BY']
+  debug.degraded=False  graph_available=True
+  answer='以下内容依据较少，仅供参考。\n【图谱依据】\n- 公孙离 克制 铠：铠是无法对公孙离造成太大的威胁的，无论自身位移还是击退，都可以反制大部分战士坦克突袭\n- 芈月 克制 铠：铠容易被长手法师风筝\n- 蒙恬 克制 铠：蒙恬的技能机制让铠这类高爆发英雄难以发挥\n- 诸葛亮 克制 铠：铠容易被长手法师风筝'
+
+POST /api/chat/sync  question='铠的出装和铭文'
+  HTTP 200
+  type=low_confidence  intent=INSCRIPTION  confidence=0.0
+  entities=['铠']
+  citations=6  clarify_options=[]
+  debug.matched_intents=['INSCRIPTION', 'ITEM_BUILD']
+  debug.degraded=False  graph_available=True
+  answer='以下内容依据较少，仅供参考。\n【图谱依据】\n- 铠 第1套铭文 · 红：传承\n- 铠 第1套铭文 · 蓝：鹰眼\n- 铠 第1套铭文 · 黄：隐匿\n- 铠 第2套铭文 · 红：圣人\n- 铠 第2套铭文 · 蓝：虚空\n- 铠 第2套铭文 · 黄：轮回'
+
+========================================================================
+【B】Neo4j 断开（模拟）：图谱单路意图应补一次向量检索
+========================================================================
+
+POST /api/chat/sync  question='铠被谁克制'
+  HTTP 200
+  type=answer  intent=COUNTER_BY  confidence=0.7010252475738525
+  entities=['铠']
+  citations=4  clarify_options=[]
+  debug.matched_intents=['COUNTER_BY']
+  debug.degraded=True  graph_available=False
+  answer='（图谱不可用，以下依据来自攻略文本检索）\n【攻略依据】\n- 、55/82.5/110点伤害格挡，每0.5秒对附近的敌人造成50/75/100(+16%额外物理攻击)法术伤害(0.5秒1次，持续8秒)。 再次点击可以提前关闭技能。 ## 最佳搭档（官方原文理由） - 宫本武藏：铠配合宫本小团战战斗力爆\n- → 暗影战斧 '
+
+========================================================================
+【C】越界拒答（全程不碰 Neo4j）
+========================================================================
+
+POST /api/chat/sync  question='今天天气怎么样'
+  HTTP 200
+  type=reject  intent=OUT_OF_SCOPE  confidence=0.0
+  entities=[]
+  citations=0  clarify_options=[]
+  debug.matched_intents=[]
+  debug.degraded=False  graph_available=None
+  answer='这个问题与王者荣耀无关，我无法回答。你可以问我英雄的克制关系（「铠被谁克制」）、出装（「亚瑟怎么出装」）、铭文、打法或版本强度。'
+--- 输出结束 ---

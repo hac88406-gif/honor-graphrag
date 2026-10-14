@@ -23,8 +23,8 @@ Python 3.12 · FastAPI · LangGraph（SqliteSaver 多轮记忆）· Neo4j 5.x ·
 | M0 骨架与环境 | ✅ 完成 |
 | M1a 数据层（抓取 + 样例） | ✅ 完成（需求方审核通过） |
 | M1b 数据层（全量 133 英雄） | ✅ 完成（需求方审核通过） |
-| M2 检索层 | ✅ 完成（待需求方审核，见 `docs/milestones/M2-report.md`） |
-| M3 LangGraph 编排 | ⏳ |
+| M2 检索层 | ✅ 完成（需求方审核通过，见 `docs/milestones/M2-report.md`） |
+| M3 LangGraph 编排 | ✅ 完成（待需求方审核，见 `docs/milestones/M3-report.md`） |
 | M4 生成层 | ⏳ |
 | M5 前端 | ⏳ |
 | M6 评测 | ⏳ |

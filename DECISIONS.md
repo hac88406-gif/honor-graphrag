@@ -58,10 +58,25 @@
 - `2026-10-15 | LLM 意图路径（route_llm）设去留期限：**M6 评测后必须决定「启用」或「删除」，不得无限期挂着** | 需求方记录性要求：一个永远不执行的代码路径 = 未测试代码 = 隐患。当前 route(use_llm=False) 为默认，LLM 路径仅实现未启用 | 影响 app/retrieval/intent.py 的 route_llm/_LLM_SYSTEM；M6 评测报告须给出该路径的裁决（若意图准确率 < 85% 则切换启用并复测，否则删除）`
 - `2026-10-15 | Chroma 弃用警告登记：测试输出出现 DeprecationWarning「legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'」，说明 EF 走的是兼容路径，未来 Chroma 版本可能移除 | 需求方记录性要求：这正是 EF 重启回归测试存在的理由。**升级 Chroma 版本时必须复跑 tests/unit/test_retrieval_chroma.py::test_ef_restart_regression**，确认 EF 契约未被破坏 | 影响 chromadb 版本升级流程与 README 升级说明；该用例断言写入→重启→重取 collection→同句结果一致`
 
+## 2026-10-15（M3 LangGraph 编排层）
+
+- `2026-10-15 | checkpointer 用 AsyncSqliteSaver（aiosqlite）而非同步 SqliteSaver，编排层统一走异步接口（ainvoke / astream_events） | 两个实测约束同时成立：① 4.8-6 要求 astream_events，该接口内部调用 checkpointer 的 aget_tuple，同步 SqliteSaver 未实现异步方法，会在流式路径抛 NotImplementedError；② LangGraph 在工作线程池里执行节点，sqlite3 连接跨线程复用抛 ProgrammingError。统一异步实现一次解决两者，避免出现「同步能跑、流式报错」的半可用状态 | 影响 app/memory/checkpointer.py、app/agent/graph.py 的 run/stream_events；测试用 open_checkpointer(":memory:") 各建独立会话库，不污染 data/checkpoints.sqlite`
+- `2026-10-15 | 新增条件边 route_after_graph_query：图谱查询后按 degraded 分流——正常进 fuse；Neo4j 不可用且原意图不含向量路时补一次 vector_search | 4.8-5 要求「降级为纯向量检索」，但意图按 4.4 分图谱单路（COUNTER_BY/COUNTER_OF/SYNERGY/INSCRIPTION）与混合路（ITEM_BUILD/MATCHUP）。图谱单路意图本来不排 vector_search，Neo4j 一断只是把 graph_evidence 清空，链路里根本没有向量检索——用户会因为「图谱没了」被拒答，而 Chroma 里其实有相关攻略文本。「降级」必须是真的会执行的动作 | 影响 app/agent/graph.py（graph_query 由静态边改为条件边，draw_mermaid 结构随之变化）；已由 test_graph_only_intent_falls_back_to_vector / test_hybrid_intent_does_not_search_vector_twice 固化`
+- `2026-10-15 | 指代消解补充「规则 3」（省略主语继承实体）：当前轮无实体、意图已被关键词判定、且问句是简短追问（长度 < COREF_SHORT_LEN）时，继承上一轮实体 | 4.10 必测链「貂蝉怕什么 → 怎么打」既无指代词（规则 1 不适用）、意图又能被「怎么打」判定（规则 2 不适用），按两条规则的字面条件都不会继承，但语义上必须继承「貂蝉」 | 影响 app/agent/coref.py、app/agent/nodes/intent.py；已由 test_chain3_diaochan_counter_by_then_matchup_ellipsis 固化`
+- `2026-10-15 | 简短追问标记词不收「怎么」，改用「呢 / 还有 / 那么」 | 4.10 规则 2 原文写「含呢/怎么」，但「今天天气怎么样」含「怎么」却是越界问句；收进去会把无关问句误判为追问并继承上一轮意图（静默串味） | 影响 app/agent/coref.py 的 FOLLOWUP_MARKERS；越界分支由 test_memory_isolated_across_sessions 覆盖`
+- `2026-10-15 | hitl 默认 False（澄清直接返回文本，不暂停图）；interrupt 仅 hitl=True 时启用 | 4.8-7 是可选加分项；M6 评测脚本批量跑分时每条澄清都挂起会卡死。默认非交互、显式开启才暂停 | 影响 app/agent/nodes/clarify.py、app/agent/graph.py 的 run/stream_events 签名；已由 test_hitl_interrupt_then_resume / test_default_path_does_not_interrupt 固化`
+- `2026-10-15 | memory 节点两条写入策略：本轮无实体不覆盖 last_entities；意图为 ENTITY_UNKNOWN / OUT_OF_SCOPE 时不覆盖 last_intent | 否则一句「今天天气怎么样」就会把上一轮的「铠」擦掉，下一轮追问再无实体可继承——「多轮记忆被自己清空」的典型静默失败；且这两种意图不是用户的真实问题类型，写进 last_intent 会让规则 2 继承到无意义值 | 影响 app/agent/nodes/memory.py；已由 test_memory_not_cleared_by_out_of_scope_turn 固化`
+- `2026-10-15 | M3 交付 /api/chat/sync 最小骨架（app/api/chat.py），本层**不**捕获 Neo4j 异常 | 5.2 明确该接口「必须存在」（M6 批量评测依赖它）。降级是 graph_query 节点的职责，异常在编排层内部已收敛；若在本层再包一层 try/except，会把真正的编程错误（如 State 字段拼错）一起吞掉——正是本项目一直在防的静默失败 | 影响 app/api/chat.py、app/main.py；已由 test_api_chat_sync_returns_200_when_neo4j_down / test_api_chat_sync_reject_path_is_offline 固化`
+- `2026-10-15 | 置信度判定：图谱有事实但无向量相似度（top_score is None）时按「低置信」处理，绝不走拒答 | 4.9 表格未定义「图谱单路、无文本证据」这一格；BM25 字面命中没有相似度，若断言「相似度 < 0.45」会把「检索到了但无相似度可比」误判成「知识库没数据」 | 影响 app/agent/nodes/confidence.py；**M3 先按保守口径实现，M4 按 4.9 表格复核该格**（4.9 三档判定正式交付在 M4）`
+- `2026-10-15 | M3 集成测试的 API 用例用 httpx ASGITransport 直连（与测试同处一个事件循环），不用 starlette TestClient | TestClient 在自己的线程/事件循环里跑应用，而 AsyncSqliteSaver 的 aiosqlite 连接**绑定事件循环**，跨循环复用抛 RuntimeError: ... bound to a different event loop（实测） | 影响 tests/integration/test_graph_degrade.py 的 client 夹具；该夹具同时把 get_graph() 的 checkpointer 指向测试内存库，走的仍是真实 run()/get_graph() 路径`
+
 ## 后续里程碑待补
 
 - M2：BM25 中文分词配置、实体链接候选策略细节 → **已于 2026-10-14 M2 落实**（见上节）
 
 - M2 验收补充（需求方 2026-10-14 要求）：M2 完成后复跑一次同类数据层校验（节点/关系计数 + `source/patch/reason` 完整性），确认检索层未破坏数据；M2 交付报告需附该校验真实输出
-- M3：LangGraph checkpointer 路径、并行分支实现细节
-- M6：评测阈值校准结果回写
+- M3：LangGraph checkpointer 路径、并行分支实现细节 → **已于 2026-10-15 M3 落实**（见上节）
+- M3：意图路由测试与规则路径准确率、多意图留痕 → **已于 2026-10-15 落实**（见上节「M2 审核后」）
+- M4：按 4.9 表格复核「图谱有事实但无向量相似度」这一格的置信度判定（M3 为保守口径）
+- M6：评测阈值校准结果回写；**并裁决 LLM 意图路径（route_llm）去留**
+- M6：升级 chromadb 版本时必须复跑 tests/unit/test_retrieval_chroma.py::test_ef_restart_regression
