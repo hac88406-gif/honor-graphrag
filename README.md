@@ -38,7 +38,8 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python -m pip install -r requirements.txt
 
 # 2) 启动 Neo4j（Docker 方案；守护进程需先启动 Docker Desktop）
-docker compose up -d
+#    注：本机 docker compose 子命令不可用，统一使用 docker-compose（带横线）
+docker-compose up -d
 
 # 3) 启动 API
 .\.venv\Scripts\python -m uvicorn app.main:app --host 127.0.0.1 --port 8000

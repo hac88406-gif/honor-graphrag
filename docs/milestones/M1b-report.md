@@ -60,6 +60,10 @@
 - 节点合计 **341**（Hero 133 + Item 115 + Inscription 93），关系合计 **3165**。
 - `stub_heroes = 0`：全量入库后关系端点全在 133 个英雄之内，M1a 的邻居桩节点机制自然消失。
 - `skipped_item_refs = 20`：4 个缺失装备 ID 的 20 处引用未建 `RECOMMENDS_ITEM` 边（不造桩，见 §4.1）。
+- `RECOMMENDS_ITEM = 1574` 的构成（**脚本统计，不手数**）：源引用 **1594** = 133 英雄 × 2 套 × 6 件 **− 2**
+  （`元流之子(法师)` 两套出装官方各只给 **5 件**；全量 266 套中 264 套为 6 件、仅此 2 套为 5 件，且这 10 个 ID 均有效），
+  再减 20 处缺失装备引用 = **1574**。核账命令：
+  `python -c "import json,collections;h=json.load(open('data/graph/heroes.json',encoding='utf-8'));print(sum(len(b) for x in h for b in x['item_sets']), dict(collections.Counter(len(b) for x in h for b in x['item_sets'])))"`
 
 **幂等**：`tests/test_data_pipeline.py::test_neo4j_import_idempotent` 对同一份数据连续 `import_all` 两次，
 断言节点数/关系数逐项不变——已通过（见 §2.4）。
@@ -190,6 +194,8 @@ M1b 交付物齐备性：
 
 6. **【已按要求完成】C1 明显主导。** 语料构成 C1 133 : C2 5 ≈ 27:1（M1a 时 5:5 仅为样例），满足「≥3:1」。
 
+7. **【已按要求说明】`RECOMMENDS_ITEM` 实测 1574 的差额来源。** 与「133 英雄 × 2 套 × 6 件 = 1596」估算相差 **22** = **20**（4 个缺失装备 ID 的引用，未建边）+ **2**（`元流之子(法师)` 两套出装官方各只给 **5 件**——全量 266 套中仅此 2 套为 5 件，其 10 个 ID 均有效，**非解析遗漏、也非缺失装备**）。核账方式见 §2.1（脚本统计，不手数）。
+
 ---
 
 ## 5. 下一步
@@ -201,3 +207,5 @@ M1b 交付物齐备性：
 - `data/fetch_report.md` 的出装引用缺失说明；
 - README 的「数据洞察 / 数据局限」表述是否恰当；
 - 上文第 4 节的确认事项。
+
+**M2 复核要求（需求方 2026-10-14 补充，已记入 `DECISIONS.md`）**：M2 完成后复跑一次同类数据层校验（节点/关系计数 + `source/patch/reason` 完整性），确认检索层未破坏数据，并在 M2 报告中附真实输出。

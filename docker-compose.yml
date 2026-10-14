@@ -1,5 +1,5 @@
 # Neo4j 5.x（规格书 4.12：外部依赖仅此一个；Q5 裁定首选 Docker）
-# 启动：docker compose up -d
+# 启动：docker-compose up -d（本机 docker compose 子命令不可用，统一用带横线的 docker-compose）
 # 若 Docker 守护进程不可用：改用 Neo4j Desktop 本机直装（明确不用 Aura Free）。
 services:
   neo4j:
