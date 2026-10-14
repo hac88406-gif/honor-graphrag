@@ -1,0 +1,52 @@
+﻿========================================================================
+[verify] 数据层复跑校验  快照 = 20261014-230459
+========================================================================
+
+【1】源数据层（data/raw/{snapshot}/parsed，未去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+
+【2】导出层（data/graph/relations.json，按页展开，仍不去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+  [ OK ] 导出层行数 == 源数据层行数（798，未去重）
+  [ OK ] 英雄节点数 == 抓取英雄数（133，全量 133）
+  导出层关系：source 空 = 0，patch 空 = 0，reason 空 = 0
+  [ OK ] 导出层全部关系都有 source
+  [ OK ] 导出层全部关系都有 patch
+  源数据层重复边（会被 MERGE 合并）：COUNTERS 5 条，SYNERGIZES 0 条
+
+【3】入库后层（Neo4j，MERGE 唯一键 = 起点+类型+终点+patch，已去重）
+  [重导入] 幂等写入 data/graph/*.json ...
+  本次写入：{'full_heroes': 133, 'stub_heroes': 0, 'items': 115, 'inscriptions': 93, 'hero_rel_rows': 798, 'item_edge_rows': 1574, 'ins_edge_rows': 798, 'skipped_item_refs': 20, 'skipped_ins_refs': 0}
+  节点：{'Hero': 133, 'Inscription': 93, 'Item': 115}
+  关系：{'COUNTERS': 527, 'RECOMMENDS_INSCRIPTION': 798, 'RECOMMENDS_ITEM': 1574, 'SYNERGIZES': 266}
+  [ OK ] 幂等：连续两次导入后节点数/关系数逐项不变
+  去重口径推导：源 COUNTERS 532 - 合并 5 = 527
+              源 SYNERGIZES 266 - 合并 0 = 266
+  [ OK ] 入库后 COUNTERS（527）== 去重后口径
+  [ OK ] 入库后 SYNERGIZES（266）== 去重后口径
+  完整性检查（空 = NULL 或 空串）：
+    Hero.source 空            = 0
+    Hero.patch 空             = 0
+    Item.source 空            = 0
+    Inscription.source 空     = 0
+    关系.source 空              = 0
+    关系.patch 空               = 0
+    COUNTERS.reason 空        = 0
+    SYNERGIZES.reason 空      = 0
+
+【4】向量库（Chroma collection 'guides'）
+  collection.count() = 540（文档数，M1b 验收要求 ≥ 100）
+  缺 patch 元数据 = 0，缺 hero_ids = 0，缺 source_url = 0
+  patch 分布 = {'2026-10': 540}
+  [ OK ] 向量库文档数 540 ≥ 100
+  [ OK ] 向量库元数据（patch / hero_ids / source_url）完整
+
+========================================================================
+[verify] 结论：PASS —— 数据层复跑校验全部通过，检索层未破坏数据
+========================================================================

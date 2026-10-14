@@ -38,9 +38,20 @@
 - `2026-10-14 | RECOMMENDS_ITEM 边实测 1574 的构成：源引用 1594 = 133×2×6 − 2（`元流之子(法师)` 官方两套出装各 5 件；266 套中仅此 2 套为 5 件，其 10 个 ID 均有效），再减 20 处缺失装备引用 = 1574 | 需求方核对「133×2×6=1596」与实际 1574 差 22，要求说明余下 2 条来源 | 影响 M1b 报告 §2.1 与 §4 的计数说明；结论：差额与缺失装备无关，是官方该英雄出装本就不足 6 件`
 - `2026-10-14 | **统一计数口径（全项目规矩）**：关系计数分三层，任何 COUNTERS / SYNERGIZES 数字必须注明层级——**源数据层**（`data/raw/<snapshot>/parsed/relations_all.json`，798 行 / COUNTERS 532）／**导出层**（`data/graph/relations.json`，798 行 / COUNTERS 532，**未去重**）／**入库后层**（Neo4j 按唯一键 `起点+类型+终点+patch` MERGE 去重，793 边 / COUNTERS 527） | 同一根因已两次造成对账歧义（M1a 报告 COUNTERS 99 vs 100；data_profile 兰陵王出度 24 vs Neo4j 23，后者差的正是合并边 兰陵王→鲁班七号）。需求方 2026-10-14 要求统一口径 | 影响 fetch_report.md / data_profile.md / 各里程碑报告 / README 的全部关系计数表述；`data_profile.md` 主表标注为源数据层并新增「入库后口径对照」小节；「793 / 527」是去重后口径，只在入库时实现`
 
+## 2026-10-14（M2 检索层）
+
+- `2026-10-14 | 意图路由默认走确定性关键词规则路径（route_rules），LLM 路径（route_llm，Ollama 结构化输出）为可选增强且任何异常回落规则路径 | 规格书 4.2 步骤[1]写的是「意图识别（LLM）」，但意图枚举封闭（4.4 明确不得新增）、且输入已带实体链接结果（4.3），关键词覆盖足够；确定性 = 可单测、零延迟、离线可跑，契合 M2 验收全为确定性断言。LLM 路径保留以对接 4.11 的 qwen2.5:3b，M6 若意图准确率不足可切换 | 影响 app/retrieval/intent.py（route(use_llm=False) 为默认）；**此为对规格书 4.2 的有意偏离，M2 报告已单列请需求方确认**`
+- `2026-10-14 | 实体链接模糊匹配用「拼音音节序列编辑距离」而非「整串字符编辑距离」，编辑距离→置信度映射 {0:1.0, 1:0.8, 2:0.6}，距离 ≤2 是必要非充分条件，最终由 ENTITY_CONFIDENCE_THRESHOLD(0.7) 把关 | 中文输入错误集中在同音/近音字（凯→铠、貂禅→貂蝉、后一→后羿），音节序列能把同音错字直接归零，比字符编辑距离更贴合错误分布；映射让「距离 2」落到 0.6 < 0.7 被拒，避免过度宽松 | 影响 app/retrieval/entity_linking.py 的 _fuzzy/_lev；M2 实体链接单测覆盖 5 个 fuzzy 用例`
+- `2026-10-14 | normalize 增加 ASCII 大小写归一（s.lower()），使分路口语的英文缩写 AD/ADC/AP/SUP/JUNGLE 可命中 | 规格书 4.3 第 2 级点名要求覆盖「AD」等分路口语，但 NFKC 只做全半角、不转小写，而 LANE_ALIASES 的键是小写；不归一即漏命中。英雄/装备/铭文名均为中文，转小写不影响 | 影响 app/retrieval/entity_linking.py 的 normalize；已由单测 test_link_single_entity[AD]/[adc] 固化`
+- `2026-10-14 | load_embedding_function() 加进程内缓存（@lru_cache），缓存的是同一个 EF 实例 | bge-large-zh-v1.5 约 1.2GB，每次 get_collection() 都新建 SentenceTransformer 会让单次检索耗时以十秒计（M2 每条查询都取 collection）；缓存不改变「必须显式传入 EF」这一契约 | 影响 app/utils/chroma.py；EF 重启回归测试仍成立（测试自行新建 PersistentClient + 显式传 EF）`
+- `2026-10-14 | Neo4j 封装 run_template 的首个形参命名 template（而非 name） | HERO_BY_NAME 模板的 Cypher 参数是 `$name`，若首参叫 name 则 `run_template("HERO_BY_NAME", name="东皇太一")` 抛 "got multiple values for argument 'name'"；改名后模板参数与函数形参不再冲突 | 影响 app/retrieval/neo4j_client.py 的 run_template/query_evidence 签名；已由单测 test_hero_by_name_and_role_templates 固化`
+- `2026-10-14 | 别名表 data/hero_aliases.json 由 M1a 的 5 个样例英雄扩展到 38 个英雄（覆盖简称/俗称、同音错字、昵称/梗） | M1b 遗留项：全量入库时其余 128 英雄 aliases 暂空，实体链接层按需补齐；38 个含全部演示点名英雄（亚瑟/貂蝉/东皇太一）+ 高频单字英雄（铠/瑶）+ 高频错字对（凯/貂禅/兰凌王/后裔/安其拉） | 影响 build_graph_data.py 产出的 heroes.json aliases 与 M2 实体链接单测语料`
+- `2026-10-14 | M2 目录落地：新增 app/retrieval/（neo4j_client/cypher_templates/chroma_client/bm25/entity_linking/intent）与 app/schemas/、tests/unit/；app/agent/nodes 属 M3 交付物，M2 不创建 | 附录 A 的目录结构中 M2 实际需要的是 retrieval 与 schemas；tests/unit 承载实体链接/模板/方向性测试（附录 A 明示）。agent 编排层为 M3，提前建空目录无内容可放 | 影响仓库结构与附录 A 落地进度；M2 报告已说明 agent/nodes 的归属`
+
 ## 后续里程碑待补
 
-- M2：BM25 中文分词配置、实体链接候选策略细节
+- M2：BM25 中文分词配置、实体链接候选策略细节 → **已于 2026-10-14 M2 落实**（见上节）
+
 - M2 验收补充（需求方 2026-10-14 要求）：M2 完成后复跑一次同类数据层校验（节点/关系计数 + `source/patch/reason` 完整性），确认检索层未破坏数据；M2 交付报告需附该校验真实输出
 - M3：LangGraph checkpointer 路径、并行分支实现细节
 - M6：评测阈值校准结果回写
