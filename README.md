@@ -24,9 +24,9 @@ Python 3.12 · FastAPI · LangGraph（SqliteSaver 多轮记忆）· Neo4j 5.x ·
 | M1a 数据层（抓取 + 样例） | ✅ 完成（需求方审核通过） |
 | M1b 数据层（全量 133 英雄） | ✅ 完成（需求方审核通过） |
 | M2 检索层 | ✅ 完成（需求方审核通过，见 `docs/milestones/M2-report.md`） |
-| M3 LangGraph 编排 | ✅ 完成（待需求方审核，见 `docs/milestones/M3-report.md`） |
-| M4 生成层 | ⏳ |
-| M5 前端 | ⏳ |
+| M3 LangGraph 编排 | ✅ 完成（需求方审核通过，三项修改已落实，见 `docs/milestones/M3-report.md`） |
+| M4 生成层 | ✅ 完成（需求方二审通过；裁定 A / B1–B3 / C1 已落实，见 `docs/milestones/M4-report.md`） |
+| M5 前端 | 🚧 进行中（按 1.6 边界：来源卡片 + 过程展示 + 拒答/澄清差异化渲染） |
 | M6 评测 | ⏳ |
 | M7 打磨 | ⏳ |
 
@@ -57,7 +57,8 @@ curl http://127.0.0.1:8000/api/health
 # 2) 从快照导出入库数据（全量 133 英雄）
 .\.venv\Scripts\python scripts\build_graph_data.py
 
-# 3) 生成 C1 官方聚合语料（每英雄一篇）
+# 3) 从快照重建 C1 官方聚合语料（每英雄一篇，确定性：publish_date 取自快照 fetch_meta.json）
+#    注：C1（data/guides/c1-*.md）为**派生数据**，不入版本库（.gitignore），由本步从 data/raw/ 重建
 .\.venv\Scripts\python scripts\build_guides.py
 
 # 4) 导入 Neo4j（MERGE 幂等）
@@ -78,6 +79,11 @@ curl http://127.0.0.1:8000/api/health
 
 > 数据来自王者荣耀官方页面脚本抓取（`scripts/fetch_official.py`，端点清单见规格书 6.1b），
 > 每条数据带真实 `source` URL 与 `patch=2026-10`。**仅本地演示用，勿用于生产。**
+
+> **版本库内数据范围**：`data/graph/*.json`（结构化事实）与 `data/guides/c2-*.md`（5 篇 LLM 生成语料，
+> **须提交以保证评测可复现**）在库内；`data/raw/`（抓取快照）与 `data/guides/c1-*.md`（133 篇，
+> 从快照解析出的**派生数据**）**不入库**（见 `.gitignore`），由上方「数据层构建」步骤重建
+> —— 故库内**不含官方表达性文本**，而本地重建后语料完整、检索质量不受影响。
 
 > **关系计数口径（全项目统一）**：关系计数分三层，本文所有关系数字均注明层级——
 > **源数据层**（`parsed/relations_all.json`，798 行 / COUNTERS 532）·

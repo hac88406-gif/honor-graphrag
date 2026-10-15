@@ -1,0 +1,101 @@
+﻿# M4 复审证据（需求方 2026-10-15 裁定 A/B/C1 落实后）
+
+## 1) pytest 开发模式（REQUIRE_SERVICES 未设）
+........................................................................ [ 28%]
+........................................................................ [ 56%]
+........................................................................ [ 84%]
+........................................                                 [100%]
+============================== warnings summary ===============================
+tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
+  D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
+    return json.dumps(create_collection_configuration_to_json(config, metadata))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+256 passed, 1 warning in 20.26s
+
+## 2) pytest 验收模式（REQUIRE_SERVICES=1，服务依赖不可 skip）
+........................................................................ [ 28%]
+........................................................................ [ 56%]
+........................................................................ [ 84%]
+........................................                                 [100%]
+============================== warnings summary ===============================
+tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
+  D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
+    return json.dumps(create_collection_configuration_to_json(config, metadata))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+256 passed, 1 warning in 20.05s
+
+## 3) 数据层复跑校验（scripts/verify_data_layer.py）
+========================================================================
+[verify] 数据层复跑校验  快照 = 20261014-230459
+========================================================================
+
+【1】源数据层（data/raw/{snapshot}/parsed，未去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+
+【2】导出层（data/graph/relations.json，按页展开，仍不去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+  [ OK ] 导出层行数 == 源数据层行数（798，未去重）
+  [ OK ] 英雄节点数 == 抓取英雄数（133，全量 133）
+  导出层关系：source 空 = 0，patch 空 = 0，reason 空 = 0
+  [ OK ] 导出层全部关系都有 source
+  [ OK ] 导出层全部关系都有 patch
+  源数据层重复边（会被 MERGE 合并）：COUNTERS 5 条，SYNERGIZES 0 条
+
+【3】入库后层（Neo4j，MERGE 唯一键 = 起点+类型+终点+patch，已去重）
+  [重导入] 幂等写入 data/graph/*.json ...
+  本次写入：{'full_heroes': 133, 'stub_heroes': 0, 'items': 115, 'inscriptions': 93, 'hero_rel_rows': 798, 'item_edge_rows': 1574, 'ins_edge_rows': 798, 'skipped_item_refs': 20, 'skipped_ins_refs': 0}
+  节点：{'Hero': 133, 'Inscription': 93, 'Item': 115}
+  关系：{'COUNTERS': 527, 'RECOMMENDS_INSCRIPTION': 798, 'RECOMMENDS_ITEM': 1574, 'SYNERGIZES': 266}
+  [ OK ] 幂等：连续两次导入后节点数/关系数逐项不变
+  去重口径推导：源 COUNTERS 532 - 合并 5 = 527
+              源 SYNERGIZES 266 - 合并 0 = 266
+  [ OK ] 入库后 COUNTERS（527）== 去重后口径
+  [ OK ] 入库后 SYNERGIZES（266）== 去重后口径
+  完整性检查（空 = NULL 或 空串）：
+    Hero.source 空            = 0
+    Hero.patch 空             = 0
+    Item.source 空            = 0
+    Inscription.source 空     = 0
+    关系.source 空              = 0
+    关系.patch 空               = 0
+    COUNTERS.reason 空        = 0
+    SYNERGIZES.reason 空      = 0
+
+【4】向量库（Chroma collection 'guides'）
+python.exe : 
+At line:15 char:2309
++ ... Append $f; (& .\.venv\Scripts\python.exe scripts/verify_data_layer.py ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 391/391 [00:00<00:00, 22712.10it/s]
+  collection.count() = 540（文档数，M1b 验收要求 ≥ 100）
+  缺 patch 元数据 = 0，缺 hero_ids = 0，缺 source_url = 0
+  patch 分布 = {'2026-10': 540}
+  [ OK ] 向量库文档数 540 ≥ 100
+  [ OK ] 向量库元数据（patch / hero_ids / source_url）完整
+
+========================================================================
+[verify] 结论：PASS —— 数据层复跑校验全部通过，检索层未破坏数据
+========================================================================
+
+## 4) C1 语料确定性重建（scripts/build_guides.py + init_chroma.py --dry-run）
+[guides] 快照=20261014-230459 产出 C1 133 篇：['c1-lianpo-official.md', 'c1-xiaoqiao-official.md', 'c1-zhaoyun-official.md', 'c1-mozi-official.md', 'c1-daji-official.md', 'c1-yingzheng-official.md', 'c1-sunshangxiang-official.md', 'c1-lubanqihao-official.md', 'c1-zhuangzhou-official.md', 'c1-liushan-official.md', 'c1-gaojianli-official.md', 'c1-ake-official.md', 'c1-zhongwuyan-official.md', 'c1-sunbin-official.md', 'c1-bianque-official.md', 'c1-sunwukong-official.md', 'c1-xinmoliuer-official.md', 'c1-baiqi-official.md', 'c1-miyue-official.md', 'c1-lvbu-official.md', 'c1-zhouyv-official.md', 'c1-xiahoudun-official.md', 'c1-zhenji-official.md', 'c1-caocao-official.md', 'c1-dianwei-official.md', 'c1-gongbenwuzang-official.md', 'c1-libai-official.md', 'c1-makeboluo-official.md', 'c1-direnjie-official.md', 'c1-damo-official.md', 'c1-xiangyu-official.md', 'c1-wuzetian-official.md', 'c1-laofuzi-official.md', 'c1-guanyu-official.md', 'c1-diaochan-official.md', 'c1-anqila-official.md', 'c1-chengyaojin-official.md', 'c1-luna-official.md', 'c1-jiangziya-official.md', 'c1-liubang-official.md', 'c1-hanxin-official.md', 'c1-wangzhaojun-official.md', 'c1-lanlingwang-official.md', 'c1-huamulan-official.md', 'c1-zhangliang-official.md', 'c1-buzhihuowu-official.md', 'c1-nakelulu-official.md', 'c1-jvyoujing-official.md', 'c1-yase-official.md', 'c1-niumo-official.md', 'c1-houyi-official.md', 'c1-liubei-official.md', 'c1-zhangfei-official.md', 'c1-liyuanfang-official.md', 'c1-yuji-official.md', 'c1-zhongkui-official.md', 'c1-yangjian-official.md', 'c1-yadianna-official.md', 'c1-caiwenji-official.md', 'c1-taiyizhenren-official.md', 'c1-nezha-official.md', 'c1-zhugeliang-official.md', 'c1-huangzhong-official.md', 'c1-daqiao-official.md', 'c1-donghuangtaiyi-official.md', 'c1-ganjiangmoye-official.md', 'c1-guiguzi-official.md', 'c1-kai-official.md', 'c1-bailishouyue-official.md', 'c1-bailixuance-official.md', 'c1-sulie-official.md', 'c1-mengqi-official.md', 'c1-nvwa-official.md', 'c1-mingshiyin-official.md', 'c1-gongsunli-official.md', 'c1-yangyuhuan-official.md', 'c1-peiqinhu-official.md', 'c1-yixing-official.md', 'c1-kuangtie-official.md', 'c1-milaidi-official.md', 'c1-yuange-official.md', 'c1-sunce-official.md', 'c1-simayi-official.md', 'c1-dunshan-official.md', 'c1-jialuo-official.md', 'c1-shenmengxi-official.md', 'c1-lixin-official.md', 'c1-shangguanwaner-official.md', 'c1-change-official.md', 'c1-zhubajie-official.md', 'c1-pangu-official.md', 'c1-yao-official.md', 'c1-yunzhongjun-official.md', 'c1-dongfangyao-official.md', 'c1-machao-official.md', 'c1-xishi-official.md', 'c1-lubandashi-official.md', 'c1-mengya-official.md', 'c1-jing-official.md', 'c1-mengtian-official.md', 'c1-aguduo-official.md', 'c1-xialuote-official.md', 'c1-lan-official.md', 'c1-sikongzhen-official.md', 'c1-ailin-official.md', 'c1-yunying-official.md', 'c1-jinchan-official.md', 'c1-fei-official.md', 'c1-sangqi-official.md', 'c1-geya-official.md', 'c1-haiyue-official.md', 'c1-zhaohuaizhen-official.md', 'c1-laixiao-official.md', 'c1-jixiaoman-official.md', 'c1-yalian-official.md', 'c1-duoliya-official.md', 'c1-hainuo-official.md', 'c1-aoyin-official.md', 'c1-dasiming-official.md', 'c1-yuanliuzhizi_magic-official.md', 'c1-yuanliuzhizi_tank-official.md', 'c1-shaosiyuan-official.md', 'c1-ying-official.md', 'c1-cang-official.md', 'c1-kongkonger-official.md', 'c1-yuanliuzhizi_archer-official.md', 'c1-sunquan-official.md', 'c1-chicha-official.md', 'c1-yuanliuzhizi_support-official.md', 'c1-dayu-official.md', 'c1-yuanliuzhizi_assassin-official.md', 'c1-luyana-official.md', 'c1-wangwei-official.md']
+
+
+[chroma] 语料 138 篇 -> chunk 540 条
+[chroma] chunk 字数 min/median/max = 114/444/580
+[chroma] dry-run 结束（未写库、未加载模型）
+
+
+

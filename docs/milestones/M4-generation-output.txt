@@ -1,0 +1,100 @@
+﻿.\.venv\Scripts\python.exe : WARNING app.agent.nodes.generate: 生成后校验不通过，回落确定性组装：class_leak / 怕高爆发法师
+At line:15 char:1601
++ ... pgrep\bin'; .\.venv\Scripts\python.exe scripts\verify_m4_generation.p ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING app.age...s_leak / 怕高爆发法师:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Building prefix dict from the default dictionary ...
+DEBUG jieba: Building prefix dict from the default dictionary ...
+Loading model from cache C:\Users\Bless\AppData\Local\Temp\jieba.cache
+DEBUG jieba: Loading model from cache C:\Users\Bless\AppData\Local\Temp\jieba.cache
+Loading model cost 0.569 seconds.
+DEBUG jieba: Loading model cost 0.569 seconds.
+Prefix dict has been built successfully.
+DEBUG jieba: Prefix dict has been built successfully.
+WARNING app.retrieval.intent: 多意图命中：'铠的出装和铭文' 命中 ['INSCRIPTION', 'ITEM_BUILD']，取 INSCRIPTION（其余仅留痕，未合并）
+==============================================================================
+M4 生成层验收证据（真实云端调用）
+==============================================================================
+
+==============================================================================
+【A】环境与依赖状态（/api/health）
+==============================================================================
+LLM_MODE=hybrid  CLOUD_CHAT_MODEL=deepseek-v4-pro  LLM_MAX_TOKENS=2048  GENERATION_MODE=template
+  neo4j    ok=True  connected: bolt://localhost:7687
+  chroma   ok=True  persistent@ data/chroma, collections=1
+  llm      ok=True  mode=hybrid, intent_model=qwen2.5:3b, ollama_models=['qwen2.5:3b', 'qwen3-embedding:0.6b']
+  注：Ollama 不可达时的链路韧性由 tests/unit/test_ollama_offline.py 固化（health 探测只回状态不抛错；意图默认走规则路径，不触 Ollama）。
+
+==============================================================================
+【B】真实云端生成（非流式）：reasoning 与正文隔离
+==============================================================================
+问题：铠被谁克制？
+资料 4 条（前 2 条）：
+  - 芈月 克制 铠：铠容易被长手法师风筝
+  - 诸葛亮 克制 铠：铠容易被长手法师风筝
+
+model=deepseek-v4-pro  finish_reason=stop
+completion_tokens=176（含思考）  reasoning_tokens=154  reasoning 字符=233
+is_success=True（判定：content 非空 AND finish_reason != 'length'）
+
+正文 content（28 字）：
+依据资料，铠被以下英雄克制：芈月、诸葛亮、公孙离、蒙恬。
+
+[检查] 思考是否混入正文：否（正确隔离）
+
+==============================================================================
+【C】真实云端流式：reasoning 分片 -> 「正在思考」，不混入正文
+==============================================================================
+  [thinking] 正在思考
+model=deepseek-v4-pro  finish_reason=stop
+completion_tokens=122  reasoning_tokens=100
+thinking 事件触发次数=1（首个 reasoning 分片触发一次）
+思考字符数=143  正文字符数=28
+
+正文 content：
+根据资料，铠被以下英雄克制：芈月、诸葛亮、公孙离、蒙恬。
+
+[检查] 思考是否混入正文：否（正确隔离）
+
+==============================================================================
+【D】越界归纳拦截（需求方实测原案：把资料里的解释当类别）
+==============================================================================
+问题：后羿怕什么？
+资料：妲己 克制 后羿：后羿怕高爆发法师
+
+模型原始正文：'后羿怕高爆发法师。'
+
+[guard] ok=False  reason=class_leak  detail='怕高爆发法师'
+
+[generate 节点] mode=llm  fallback=True  guard={'ok': False, 'reason': 'class_leak', 'detail': '怕高爆发法师'}
+交付给用户的答案（确定性组装）：
+【图谱依据】
+- 妲己 克制 后羿：后羿怕高爆发法师
+
+[检查] 越界原文是否被交付：否（已回落）
+
+==============================================================================
+【E】空答案 fail-fast：max_tokens=200 复现（HTTP 200 + finish_reason=length + content 空）
+==============================================================================
+问题：铠的铭文怎么搭配？（重问题：思考吃 token 多）
+max_tokens=200（远小于 LLM_MAX_TOKENS=2048）
+LLMGenerationError: 生成结果不可用：空答案（finish_reason=length）
+[检查] 空答案被拦下（未当正常回答往下走）：是（正确）
+
+==============================================================================
+【F】端到端 /api/chat/sync（GENERATION_MODE=llm，真实云端）
+==============================================================================
+
+POST /api/chat/sync  question='铠被谁克制'
+  HTTP 200  type=answer  intent=COUNTER_BY  confidence=0.85
+  citations=4  matched_intents=['COUNTER_BY']
+  generation_info: mode=llm fallback=False model=deepseek-v4-pro finish=stop completion_tokens=70 reasoning_chars=78 guard={'ok': True, 'reason': '', 'detail': ''}
+  answer='铠被以下英雄克制：公孙离、芈月、蒙恬、诸葛亮。'
+
+POST /api/chat/sync  question='铠的出装和铭文'
+  HTTP 200  type=answer  intent=INSCRIPTION  confidence=0.85
+  citations=6  matched_intents=['INSCRIPTION', 'ITEM_BUILD']
+  generation_info: mode=llm fallback=False model=deepseek-v4-pro finish=stop completion_tokens=213 reasoning_chars=219 guard={'ok': True, 'reason': '', 'detail': ''}
+  answer='（本次只回答了「铭文」；您还提到了「出装」，可以继续追问。）\n资料中仅包含铠的铭文，出装信息资料不足。\n\n铠的铭文：\n- 第1套：红·传承、蓝·鹰眼、黄·隐匿\n- 第2套：红·圣人、蓝·虚空、黄·轮回'
