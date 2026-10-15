@@ -38,6 +38,9 @@ def _debug(state: dict) -> dict:
         "degradation_note": state.get("degradation_note"),
         "top_score": state.get("top_score"),
         "evidence_count": len(state.get("evidence") or []),
+        "generation": state.get("generation_info") or {},
+        # 生成后校验的 G2 因词典不可用而失效时为 True（fail-open，但必须可见）
+        "guard_degraded": bool((state.get("generation_info") or {}).get("guard_degraded")),
         "error": state.get("error"),
     }
 
