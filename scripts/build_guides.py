@@ -9,6 +9,13 @@ M1a 只为 5 个样例英雄生成；**M1b 为全量 133 英雄各生成一篇**
 C2（LLM 生成的对线思路）不由此脚本产出：它是人工/模型撰写的内容，单独放
 data/guides/c2-*.md，本脚本只写 c1-*.md，不触碰 c2-*.md。
 
+**C1 是派生数据，不入版本库**（需求方 2026-10-15 裁定 C1）：它与同样被 gitignore 的
+`data/raw/` 同性质（都是抓取/解析产物），故改为加 `.gitignore`、由本脚本从 `data/raw/`
+重建。仓库内因此不含官方表达性文本（版权顾虑消失），本地仍有完整语料（检索质量不受影响）。
+
+**产物必须确定**：`publish_date` 取自快照 `fetch_meta.json.generated_at` 的日期部分，
+**不用 `date.today()`** —— 否则隔天重跑同一快照就会产出不同的语料（与「可确定重建」矛盾）。
+
 用法：
   python scripts/build_guides.py
 """
@@ -19,14 +26,20 @@ import json
 import os
 import re
 import sys
-from datetime import date
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RAW_DIR = PROJECT_ROOT / "data" / "raw"
 GUIDES_DIR = PROJECT_ROOT / "data" / "guides"
 
-PUBLISH_DATE = str(date.today())
+
+def snapshot_publish_date(snap: Path) -> str:
+    """快照的抓取日期（YYYY-MM-DD），取自 `fetch_meta.json.generated_at`。
+
+    用快照而非当天日期，保证「同一快照 -> 同一语料」，重建结果确定可复现。
+    """
+    meta = load(snap / "fetch_meta.json")
+    return str(meta["generated_at"])[:10]
 
 # 关系区块 -> 该英雄页面上显示的区块名（用于语料小标题）
 BLOCK_TITLE = {"hr1": "最佳搭档", "hr2": "压制英雄", "hr3": "被压制英雄"}
@@ -56,6 +69,7 @@ def yaml_block(meta: dict) -> str:
 
 def main() -> int:
     snap = latest_snapshot()
+    publish_date = snapshot_publish_date(snap)
     parsed = snap / "parsed"
     heroes_all = load(parsed / "heroes_all.json")
     relations_all = load(parsed / "relations_all.json")
@@ -123,7 +137,7 @@ def main() -> int:
             "patch": h["patch"],
             "source_url": url,
             "source_type": "official",
-            "publish_date": PUBLISH_DATE,
+            "publish_date": publish_date,
             "data_source": "real",
         }
         body = yaml_block(meta) + "\n\n" + "\n".join(lines) + "\n"
