@@ -41,7 +41,14 @@ class Settings(BaseSettings):
     CLOUD_BASE_URL: str = ""
     CLOUD_CHAT_MODEL: str = ""
     LLM_TIMEOUT: float = 30.0            # 秒
-    LLM_MAX_TOKENS: int = 512
+    # 推理模型（deepseek-v4-pro / flash）的 completion_tokens **含思考**，实测思考可吃 250~290。
+    # 512 会给正文只留 220~260，重问题直接触发 finish_reason=length + 空答案（实测复现）。
+    LLM_MAX_TOKENS: int = 2048
+    # 答案生成方式：llm=云端生成 + 生成后校验；template=确定性证据组装（M3 行为，离线可测）。
+    # 测试默认 template（离线、确定性）；M4 生成用例显式置 llm。
+    GENERATION_MODE: str = "template"
+    # 生成后校验（4.9 生成约束补强）：光靠 prompt 挡不住「把资料里的解释当类别」的越界归纳。
+    GUARD_ENABLED: bool = True
 
     # ---------- Embedding（规格书 1.3 默认裁定） ----------
     EMBEDDING_MODEL: str = "BAAI/bge-large-zh-v1.5"
@@ -57,6 +64,10 @@ class Settings(BaseSettings):
     # ---------- 置信度阈值（规格书 4.9；M6 阶段评测校准后回写） ----------
     CONF_LOW: float = 0.45
     CONF_HIGH: float = 0.60
+    # 图谱单路的 confidence 映射（4.9 v1.5「按关系条数」；M6 校准）。≥1 条即正常回答，不降级。
+    CONF_GRAPH_1: float = 0.60   # 1 条官方关系
+    CONF_GRAPH_2: float = 0.75   # 2 条（官方页面模板的常规条数）
+    CONF_GRAPH_3: float = 0.85   # ≥3 条互相印证
     # 实体链接采纳阈值（规格书 4.3：< 0.7 走澄清反问）
     ENTITY_CONFIDENCE_THRESHOLD: float = 0.7
 

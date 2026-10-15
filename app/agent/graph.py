@@ -6,7 +6,10 @@
   3. 并行分支（混合意图下图谱与向量并行） -> `route_after_intent` 返回**列表**（LangGraph 在同一超步并行执行）
   4. Checkpointer 持久化（thread_id=session_id）-> `app/memory/checkpointer.py`
   5. 降级节点（Neo4j 失败不抛 500）      -> `app/agent/nodes/graph_query.py`
-  6. 流式事件 `astream_events`           -> `stream_events`
+  6. 流式事件（4.8-6）                      -> `stream_events`
+     **实现偏离**：4.8-6 原文写 `astream_events`，但实测（LangGraph 1.2.15）该接口**拿不到
+     节点内 `get_stream_writer()` 推的自定义事件**，故改用 `astream(stream_mode=["custom","updates","debug"])`。
+     偏离已登记 DECISIONS.md（2026-10-15 M4 条），对 SSE 协议（5.3）无影响。
   7. 可选 human-in-the-loop `interrupt`  -> `app/agent/nodes/clarify.py`（hitl=True 时生效）
 
 图结构（与 `draw_mermaid()` 导出一致，README 用）：
@@ -185,34 +188,48 @@ async def run(question: str, session_id: str, *, hitl: bool = False) -> dict:
 
 
 async def stream_events(question: str, session_id: str, *, hitl: bool = False) -> AsyncIterator[dict]:
-    """`astream_events` -> 规格书 5.3 的 SSE 事件（节点级）。
+    """编排层 -> 规格书 5.3 的 SSE 事件（节点级 + 生成层自定义事件）。
+
+    **为什么不用 `astream_events`**：实测（LangGraph 1.2.15）`astream_events(version="v2")`
+    只暴露框架内建事件，**拿不到节点内用 `get_stream_writer()` 推的自定义事件**（thinking / token）。
+    改用 `astream(stream_mode=["custom","updates","debug"])` 三路合一：
+      - `custom`  —— 节点内推送的事件（generate 节点的 thinking / token）；
+      - `debug`   —— 节点启动边界（type == "task" 且 payload.name 是节点名）-> node_start；
+      - `updates` —— 节点输出增量（fuse 的 evidence）-> evidence。
 
     事件映射：
-      on_chain_start(节点)   -> node_start
-      on_chain_end(fuse)     -> evidence（逐条推送来源）
-      结束时                 -> token（整段答案，M3 无 LLM 故不分片）/ citation / done
+      debug(task)          -> node_start
+      custom(thinking)     -> thinking（「正在思考」，**不含思考正文**）
+      custom(token)        -> token（LLM 路径下逐段推送，前缀行先推）
+      updates(fuse)        -> evidence（逐条推送来源）
+      结束时               -> token（template 路径整段答案）/ citation / done
     """
     graph = await get_graph()
     config = _config(session_id)
     inputs = {"question": question, "session_id": session_id, "hitl": hitl}
 
-    async for ev in graph.astream_events(inputs, config, version="v2"):
-        kind = ev.get("event")
-        name = ev.get("name")
-        if kind == "on_chain_start" and name in NODE_NAMES:
-            yield {"event": "node_start", "data": {"node": name}}
-        elif kind == "on_chain_end" and name == NODE_FUSE:
-            output = (ev.get("data") or {}).get("output") or {}
-            for e in output.get("evidence", []):
-                payload = e.model_dump() if hasattr(e, "model_dump") else e
-                yield {"event": "evidence", "data": {"evidence": payload}}
+    async for mode, chunk in graph.astream(inputs, config, stream_mode=["custom", "updates", "debug"]):
+        if mode == "custom":
+            # 节点内自定义事件已经是 5.3 的 {"event":..., "data":...} 形态，直接透传
+            if isinstance(chunk, dict) and chunk.get("event"):
+                yield chunk
+        elif mode == "debug":
+            payload = chunk.get("payload") or {}
+            if chunk.get("type") == "task" and payload.get("name") in NODE_NAMES:
+                yield {"event": "node_start", "data": {"node": payload["name"]}}
+        elif mode == "updates":
+            for node, output in (chunk or {}).items():
+                if node == NODE_FUSE and isinstance(output, dict):
+                    for e in output.get("evidence", []):
+                        payload = e.model_dump() if hasattr(e, "model_dump") else e
+                        yield {"event": "evidence", "data": {"evidence": payload}}
 
     # 终态从 checkpointer 取：末尾节点（memory）只返回记忆增量，拿不到 answer/citations
     snapshot = await graph.aget_state(config)
     values = snapshot.values or {}
-    if values.get("answer"):
-        # M3 无 LLM 生成，答案是一次性组装好的整段文本，故作为单个 token 事件推送；
-        # M4 接入云端 LLM 后改为逐字推送（SSE 协议不变）。
+    info = values.get("generation_info") or {}
+    # LLM 路径下正文已由 generate 节点逐段推送（含前缀行），此处不得重复推送整段答案
+    if values.get("answer") and not info.get("streamed"):
         yield {"event": "token", "data": {"text": values["answer"]}}
     yield {
         "event": "citation",
@@ -223,6 +240,9 @@ async def stream_events(question: str, session_id: str, *, hitl: bool = False) -
         "data": {
             "type": values.get("response_type"),
             "confidence": values.get("confidence"),
+            # 生成层是否回落到确定性组装（M4 新增字段，便于前端/评测看到「这次不是模型答的」）
+            "fallback": bool(info.get("fallback")),
+            "generation_mode": info.get("mode"),
         },
     }
 

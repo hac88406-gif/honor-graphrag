@@ -67,6 +67,10 @@ class AgentState(TypedDict, total=False):
     # ---------- [5] 生成（4.2 步骤 5） ----------
     answer: str
     citations: list[Citation]
+    # 生成层留痕（M4）：mode / 模型名 / finish_reason / completion_tokens（含思考）/
+    # reasoning_tokens / guard 结果 / 是否回落。这些都是「错了也不报错」的环节，
+    # 不给出来就只能靠猜 —— 经 debug 字段对外暴露（仅 DEBUG=1）。
+    generation_info: dict
 
     # ---------- [6] 记忆（4.2 步骤 6 / 4.10，经 checkpointer 跨轮保留） ----------
     last_entities: list[str]      # 上一轮识别到的规范实体 ID
