@@ -181,6 +181,30 @@ def test_chat_sends_configured_model_and_max_tokens(monkeypatch):
     assert seen["stream"] is False
 
 
+def test_chat_max_tokens_can_be_overridden_per_call(monkeypatch):
+    """`max_tokens` 可按调用覆盖，且**默认仍取配置值**。
+
+    为什么必须钉住：评测判官要「先读完资料再逐条比对」，资料越长思考越长 ——
+    实测沿用生成的 2048 时，5/78 条判官返回空答案（finish_reason=length），
+    答案有据率的分母被迫缩小。若后人重构掉这个覆盖参数，该问题会**静默复发**
+    （判官失败被计成 judge_error 而不是报错，指标只是分母变小，看不出异常）。
+    """
+    seen: dict = {}
+
+    def _post(url, **kwargs):
+        seen.update(kwargs["json"])
+        return _Resp(payload=_chat_body(content="ok"))
+
+    monkeypatch.setattr(httpx, "post", _post)
+    c = _client(model="deepseek-v4-pro", max_tokens=2048)
+
+    c.chat([{"role": "user", "content": "x"}], max_tokens=4096)
+    assert seen["max_tokens"] == 4096          # 覆盖生效
+
+    c.chat([{"role": "user", "content": "x"}])
+    assert seen["max_tokens"] == 2048          # 不传时回落配置值
+
+
 # ---------------------------------------------------------------- 流式
 
 def _install_stream(monkeypatch, lines: list[str]):

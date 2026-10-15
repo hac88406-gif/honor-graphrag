@@ -44,6 +44,11 @@ class Settings(BaseSettings):
     # 推理模型（deepseek-v4-pro / flash）的 completion_tokens **含思考**，实测思考可吃 250~290。
     # 512 会给正文只留 220~260，重问题直接触发 finish_reason=length + 空答案（实测复现）。
     LLM_MAX_TOKENS: int = 2048
+    # M6 评测判官（scripts/eval_judge.py）单独一份预算，**不复用生成用的 LLM_MAX_TOKENS**。
+    # 原因：判官要「先读完资料再逐条比对」，资料越长思考越长——实测 5/78 条判官
+    # 因 2048 全被思考吃掉而返回空答案（finish_reason=length），答案有据率的分母被迫缩小。
+    # 判官的产出只是一小段 JSON，正文不需要空间，缺的是思考空间，故给到 2 倍。
+    JUDGE_MAX_TOKENS: int = 4096
     # 答案生成方式：llm=云端生成 + 生成后校验；template=确定性证据组装（M3 行为，离线可测）。
     # 测试默认 template（离线、确定性）；M4 生成用例显式置 llm。
     GENERATION_MODE: str = "template"

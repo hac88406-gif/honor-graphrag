@@ -96,11 +96,11 @@ class CloudChatClient:
     def _headers(self) -> dict:
         return {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
-    def _payload(self, messages: list[dict], *, stream: bool) -> dict:
+    def _payload(self, messages: list[dict], *, stream: bool, max_tokens: int | None = None) -> dict:
         return {
             "model": self.model,
             "messages": messages,
-            "max_tokens": self.max_tokens,
+            "max_tokens": max_tokens or self.max_tokens,
             "stream": stream,
         }
 
@@ -122,10 +122,12 @@ class CloudChatClient:
 
     # ---------------------------------------------------------------- 非流式
 
-    def chat(self, messages: list[dict]) -> LLMResult:
+    def chat(self, messages: list[dict], *, max_tokens: int | None = None) -> LLMResult:
+        """非流式调用。`max_tokens` 可**按调用覆盖**——评测判官需要更大的思考空间
+        （见 config.JUDGE_MAX_TOKENS），生成路径仍用全局 `LLM_MAX_TOKENS`。"""
         try:
             resp = httpx.post(
-                self._url(), json=self._payload(messages, stream=False),
+                self._url(), json=self._payload(messages, stream=False, max_tokens=max_tokens),
                 headers=self._headers(), timeout=self.timeout,
             )
         except httpx.HTTPError as e:
