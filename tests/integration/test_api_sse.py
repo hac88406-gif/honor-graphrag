@@ -150,6 +150,23 @@ async def test_token_frames_are_incremental_not_one_shot(client, retrieval_stubb
     assert GRAPH_EV.content in "".join(texts), "分块不得丢字或改字"
 
 
+async def test_citation_is_pushed_before_body_tokens(client, retrieval_stubbed):
+    """规格书 v1.6 §3.4：依据在检索阶段就已确定，不必等生成 —— citation 必须**先于正文**到达。
+
+    否则「先看到查到了哪些依据」的感知改善落不了地：用户仍要等完整生成（llm 路径 3~6s）之后
+    才看到来源卡片。顺带钉住「每条路径**恰好一次** citation」，防止提前推之后末尾又重复推一份。
+    """
+    retrieval_stubbed(graph=[GRAPH_EV], vector=[])
+    _, events = await stream_chat(client, "sse-early-cit", "铠被谁克制")
+
+    names = [n for n, _ in events]
+    assert names.index("citation") < names.index("token"), "citation 必须先于正文 token 到达"
+    assert names.count("citation") == 1, "citation 只推一次（不得提前推后又在末尾重复）"
+    # 提前推的 citation 仍是 5.1 的 1-based 序号，与 evidence 顺序一致（前端据此配对展开）
+    cits = next(d["citations"] for n, d in events if n == "citation")
+    assert [c["index"] for c in cits] == [1]
+
+
 # ---------------------------------------------------------------- 拒答路径
 
 
