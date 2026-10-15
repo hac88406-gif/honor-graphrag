@@ -1,0 +1,178 @@
+﻿M5 前端交付 · 真实 SSE 事件流（端到端，可复跑）
+生成日期：2026-10-15　规格书：v1.5
+服务：uvicorn app.main:app（127.0.0.1:8123），真实 Neo4j + Chroma + 意图规则路径
+生成方式：GENERATION_MODE 默认 template（确定性证据组装，不产生云端费用）
+复跑命令（PowerShell，body 见各节）：
+  curl.exe -N -s -X POST http://127.0.0.1:8123/api/chat -H "Content-Type: application/json" --data-binary "@body.json"
+================================================================
+
+§1 正常回答路径 —— question = 铠被谁克制（stream=true）
+----------------------------------------------------------------
+event: node_start
+data: {"node": "entity_linking"}
+
+event: node_start
+data: {"node": "intent_routing"}
+
+event: node_start
+data: {"node": "graph_query"}
+
+event: node_start
+data: {"node": "fuse"}
+
+event: evidence
+data: {"evidence": {"kind": "graph", "content": "公孙离 克制 铠：铠是无法对公孙离造成太大的威胁的，无论自身位移还是击退，都可以反制大部分战士坦克突袭", "hero_ids": ["199", "193"], "relation": "COUNTERS", "patch": "2026-10", "source": "official", "source_url": "https://pvp.qq.com/web201605/herodetail/gongsunli.shtml", "score": null}}
+
+event: evidence
+data: {"evidence": {"kind": "graph", "content": "芈月 克制 铠：铠容易被长手法师风筝", "hero_ids": ["121", "193"], "relation": "COUNTERS", "patch": "2026-10", "source": "official", "source_url": "https://pvp.qq.com/web201605/herodetail/kai.shtml", "score": null}}
+
+event: evidence
+data: {"evidence": {"kind": "graph", "content": "蒙恬 克制 铠：蒙恬的技能机制让铠这类高爆发英雄难以发挥", "hero_ids": ["527", "193"], "relation": "COUNTERS", "patch": "2026-10", "source": "official", "source_url": "https://pvp.qq.com/web201605/herodetail/mengtian.shtml", "score": null}}
+
+event: evidence
+data: {"evidence": {"kind": "graph", "content": "诸葛亮 克制 铠：铠容易被长手法师风筝", "hero_ids": ["190", "193"], "relation": "COUNTERS", "patch": "2026-10", "source": "official", "source_url": "https://pvp.qq.com/web201605/herodetail/kai.shtml", "score": null}}
+
+event: node_start
+data: {"node": "confidence"}
+
+event: node_start
+data: {"node": "generate"}
+
+event: node_start
+data: {"node": "memory"}
+
+event: token
+data: {"text": "【图谱依据】\n-"}
+
+event: token
+data: {"text": " 公孙离 克制 "}
+
+event: token
+data: {"text": "铠：铠是无法对公"}
+
+event: token
+data: {"text": "孙离造成太大的威"}
+
+event: token
+data: {"text": "胁的，无论自身位"}
+
+event: token
+data: {"text": "移还是击退，都可"}
+
+event: token
+data: {"text": "以反制大部分战士"}
+
+event: token
+data: {"text": "坦克突袭\n- 芈"}
+
+event: token
+data: {"text": "月 克制 铠：铠"}
+
+event: token
+data: {"text": "容易被长手法师风"}
+
+event: token
+data: {"text": "筝\n- 蒙恬 克"}
+
+event: token
+data: {"text": "制 铠：蒙恬的技"}
+
+event: token
+data: {"text": "能机制让铠这类高"}
+
+event: token
+data: {"text": "爆发英雄难以发挥"}
+
+event: token
+data: {"text": "\n- 诸葛亮 克"}
+
+event: token
+data: {"text": "制 铠：铠容易被"}
+
+event: token
+data: {"text": "长手法师风筝"}
+
+event: citation
+data: {"citations": [{"index": 1, "kind": "graph", "label": "公孙离 克制 铠：铠是无法对公孙离造成太大的威胁的，无论自身位移还是击退，都可以反制大部分战士坦克突袭", "url": "https://pvp.qq.com/web201605/herodetail/gongsunli.shtml", "patch": "2026-10"}, {"index": 2, "kind": "graph", "label": "芈月 克制 铠：铠容易被长手法师风筝", "url": "https://pvp.qq.com/web201605/herodetail/kai.shtml", "patch": "2026-10"}, {"index": 3, "kind": "graph", "label": "蒙恬 克制 铠：蒙恬的技能机制让铠这类高爆发英雄难以发挥", "url": "https://pvp.qq.com/web201605/herodetail/mengtian.shtml", "patch": "2026-10"}, {"index": 4, "kind": "graph", "label": "诸葛亮 克制 铠：铠容易被长手法师风筝", "url": "https://pvp.qq.com/web201605/herodetail/kai.shtml", "patch": "2026-10"}]}
+
+event: done
+data: {"type": "answer", "confidence": 0.85, "fallback": false, "generation_mode": "template", "clarify_options": [], "intent": "COUNTER_BY"}
+
+
+§2 拒答路径 —— question = 今天天气怎么样
+----------------------------------------------------------------
+event: node_start
+data: {"node": "entity_linking"}
+
+event: node_start
+data: {"node": "intent_routing"}
+
+event: node_start
+data: {"node": "reject"}
+
+event: node_start
+data: {"node": "memory"}
+
+event: token
+data: {"text": "这个问题与王者荣"}
+
+event: token
+data: {"text": "耀无关，我无法回"}
+
+event: token
+data: {"text": "答。你可以问我英"}
+
+event: token
+data: {"text": "雄的克制关系（「"}
+
+event: token
+data: {"text": "铠被谁克制」）、"}
+
+event: token
+data: {"text": "出装（「亚瑟怎么"}
+
+event: token
+data: {"text": "出装」）、铭文、"}
+
+event: token
+data: {"text": "打法或版本强度。"}
+
+event: citation
+data: {"citations": []}
+
+event: done
+data: {"type": "reject", "confidence": 0.0, "fallback": false, "generation_mode": null, "clarify_options": [], "intent": "OUT_OF_SCOPE"}
+
+
+§3 澄清路径 —— question = 赛博坦这个英雄怎么样
+----------------------------------------------------------------
+event: node_start
+data: {"node": "entity_linking"}
+
+event: node_start
+data: {"node": "intent_routing"}
+
+event: node_start
+data: {"node": "clarify"}
+
+event: node_start
+data: {"node": "memory"}
+
+event: token
+data: {"text": "没认出「赛博坦、"}
+
+event: token
+data: {"text": "英雄、怎么样」，"}
+
+event: token
+data: {"text": "你是指下面哪个英"}
+
+event: token
+data: {"text": "雄？"}
+
+event: citation
+data: {"citations": []}
+
+event: done
+data: {"type": "clarify", "confidence": 0.0, "fallback": false, "generation_mode": null, "clarify_options": ["亚瑟", "后羿", "鲁班七号", "貂蝉", "铠", "东皇太一", "兰陵王", "蔡文姬", "孙悟空", "安琪拉"], "intent": "ENTITY_UNKNOWN"}
+

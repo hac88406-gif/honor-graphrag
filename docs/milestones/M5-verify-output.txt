@@ -1,0 +1,111 @@
+﻿M5 前端交付 · 真实运行证据（可复跑）
+生成日期：2026-10-15　规格书：v1.5
+（真实 SSE 事件流另见 M5-sse-live-output.txt）
+================================================================
+
+§1 pytest 全量 · 开发模式（REQUIRE_SERVICES 未设）
+----------------------------------------------------------------
+........................................................................ [ 27%]
+........................................................................ [ 54%]
+........................................................................ [ 82%]
+..............................................                           [100%]
+============================== warnings summary ===============================
+tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
+  D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
+    return json.dumps(create_collection_configuration_to_json(config, metadata))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+262 passed, 1 warning in 19.72s
+
+§2 pytest 全量 · 验收模式（REQUIRE_SERVICES=1，服务依赖不可 skip）
+----------------------------------------------------------------
+........................................................................ [ 27%]
+........................................................................ [ 54%]
+........................................................................ [ 82%]
+..............................................                           [100%]
+============================== warnings summary ===============================
+tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
+  D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
+    return json.dumps(create_collection_configuration_to_json(config, metadata))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+262 passed, 1 warning in 19.86s
+
+§3 数据层复跑校验（scripts/verify_data_layer.py）
+----------------------------------------------------------------
+
+========================================================================
+[verify] 数据层复跑校验  快照 = 20261014-230459
+========================================================================
+【1】源数据层（data/raw/{snapshot}/parsed，未去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+【2】导出层（data/graph/relations.json，按页展开，仍不去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+  [ OK ] 导出层行数 == 源数据层行数（798，未去重）
+  [ OK ] 英雄节点数 == 抓取英雄数（133，全量 133）
+  导出层关系：source 空 = 0，patch 空 = 0，reason 空 = 0
+  [ OK ] 导出层全部关系都有 source
+  [ OK ] 导出层全部关系都有 patch
+  源数据层重复边（会被 MERGE 合并）：COUNTERS 5 条，SYNERGIZES 0 条
+【3】入库后层（Neo4j，MERGE 唯一键 = 起点+类型+终点+patch，已去重）
+  [重导入] 幂等写入 data/graph/*.json ...
+  本次写入：{'full_heroes': 133, 'stub_heroes': 0, 'items': 115, 'inscriptions': 93, 'hero_rel_rows': 798, 'item_edge_rows':
+ 1574, 'ins_edge_rows': 798, 'skipped_item_refs': 20, 'skipped_ins_refs': 0}
+  节点：{'Hero': 133, 'Inscription': 93, 'Item': 115}
+  关系：{'COUNTERS': 527, 'RECOMMENDS_INSCRIPTION': 798, 'RECOMMENDS_ITEM': 1574, 'SYNERGIZES': 266}
+  [ OK ] 幂等：连续两次导入后节点数/关系数逐项不变
+  去重口径推导：源 COUNTERS 532 - 合并 5 = 527
+              源 SYNERGIZES 266 - 合并 0 = 266
+  [ OK ] 入库后 COUNTERS（527）== 去重后口径
+  [ OK ] 入库后 SYNERGIZES（266）== 去重后口径
+  完整性检查（空 = NULL 或 空串）：
+    Hero.source 空            = 0
+    Hero.patch 空             = 0
+    Item.source 空            = 0
+    Inscription.source 空     = 0
+    关系.source 空              = 0
+    关系.patch 空               = 0
+    COUNTERS.reason 空        = 0
+    SYNERGIZES.reason 空      = 0
+【4】向量库（Chroma collection 'guides'）
+Loading weights: 100%|██████████| 391/391 [00:00<00:00, 19086.54it/s]
+  collection.count() = 540（文档数，M1b 验收要求 ≥ 100）
+  缺 patch 元数据 = 0，缺 hero_ids = 0，缺 source_url = 0
+  patch 分布 = {'2026-10': 540}
+  [ OK ] 向量库文档数 540 ≥ 100
+  [ OK ] 向量库元数据（patch / hero_ids / source_url）完整
+========================================================================
+[verify] 结论：PASS —— 数据层复跑校验全部通过，检索层未破坏数据
+========================================================================
+
+
+
+§4 C1 语料确定性重建（data/raw -> build_guides.py，重建前后 SHA256 逐项比对）
+----------------------------------------------------------------
+[guides] 快照=20261014-230459 产出 C1 133 篇；重建前后 SHA256 逐项比对 = IDENTICAL（133 篇逐字节一致）
+
+§5 前端生产构建（frontend: npm run build）
+----------------------------------------------------------------
+
+> honor-graphrag-frontend@0.1.0 build
+> vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 21 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                 [39m[1m[2m 0.40 kB[22m[1m[22m[2m │ gzip:  0.31 kB[22m
+[2mdist/[22m[35massets/index-40etcv6q.css  [39m[1m[2m 7.66 kB[22m[1m[22m[2m │ gzip:  1.99 kB[22m
+[2mdist/[22m[36massets/index-Dcw_P5A6.js   [39m[1m[2m73.86 kB[22m[1m[22m[2m │ gzip: 29.88 kB[22m
+[32m✓ built in 707ms[39m
+
+[verify] 结论：PASS —— M5 后端 SSE 端点与前端骨架自测通过，数据层未破坏
+================================================================
+

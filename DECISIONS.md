@@ -94,6 +94,16 @@
 - `2026-10-15 | 【裁定 C1·语料归属】`data/guides/c1-*.md`（C1，133 篇）**移出版本库**（加 `.gitignore`），改由 `scripts/build_guides.py` 从 `data/raw/` 重建；`data/guides/c2-*.md`（C2，5 篇 LLM 生成）**保留在版本库**；`data/graph/*.json`（结构化事实）**继续留库** | 需求方**修正自己先前的裁决**——此前要求「把技能描述/官方理由改成短句摘录」**是错的，会损害检索质量**（向量库文本变少 → 语义召回变差）。C1 是从 raw 解析出的**派生数据**，与已被 gitignore 的 `data/raw/` 同性质：移出后仓库内不含官方表达性文本（版权顾虑消除），本地仍保留完整语料（检索质量不受影响）。C2 不是官方文本，且**必须提交以保证评测可复现**（LLM 重新生成会得到不同文本 → 向量库变 → 评测不可复现）。`data/graph/*.json` 是结构化事实，无版权问题 | 影响 `.gitignore`、`scripts/build_guides.py`、README 数据层构建步骤；**已实测**：重建 133 篇与移出前逐字节一致（`git status` 干净），138 篇 → **540 chunk** 与数据层复跑校验口径一致`
 - `2026-10-15 | 【裁定 C1 实现细节】`build_guides.py` 的 `publish_date` 改从快照 `fetch_meta.json.generated_at` 取日期，**不再用 `date.today()`** | 裁定要求「fetch 脚本可重跑且产物确定」。原实现用当天日期，**隔天重跑同一快照就会产出不同语料**（front-matter 与写入 Chroma 的 `publish_date` 元数据都变），与「可确定重建」直接矛盾 | 影响 `scripts/build_guides.py`（新增 `snapshot_publish_date()`）；README 重建步骤注明「仅凭 `data/raw/`」的完整链：`fetch_official.py` → `build_guides.py` → `init_chroma.py``
 
+## 2026-10-15（M5 前端）
+
+- `2026-10-15 | SSE 端点用 FastAPI 原生 StreamingResponse 实现，**不引 sse-starlette** | 本项目既定取向是「够用且可控、不引额外依赖」。SSE 一帧就是三行字符串（event 行 + data 行 + 空行），原生 StreamingResponse 足够；为省这几行引一个包不划算。另加 X-Accel-Buffering: no 关掉反代缓冲（否则流被攒起来一次性吐给前端，看起来像没流式） | 影响 app/api/chat.py 的 _sse() 与 /api/chat 路由；测试侧也不反向依赖 sse-starlette 的解析器（test_api_sse.py 自写最小解析器），避免「测试逼着实现引包」`
+- `2026-10-15 | 前端流式用 **fetch + resp.body.getReader()**，**不用 EventSource** | 规格书 §M5 交付原文写「原生 fetch + EventSource」，但 5.2 把问答定义为 **POST /api/chat**（请求体带 session_id + question），而浏览器原生 EventSource **只能发 GET**。用它就得把问题塞进 query string 并另开一个 GET 端点——为迁就一个客户端类去改服务端契约。fetch + ReadableStream 是原生能力，能发 POST 也能逐帧读 SSE | 影响 frontend/src/api.js 的 askStream()；偏离已登记`
+- `2026-10-15 | 【对 5.3 的有意扩展】done 事件新增 **clarify_options** 与 **intent** 两个字段 | 5.3 原协议 done 只有 type/confidence，**拿不到澄清候选**，前端就无法把候选渲染成可点选项——1.6 第 5 条要求的「澄清反问差异化展示」落不了地（只剩一个标签，等于没做）。intent 是 matched_intents（M3 留痕）的单值视图，供过程展示与排查。与 M4 新增 thinking 事件同类，属对 5.3 的有意扩展 | 影响 app/agent/graph.py 的 stream_events 终态 done 载荷、frontend/src/components/MessageBubble.vue；已由 test_clarify_path_carries_options 固化`
+- `2026-10-15 | 【修一处实现缺口】正文改为**校验通过后按块推**（每帧 ≤ 8 字），原先是「一帧整段」 | 原实现下（template 路径与 llm 路径皆然）整段答案作为**单个** token 帧推出，前端只能一次性显示——协议上也不再是 5.3 那种逐段形态（event: token data: {"text": "铠"}），与 M5 验收「SSE 流式逐字显示」不符。**为什么不是边生成边推**：guard 的 G2（英雄名越界）要拿全篇英雄名比对、G3 要按句子窗口判，都必须**完整正文**才判得准；边收边推会让未校验内容先到前端，**推出去撤不回**，等于把 guard 架空。取舍方向与 M4 一致：**校验优先于观感** | 影响 app/agent/nodes/generate.py 的 _emit_text()、app/agent/graph.py 的 template 路径 token 推送；已由 test_token_frames_are_incremental_not_one_shot 钉住粒度（防退回一帧整段）`
+- `2026-10-15 | 前端状态**不引 Pinia**（ref/reactive 足够）；助手消息对象必须用 **reactive() 包一层** | 单页只有一个会话，引 Pinia 等于把一个 ref 换成 store + actions，没有收益（9.2 最简依赖）。**Vue 陷阱**：往 ref 数组里 push **裸对象**后，再在事件回调里改裸对象**不会触发更新**——流式回答会「文字进来了但界面不刷新」，且不报错（静默失败） | 影响 frontend/src/App.vue 的 messages/assistant 构造`
+- `2026-10-15 | 过程展示**只画 node_start 已到达的节点**（不预画整条链）；「当前节点」用**静态**实心点+描边环区分，**不做动画** | 预画整条节点链再逐个点亮，会让「实际没跑」的节点看起来像「跑过了」——正是本项目一路在防的静默失败。另：1.6 明确把「动画特效」列进**不做**清单，故当前节点不用脉动动画，用静态样式即可区分「已完成 / 进行中」 | 影响 frontend/src/components/ProcessPanel.vue`
+- `2026-10-15 | 5.2 表中其余三条接口（POST /api/graph/import、POST /api/docs/upload、DELETE /api/session/{session_id}）**本轮未实现**，归属待需求方裁定 | 它们**不属于任何里程碑的交付/验收条目**（M5 验收只含前端四项；M4 验收不含它们），故不擅自实现；app/main.py 文档字符串已明确标注「尚未挂载」，不留静默缺口。建议：graph/import 与 session 删除并入 M6（成本低）；docs/upload 会牵动「上传语料是否进向量库」的数据层口径与版权声明，建议放 M7 或独立小任务，以免影响 M6 评测的可复现性 | 影响 app/main.py 文档字符串、M5 报告 §4-3；待裁定`
+
 ## 后续里程碑待补
 
 - M2：BM25 中文分词配置、实体链接候选策略细节 → **已于 2026-10-14 M2 落实**（见上节）
@@ -105,4 +115,5 @@
 - M6：评测阈值校准结果回写；**并裁决 LLM 意图路径（route_llm）去留**
 - M6（2026-10-15 二审裁定 A 追加）：评测集必须含**复合意图**用例（8.1 混合类 5 条），并给出**复合问题在真实问句中的占比估算**；据此裁决**多意图合并**做不做（占比低 + 「告知」体验可接受 → 永久不做，写进 README 已知局限）
 - M6（2026-10-15 二审裁定 B-3 追加）：增加 **guard on/off 的 A/B 对比**，量化 guard 对「答案有据率」的实际影响
+- M6/M7（2026-10-15 M5 追加·待裁定）：5.2 表中未实现的 **POST /api/graph/import**、**DELETE /api/session/{session_id}**（建议并入 M6）与 **POST /api/docs/upload**（建议 M7 或独立小任务，牵动上传语料的数据层口径与版权声明）——归属待需求方裁定，见 M5 报告 §4-3
 - M6：升级 chromadb 版本时必须复跑 tests/unit/test_retrieval_chroma.py::test_ef_restart_regression

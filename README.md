@@ -26,7 +26,7 @@ Python 3.12 · FastAPI · LangGraph（SqliteSaver 多轮记忆）· Neo4j 5.x ·
 | M2 检索层 | ✅ 完成（需求方审核通过，见 `docs/milestones/M2-report.md`） |
 | M3 LangGraph 编排 | ✅ 完成（需求方审核通过，三项修改已落实，见 `docs/milestones/M3-report.md`） |
 | M4 生成层 | ✅ 完成（需求方二审通过；裁定 A / B1–B3 / C1 已落实，见 `docs/milestones/M4-report.md`） |
-| M5 前端 | 🚧 进行中（按 1.6 边界：来源卡片 + 过程展示 + 拒答/澄清差异化渲染） |
+| M5 前端 | ✅ 完成（待需求方审核；按 1.6 边界：来源卡片 + 过程展示 + 拒答/澄清差异化渲染，不引 Pinia/Router/UI 库，见 `docs/milestones/M5-report.md`） |
 | M6 评测 | ⏳ |
 | M7 打磨 | ⏳ |
 
@@ -47,6 +47,25 @@ docker-compose up -d
 # 4) 验证
 curl http://127.0.0.1:8000/api/health
 ```
+
+## 前端（M5，最简聊天页）
+
+```powershell
+# 1) 后端先起来（见上「启动」）
+.\.venv\Scripts\python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+
+# 2) 前端开发模式（Vite，/api 自动代理到 8000）
+cd frontend
+npm install
+npm run dev          # http://127.0.0.1:5173
+
+# 3) 生产构建（产出静态文件到 frontend/dist）
+npm run build
+```
+
+前端依赖仅 `vue` + `vite`（**无 Pinia / Router / UI 库**，规格书 1.6 边界）。
+功能：多轮消息列表、SSE 流式逐字显示、节点过程指示、可展开的来源卡片、
+拒答 / 澄清反问的差异化渲染（澄清候选可点选）。`dist/` 与 `node_modules/` 均不入版本库。
 
 ## 数据层构建（M1b，可复现）
 
