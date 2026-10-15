@@ -1,5 +1,5 @@
 ﻿M5 前端交付 · 真实运行证据（可复跑）
-生成日期：2026-10-15　规格书：v1.5
+生成日期：2026-10-15　规格书：v1.6
 （真实 SSE 事件流另见 M5-sse-live-output.txt）
 ================================================================
 
@@ -8,28 +8,28 @@
 ........................................................................ [ 27%]
 ........................................................................ [ 54%]
 ........................................................................ [ 82%]
-..............................................                           [100%]
+...............................................                          [100%]
 ============================== warnings summary ===============================
 tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
   D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
     return json.dumps(create_collection_configuration_to_json(config, metadata))
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-262 passed, 1 warning in 19.72s
+263 passed, 1 warning in 20.37s
 
 §2 pytest 全量 · 验收模式（REQUIRE_SERVICES=1，服务依赖不可 skip）
 ----------------------------------------------------------------
 ........................................................................ [ 27%]
 ........................................................................ [ 54%]
 ........................................................................ [ 82%]
-..............................................                           [100%]
+...............................................                          [100%]
 ============================== warnings summary ===============================
 tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
   D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
     return json.dumps(create_collection_configuration_to_json(config, metadata))
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-262 passed, 1 warning in 19.86s
+263 passed, 1 warning in 20.41s
 
 §3 数据层复跑校验（scripts/verify_data_layer.py）
 ----------------------------------------------------------------
@@ -74,7 +74,8 @@ tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
     COUNTERS.reason 空        = 0
     SYNERGIZES.reason 空      = 0
 【4】向量库（Chroma collection 'guides'）
-Loading weights: 100%|██████████| 391/391 [00:00<00:00, 19086.54it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 391/391 [00:00<00:00, 26720.54it/s]
   collection.count() = 540（文档数，M1b 验收要求 ≥ 100）
   缺 patch 元数据 = 0，缺 hero_ids = 0，缺 source_url = 0
   patch 分布 = {'2026-10': 540}
@@ -104,7 +105,7 @@ computing gzip size...
 [2mdist/[22m[32mindex.html                 [39m[1m[2m 0.40 kB[22m[1m[22m[2m │ gzip:  0.31 kB[22m
 [2mdist/[22m[35massets/index-40etcv6q.css  [39m[1m[2m 7.66 kB[22m[1m[22m[2m │ gzip:  1.99 kB[22m
 [2mdist/[22m[36massets/index-Dcw_P5A6.js   [39m[1m[2m73.86 kB[22m[1m[22m[2m │ gzip: 29.88 kB[22m
-[32m✓ built in 707ms[39m
+[32m✓ built in 783ms[39m
 
 [verify] 结论：PASS —— M5 后端 SSE 端点与前端骨架自测通过，数据层未破坏
 ================================================================

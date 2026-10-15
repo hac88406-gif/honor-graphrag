@@ -1,9 +1,10 @@
 ﻿M5 前端交付 · 真实 SSE 事件流（端到端，可复跑）
-生成日期：2026-10-15　规格书：v1.5
+生成日期：2026-10-15　规格书：v1.6
 服务：uvicorn app.main:app（127.0.0.1:8123），真实 Neo4j + Chroma + 意图规则路径
 生成方式：GENERATION_MODE 默认 template（确定性证据组装，不产生云端费用）
 复跑命令（PowerShell，body 见各节）：
   curl.exe -N -s -X POST http://127.0.0.1:8123/api/chat -H "Content-Type: application/json" --data-binary "@body.json"
+说明：citation 已按 v1.6 §3.4 提前到**生成之前**推送（见 §1 事件顺序）。
 ================================================================
 
 §1 正常回答路径 —— question = 铠被谁克制（stream=true）
@@ -37,6 +38,9 @@ data: {"node": "confidence"}
 
 event: node_start
 data: {"node": "generate"}
+
+event: citation
+data: {"citations": [{"index": 1, "kind": "graph", "label": "公孙离 克制 铠：铠是无法对公孙离造成太大的威胁的，无论自身位移还是击退，都可以反制大部分战士坦克突袭", "url": "https://pvp.qq.com/web201605/herodetail/gongsunli.shtml", "patch": "2026-10"}, {"index": 2, "kind": "graph", "label": "芈月 克制 铠：铠容易被长手法师风筝", "url": "https://pvp.qq.com/web201605/herodetail/kai.shtml", "patch": "2026-10"}, {"index": 3, "kind": "graph", "label": "蒙恬 克制 铠：蒙恬的技能机制让铠这类高爆发英雄难以发挥", "url": "https://pvp.qq.com/web201605/herodetail/mengtian.shtml", "patch": "2026-10"}, {"index": 4, "kind": "graph", "label": "诸葛亮 克制 铠：铠容易被长手法师风筝", "url": "https://pvp.qq.com/web201605/herodetail/kai.shtml", "patch": "2026-10"}]}
 
 event: node_start
 data: {"node": "memory"}
@@ -91,9 +95,6 @@ data: {"text": "制 铠：铠容易被"}
 
 event: token
 data: {"text": "长手法师风筝"}
-
-event: citation
-data: {"citations": [{"index": 1, "kind": "graph", "label": "公孙离 克制 铠：铠是无法对公孙离造成太大的威胁的，无论自身位移还是击退，都可以反制大部分战士坦克突袭", "url": "https://pvp.qq.com/web201605/herodetail/gongsunli.shtml", "patch": "2026-10"}, {"index": 2, "kind": "graph", "label": "芈月 克制 铠：铠容易被长手法师风筝", "url": "https://pvp.qq.com/web201605/herodetail/kai.shtml", "patch": "2026-10"}, {"index": 3, "kind": "graph", "label": "蒙恬 克制 铠：蒙恬的技能机制让铠这类高爆发英雄难以发挥", "url": "https://pvp.qq.com/web201605/herodetail/mengtian.shtml", "patch": "2026-10"}, {"index": 4, "kind": "graph", "label": "诸葛亮 克制 铠：铠容易被长手法师风筝", "url": "https://pvp.qq.com/web201605/herodetail/kai.shtml", "patch": "2026-10"}]}
 
 event: done
 data: {"type": "answer", "confidence": 0.85, "fallback": false, "generation_mode": "template", "clarify_options": [], "intent": "COUNTER_BY"}

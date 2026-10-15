@@ -1,12 +1,16 @@
 # M5 交付报告 — 前端（SSE 流式问答 + 来源可追溯）
 
-> 生成日期：2026-10-15　规格书：**v1.5**　快照：`data/raw/20261014-230459`
+> 生成日期：2026-10-15　规格书：**v1.5（交付时）→ v1.6（审核后，见 §6）**　快照：`data/raw/20261014-230459`
 > 格式依据：规格书 11.3（四项缺一视为未完成）。
 > **状态：待需求方审核。**
 > 本轮范围：M5 按 **1.6 边界**执行 —— 消息列表 / 输入框 / 来源卡片 / 过程指示 / 拒答与澄清差异化，
-> **不引 Pinia / Router / UI 库**。规格书无需变更，仍为 v1.5。
+> **不引 Pinia / Router / UI 库**。
 > 附带修一处**实现缺口**（见 §4-2）：正文原先是「一帧整段」推给前端，不算流式，
 > 与 M5 验收「SSE 流式逐字显示」不符。
+>
+> **M5 审核后追加（本轮）**：① 首 token 偏差显式登记到 README 与 DECISIONS；② `citation` 提前到
+> 生成之前推（规格书 v1.6 §3.4 的感知改善建议）；③ 5.2 三条接口归属裁定落地（README 接口清单
+> 与 5.2 表逐条一致）。详见 **§6**。
 
 ---
 
@@ -27,22 +31,23 @@
 | `frontend/src/components/MessageBubble.vue` | 消息气泡，按 `done.type` **差异化渲染**（answer / low_confidence / reject / clarify） |
 | `frontend/src/components/ProcessPanel.vue` | 过程展示：只展示**已发生**的节点，不预测后续 |
 | `frontend/src/components/SourceCards.vue` | 来源卡片：原生 `<details>` 可展开，按 citation index 配对 evidence 原文 |
-| `tests/integration/test_api_sse.py` | 6 用例：SSE 事件序列 / 分帧粒度 / 三条路径 type 分流 / 非流式分支 |
+| `tests/integration/test_api_sse.py` | 7 用例：SSE 事件序列 / 分帧粒度 / **citation 先于正文** / 三条路径 type 分流 / 非流式分支 |
 | `docs/milestones/M5-report.md` | 本报告 |
 | `docs/milestones/M5-verify-output.txt` | pytest（两模式）+ 数据层复跑校验 + C1 重建 + 前端构建 真实输出 |
 | `docs/milestones/M5-sse-live-output.txt` | **端到端真实 SSE 事件流**（三条路径，可复跑） |
 | `docs/module-notes/m5-frontend.md` | M5 模块三段说明（规格书 9.1-1） |
+| `app/agent/citations.py` | **（审核后追加）** Evidence→Citation 的统一构造：citation 有「stream_events 提前推」与「generate 写终态 State」两个推送点，index 基准与 label 截断都是对外契约，收敛到单一入口避免分叉 |
 
 ### 1.2 修改（M5）
 
 | 文件 | 说明 |
 | --- | --- |
 | `app/api/chat.py` | 新增 `POST /api/chat`（SSE，**FastAPI 原生 `StreamingResponse`**，不引 sse-starlette）；`/api/chat/sync` 保留不变；抽出 `_to_response()` / `_sse()` 复用 |
-| `app/agent/graph.py` | `done` 事件补 `clarify_options` / `intent`（否则前端拿不到澄清候选）；**template 路径正文改为按块推**（原先一帧整段） |
-| `app/agent/nodes/generate.py` | 新增 `_emit_text()`：把**已校验通过**的正文按块推（原先一帧整段） |
+| `app/agent/graph.py` | `done` 事件补 `clarify_options` / `intent`（否则前端拿不到澄清候选）；**template 路径正文改为按块推**（原先一帧整段）；**（审核后追加）`citation` 提前到 `node_start(generate)` 处推**（v1.6 §3.4） |
+| `app/agent/nodes/generate.py` | 新增 `_emit_text()`：把**已校验通过**的正文按块推（原先一帧整段）；**（审核后追加）** 改用 `build_citations()`，移除本地私有 `_citation` |
 | `app/main.py` | 文档字符串更新（SSE 已挂载；5.2 表中其余三条未挂载，归属待裁定） |
-| `DECISIONS.md` | 追加「M5 前端」决策 **6 条** |
-| `README.md` | 里程碑状态更新（M5 完成待审）+ 前端启动/构建步骤 |
+| `DECISIONS.md` | 追加「M5 前端」决策 **10 条**（含审核后 3 条：citation 提前推、citations 单一入口、首 token 偏差登记） |
+| `README.md` | 里程碑状态更新；前端启动/构建步骤；**（审核后追加）接口清单（与 5.2 表逐条一致）、已知偏差（首 token）、非目标（graph/import）** |
 
 ---
 
@@ -56,23 +61,23 @@
 **开发模式**（`REQUIRE_SERVICES` 未设）：
 
 ```
-262 passed, 1 warning in 19.72s
+263 passed, 1 warning in 20.37s
 ```
 
 **验收模式**（`REQUIRE_SERVICES=1`，服务依赖用例不可 skip —— 11.3 v1.5）：
 
 ```
-262 passed, 1 warning in 19.86s
+263 passed, 1 warning in 20.41s
 ```
 
-两种模式均为 **262 passed / 0 skipped**（Neo4j 与 Chroma 在线，无静默 skip）。
+两种模式均为 **263 passed / 0 skipped**（Neo4j 与 Chroma 在线，无静默 skip）。
 1 warning 为 chromadb 内部 `is_legacy` DeprecationWarning（与断言无关，升级复跑要求已登记）。
 
 | 文件 | 用例数 | 归属 |
 | --- | --- | --- |
 | M0–M4 既有 | 256 | — |
-| `tests/integration/test_api_sse.py` | **6** | **M5** |
-| **合计** | **262** | M5 新增 6 |
+| `tests/integration/test_api_sse.py` | **7** | **M5** |
+| **合计** | **263** | M5 新增 7 |
 
 ### 2.2 数据层复跑校验（**未破坏数据**）
 
