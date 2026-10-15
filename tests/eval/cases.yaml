@@ -1,0 +1,362 @@
+# M6 评测用例集（规格书 8.1，覆盖集）
+#
+# 用途：意图路由 / 实体链接 / 检索 Recall@5 / 拒答正确率 的**覆盖集**评测。
+# 与 `freeform.yaml`（自由问句泛化集）分开统计，两个数分别上报（需求方 2026-10-15 要求）。
+#
+# 字段口径：
+#   id                       用例编号（跨版本稳定，便于对比历史结果）
+#   category                 8.1 的场景分类
+#   question                 问句（单轮用例）
+#   turns                    多轮用例：按顺序在同一 session 内发问，逐轮断言
+#   expected_intent          人工标注的**应有意图**（4.4 封闭枚举取值）
+#                             —— 标注依据是「人读这句话会期望系统回答什么」，不是「系统会答什么」
+#   expected_entity_ids      人工标注的**应有实体**（图谱规范 ID）；要求全部命中
+#   expected_evidence_contains  关键依据片段；命中任一即算 Recall@5 命中
+#                             - 图谱侧用关系文本片段（如「克制 铠」，对应 Evidence 的
+#                               「{压制者} 克制 {目标}：{理由}」格式）
+#                             - 向量侧用**该英雄攻略文本里必然出现的英雄名**（关键依据 = 该英雄的攻略）
+#   expect_type              answer / low_confidence / clarify / reject（4.9 三档 + 澄清）
+#
+# **约束**（规格书 8.2）：不得为了让指标好看而修改本文件的标注或放宽 expect_type。
+# 指标不达标就如实记录并归因。
+
+meta:
+  spec: "v1.6"
+  section: "8.1 覆盖集"
+  generated: "2026-10-15"
+
+cases:
+  # ---------------- 图谱-克制/被克制（6） ----------------
+  - id: G-01
+    category: 图谱-克制/被克制
+    question: "铠被谁克制"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["193"]
+    expected_evidence_contains: ["克制 铠"]
+    expect_type: answer
+
+  - id: G-02
+    category: 图谱-克制/被克制
+    question: "谁能打铠"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["193"]
+    expected_evidence_contains: ["克制 铠"]
+    expect_type: answer
+
+  - id: G-03
+    category: 图谱-克制/被克制
+    question: "后羿怕谁"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["169"]
+    expected_evidence_contains: ["克制 后羿"]
+    expect_type: answer
+
+  - id: G-04
+    category: 图谱-克制/被克制
+    question: "鲁班七号被谁克制"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["112"]
+    expected_evidence_contains: ["克制 鲁班七号"]
+    expect_type: answer
+
+  - id: G-05
+    category: 图谱-克制/被克制
+    question: "貂蝉克制谁"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["141"]
+    expected_evidence_contains: ["貂蝉 克制"]
+    expect_type: answer
+
+  - id: G-06
+    category: 图谱-克制/被克制
+    question: "兰陵王能打谁"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["153"]
+    expected_evidence_contains: ["兰陵王 克制"]
+    expect_type: answer
+
+  # ---------------- 图谱-出装/铭文（4） ----------------
+  - id: B-01
+    category: 图谱-出装/铭文
+    question: "铠的出装"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: ["193"]
+    expected_evidence_contains: ["第1套出装"]
+    expect_type: answer
+
+  - id: B-02
+    category: 图谱-出装/铭文
+    question: "亚瑟怎么出装"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: ["166"]
+    expected_evidence_contains: ["第1套出装"]
+    expect_type: answer
+
+  - id: B-03
+    category: 图谱-出装/铭文
+    question: "貂蝉的铭文怎么搭配"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: ["141"]
+    expected_evidence_contains: ["第1套铭文"]
+    expect_type: answer
+
+  - id: B-04
+    category: 图谱-出装/铭文
+    question: "后羿铭文"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: ["169"]
+    expected_evidence_contains: ["第1套铭文"]
+    expect_type: answer
+
+  # ---------------- 图谱-搭档（2） ----------------
+  - id: S-01
+    category: 图谱-搭档
+    question: "谁和鲁班七号配合好"
+    expected_intent: SYNERGY
+    expected_entity_ids: ["112"]
+    expected_evidence_contains: ["是官方推荐搭档"]
+    expect_type: answer
+
+  - id: S-02
+    category: 图谱-搭档
+    question: "貂蝉的搭档是谁"
+    expected_intent: SYNERGY
+    expected_entity_ids: ["141"]
+    expected_evidence_contains: ["是官方推荐搭档"]
+    expect_type: answer
+
+  # ---------------- 文本-打法/版本（8） ----------------
+  - id: T-01
+    category: 文本-打法/版本
+    question: "貂蝉对线思路"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["141"]
+    expected_evidence_contains: ["缘·心结", "貂蝉"]
+    expect_type: answer
+
+  - id: T-02
+    category: 文本-打法/版本
+    question: "铠怎么玩"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["193"]
+    expected_evidence_contains: ["修罗之魂", "铠"]
+    expect_type: answer
+
+  - id: T-03
+    category: 文本-打法/版本
+    question: "兰陵王的连招技巧"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["153"]
+    expected_evidence_contains: ["秘技·影蚀", "兰陵王"]
+    expect_type: answer
+
+  - id: T-04
+    category: 文本-打法/版本
+    question: "后羿的打法"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["169"]
+    expected_evidence_contains: ["灼日之矢", "后羿"]
+    expect_type: answer
+
+  - id: T-05
+    category: 文本-打法/版本
+    question: "东皇太一的玩法"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["187"]
+    expected_evidence_contains: ["堕神契约", "东皇太一"]
+    expect_type: answer
+
+  - id: T-06
+    category: 文本-打法/版本
+    question: "花木兰怎么玩"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["154"]
+    expected_evidence_contains: ["花木兰"]
+    expect_type: answer
+
+  - id: T-07
+    category: 文本-打法/版本
+    question: "这个版本谁强"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expected_evidence_contains: ["版本"]
+    expect_type: answer
+
+  - id: T-08
+    category: 文本-打法/版本
+    question: "当前版本哪些英雄强势"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expected_evidence_contains: ["版本"]
+    expect_type: answer
+
+  # ---------------- 混合-对位（5） ----------------
+  - id: H-01
+    category: 混合-对位
+    question: "我玩铠怎么打吕布"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["193", "123"]
+    expected_evidence_contains: ["克制 吕布"]
+    expect_type: answer
+
+  - id: H-02
+    category: 混合-对位
+    question: "铠怎么打后羿"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["193", "169"]
+    expected_evidence_contains: ["克制 后羿"]
+    expect_type: answer
+
+  - id: H-03
+    category: 混合-对位
+    question: "我玩貂蝉怎么打张良"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["141", "156"]
+    expected_evidence_contains: ["克制 张良"]
+    expect_type: answer
+
+  # 4.3 点名的场景：只给了敌方英雄 -> 槽位不完整 -> 澄清反问（不算拒答）
+  - id: H-04
+    category: 混合-对位
+    question: "怎么打东皇太一"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["187"]
+    expected_evidence_contains: []
+    expect_type: clarify
+
+  - id: H-05
+    category: 混合-对位
+    question: "怎么针对兰陵王"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["153"]
+    expected_evidence_contains: []
+    expect_type: clarify
+
+  # ---------------- 多轮追问（4 条链，逐轮断言） ----------------
+  # 四条链取自规格书 4.10「测试用例必须覆盖的追问链条」
+  - id: M-01
+    category: 多轮追问
+    turns:
+      - question: "铠被谁克制"
+        expected_intent: COUNTER_BY
+        expected_entity_ids: ["193"]
+        expect_type: answer
+      - question: "那铭文呢"
+        expected_intent: INSCRIPTION
+        expected_entity_ids: ["193"]
+        expect_type: answer
+
+  - id: M-02
+    category: 多轮追问
+    turns:
+      - question: "亚瑟怎么出装"
+        expected_intent: ITEM_BUILD
+        expected_entity_ids: ["166"]
+        expect_type: answer
+      - question: "那他怕谁"
+        expected_intent: COUNTER_BY
+        expected_entity_ids: ["166"]
+        expect_type: answer
+
+  - id: M-03
+    category: 多轮追问
+    # 「怎么打」省略主语：继承实体「貂蝉」后成为「怎么打貂蝉」= 如何应对貂蝉，
+    # 只有敌方无我方 -> 槽位不完整 -> 澄清（4.9）。这是省略主语链的正确落点。
+    turns:
+      - question: "貂蝉怕什么"
+        expected_intent: COUNTER_BY
+        expected_entity_ids: ["141"]
+        expect_type: answer
+      - question: "怎么打"
+        expected_intent: MATCHUP
+        expected_entity_ids: ["141"]
+        expect_type: clarify
+
+  - id: M-04
+    category: 多轮追问
+    # 纯指代链：首轮只给英雄名 -> 澄清；次轮「他克制谁」继承实体 -> COUNTER_OF
+    turns:
+      - question: "东皇太一"
+        expected_intent: ENTITY_UNKNOWN
+        expected_entity_ids: ["187"]
+        expect_type: clarify
+      - question: "他克制谁"
+        expected_intent: COUNTER_OF
+        expected_entity_ids: ["187"]
+        expect_type: answer
+
+  # ---------------- 拒答/越界（4） ----------------
+  - id: R-01
+    category: 拒答/越界
+    question: "今天天气怎么样"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-02
+    category: 拒答/越界
+    question: "北京到上海多远"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-03
+    category: 拒答/越界
+    question: "推荐几部好看的电影"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-04
+    category: 拒答/越界
+    question: "1+1等于几"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  # ---------------- 实体异常（5） ----------------
+  - id: E-01
+    category: 实体异常
+    question: "凯被谁克制"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["193"]
+    expected_evidence_contains: ["克制 铠"]
+    expect_type: answer
+
+  - id: E-02
+    category: 实体异常
+    question: "兰凌王能打谁"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["153"]
+    expected_evidence_contains: ["兰陵王 克制"]
+    expect_type: answer
+
+  - id: E-03
+    category: 实体异常
+    question: "猴子怕谁"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["167"]
+    expected_evidence_contains: ["克制 孙悟空"]
+    expect_type: answer
+
+  # 分路口语：只给分路，未给英雄 -> 澄清候选按分路给（4.3 第 2 级必须覆盖）
+  - id: E-04
+    category: 实体异常
+    question: "我想玩个射手"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: clarify
+
+  # 不存在的英雄：实体未识别 -> 澄清（9.2-5 明确禁止走拒答）
+  - id: E-05
+    category: 实体异常
+    question: "赛博坦这个英雄怎么样"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: clarify

@@ -1,0 +1,504 @@
+# M6 评测用例集（规格书 8.1，泛化集 / 自由问句）
+#
+# 用途：与 `cases.yaml`（覆盖集，按 8.1 场景分布构造）**分开统计**意图路由准确率。
+# 需求方 2026-10-15 明确：覆盖集与泛化集两个数必须分开报，且泛化集 ≥60 条。
+# 理由：20 条抽样的置信区间约 ±18%，80% 这个数不可用；而覆盖集是「照着关键词表构造」的，
+# 在上面刷高准确率没有说服力。泛化集用**真实用户口吻**（口语、倒装、省略、简称、错别字）
+# 来测「没被关键词表直接覆盖的问法能不能路由对」。
+#
+# 字段口径：
+#   id               用例编号（跨版本稳定）
+#   category         问句风格分类（便于归因：是哪一类口吻在失败）
+#   question         问句
+#   expected_intent  人工标注的**应有意图**（4.4 封闭枚举）
+#                     —— 标注依据是「人读这句话会期望系统回答什么」，不是「系统会答什么」
+#   expected_entity_ids  人工标注的**应有实体**（图谱规范 ID）；要求全部命中
+#   expect_type      answer / low_confidence / clarify / reject（4.9 三档 + 澄清）
+#   note             该条为何这样标（或预期它可能失败的原因），供归因时核对
+#
+# **约束**（规格书 8.2）：不得为了让指标好看而修改本文件的标注或放宽 expect_type。
+# 标注先于运行冻结；跑完若与标注不符，**如实计入错误样例并归因**，不得回头改标注。
+#
+# **已知会失败的口语形态**（写在这里是为了「提前声明这是被测的已知缺口」，不是事后找补）：
+#   - 「谁打得过 X」「我拿谁好打 X」这类**倒装/口语**的「求压制者名单」问法；
+#   - 「怎么发育」「怎么抓人」「打野节奏怎么带」这类**不带关键词表词根**的 GAMEPLAY 问法；
+#   它们都是真实用户会说的话，失败就是失败，不做规避。
+
+meta:
+  spec: "v1.6"
+  section: "8.1 泛化集（自由问句）"
+  generated: "2026-10-15"
+
+cases:
+  # ---------------- 图谱-克制/被克制（14） ----------------
+  - id: F-01
+    category: 口语-倒装
+    question: "铠谁打得过他啊"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["193"]
+    expect_type: answer
+    note: "『谁打得过 X』倒装；关键词表只收了『谁打得过』的正序形式"
+  - id: F-02
+    category: 口语
+    question: "后羿最怕啥英雄"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["169"]
+    expect_type: answer
+  - id: F-03
+    category: 口语-倒装
+    question: "我拿谁好打鲁班七号"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["112"]
+    expect_type: answer
+    note: "『我拿谁好打 X』= 谁克制 X；关键词表未收『好打』"
+  - id: F-04
+    category: 书面
+    question: "貂蝉的天敌是哪些"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["141"]
+    expect_type: answer
+  - id: F-05
+    category: 书面
+    question: "哪个英雄能压制兰陵王"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["153"]
+    expect_type: answer
+  - id: F-06
+    category: 口语
+    question: "花木兰怕什么英雄"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["154"]
+    expect_type: answer
+  - id: F-07
+    category: 口语-简称
+    question: "谁能针对猴子"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["167"]
+    expect_type: answer
+    note: "『猴子』是孙悟空的民间简称，靠别名表命中"
+  - id: F-08
+    category: 口语
+    question: "铠能打过谁"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["193"]
+    expect_type: answer
+  - id: F-09
+    category: 口语
+    question: "兰陵王克谁"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["153"]
+    expect_type: answer
+  - id: F-10
+    category: 书面
+    question: "貂蝉压制哪些英雄"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["141"]
+    expect_type: answer
+  - id: F-11
+    category: 书面
+    question: "孙悟空打得过谁"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["167"]
+    expect_type: answer
+  - id: F-12
+    category: 书面
+    question: "花木兰克制什么英雄"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["154"]
+    expect_type: answer
+  - id: F-13
+    category: 口语
+    question: "后羿能欺负谁"
+    expected_intent: COUNTER_OF
+    expected_entity_ids: ["169"]
+    expect_type: answer
+  - id: F-14
+    category: 口语-场景化
+    question: "对面选貂蝉我选谁能克制她"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: ["141"]
+    expect_type: answer
+
+  # ---------------- 图谱-搭档（6） ----------------
+  - id: F-15
+    category: 口语
+    question: "铠跟谁配合比较猛"
+    expected_intent: SYNERGY
+    expected_entity_ids: ["193"]
+    expect_type: answer
+  - id: F-16
+    category: 口语-极简
+    question: "后羿配谁"
+    expected_intent: SYNERGY
+    expected_entity_ids: ["169"]
+    expect_type: answer
+  - id: F-17
+    category: 口语
+    question: "鲁班七号适合和谁一队"
+    expected_intent: SYNERGY
+    expected_entity_ids: ["112"]
+    expect_type: answer
+  - id: F-18
+    category: 口语-游戏黑话
+    question: "貂蝉开黑搭谁"
+    expected_intent: SYNERGY
+    expected_entity_ids: ["141"]
+    expect_type: answer
+  - id: F-19
+    category: 口语
+    question: "东皇太一和谁一起玩强"
+    expected_intent: SYNERGY
+    expected_entity_ids: ["187"]
+    expect_type: answer
+  - id: F-20
+    category: 书面
+    question: "宫本武藏的组合英雄有谁"
+    expected_intent: SYNERGY
+    expected_entity_ids: ["130"]
+    expect_type: answer
+
+  # ---------------- 图谱-出装/铭文（12） ----------------
+  - id: F-21
+    category: 口语
+    question: "铠出什么装备好"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: ["193"]
+    expect_type: answer
+  - id: F-22
+    category: 口语
+    question: "亚瑟第一件出啥"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: ["166"]
+    expect_type: answer
+  - id: F-23
+    category: 游戏黑话
+    question: "貂蝉六神装"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: ["141"]
+    expect_type: answer
+  - id: F-24
+    category: 口语
+    question: "后羿鞋子买哪个"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: ["169"]
+    expect_type: answer
+  - id: F-25
+    category: 口语
+    question: "东皇太一怎么出装啊"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: ["187"]
+    expect_type: answer
+  - id: F-26
+    category: 口语
+    question: "花木兰核心装是啥"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: ["154"]
+    expect_type: answer
+  - id: F-27
+    category: 口语
+    question: "铠带什么铭文"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: ["193"]
+    expect_type: answer
+  - id: F-28
+    category: 同义词
+    question: "亚瑟符文怎么配"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: ["166"]
+    expect_type: answer
+    note: "『符文』是铭文的同义词，关键词表已收"
+  - id: F-29
+    category: 书面
+    question: "貂蝉的铭文推荐"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: ["141"]
+    expect_type: answer
+  - id: F-30
+    category: 口语
+    question: "后羿用什么铭文好"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: ["169"]
+    expect_type: answer
+  - id: F-31
+    category: 书面
+    question: "东皇太一铭文搭配"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: ["187"]
+    expect_type: answer
+    note: "『搭配』同时是 SYNERGY 关键词 —— 但『铭文』优先级更高，且语义主体是铭文"
+  - id: F-32
+    category: 口语
+    question: "兰陵王带啥铭文"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: ["153"]
+    expect_type: answer
+
+  # ---------------- 文本-打法（10） ----------------
+  - id: F-33
+    category: 口语
+    question: "铠怎么玩才厉害"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["193"]
+    expect_type: answer
+  - id: F-34
+    category: 书面
+    question: "亚瑟的对线思路"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["166"]
+    expect_type: answer
+    note: "『对线』是 MATCHUP 关键词、『思路』是 GAMEPLAY —— 优先级裁决应取 GAMEPLAY"
+  - id: F-35
+    category: 口语
+    question: "貂蝉连招怎么放"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["141"]
+    expect_type: answer
+  - id: F-36
+    category: 口语-无词根
+    question: "兰陵王打野节奏怎么带"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["153"]
+    expect_type: answer
+    note: "**预期失败**：『节奏/怎么带』不在关键词表；只有『打野』落在领域词里"
+  - id: F-37
+    category: 口语-无词根
+    question: "后羿怎么发育"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["169"]
+    expect_type: answer
+    note: "**预期失败**：『发育』既不是 GAMEPLAY 词根也不是领域词（只有『发育路』）"
+  - id: F-38
+    category: 口语
+    question: "花木兰上手难不难"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["154"]
+    expect_type: answer
+  - id: F-39
+    category: 书面
+    question: "东皇太一的意识"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["187"]
+    expect_type: answer
+  - id: F-40
+    category: 口语
+    question: "貂蝉打团思路"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["141"]
+    expect_type: answer
+  - id: F-41
+    category: 口语
+    question: "铠的技巧有哪些"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["193"]
+    expect_type: answer
+  - id: F-42
+    category: 口语-无词根
+    question: "兰陵王怎么抓人"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: ["153"]
+    expect_type: answer
+    note: "**预期失败**：『抓人』不在关键词表也不在领域词里"
+
+  # ---------------- 文本-版本（6） ----------------
+  - id: F-43
+    category: 口语
+    question: "现在版本谁最强"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expect_type: answer
+  - id: F-44
+    category: 口语
+    question: "这个赛季上分用啥英雄"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expect_type: answer
+  - id: F-45
+    category: 书面
+    question: "2026年10月版本梯队"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expect_type: answer
+  - id: F-46
+    category: 口语
+    question: "当前谁值得练"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expect_type: answer
+  - id: F-47
+    category: 游戏黑话
+    question: "版本答案是什么"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expect_type: answer
+  - id: F-48
+    category: 口语
+    question: "这版本打野强势的有哪些"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expect_type: answer
+
+  # ---------------- 混合-对位（10） ----------------
+  - id: F-49
+    category: 场景化
+    question: "我玩铠怎么打吕布"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["193", "123"]
+    expect_type: answer
+  - id: F-50
+    category: 书面
+    question: "亚瑟对线吕布怎么打"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["166", "123"]
+    expect_type: answer
+  - id: F-51
+    category: 省略主语
+    question: "怎么打貂蝉"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["141"]
+    expect_type: clarify
+    note: "4.3：只给敌方英雄 -> 槽位不完整 -> 澄清反问（不算拒答）"
+  - id: F-52
+    category: 场景化
+    question: "貂蝉打张良怎么打"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["141", "156"]
+    expect_type: answer
+  - id: F-53
+    category: 场景化
+    question: "我拿后羿怎么对线百里守约"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["169", "196"]
+    expect_type: answer
+  - id: F-54
+    category: 场景化
+    question: "花木兰怎么打铠"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["154", "193"]
+    expect_type: clarify
+    note: "『花木兰怎么打铠』关键字前是我方（花木兰）、后是敌方（铠）-> 双槽齐全 -> 正常回答"
+  - id: F-55
+    category: 场景化
+    question: "铠对线怎么打后羿"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["193", "169"]
+    expect_type: answer
+  - id: F-56
+    category: 口语
+    question: "东皇太一怎么破"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["187"]
+    expect_type: clarify
+    note: "4.4 槽位规则：关键字**之前**的英雄算我方，故此句我方=东皇太一、缺敌方 -> 应澄清"
+  - id: F-57
+    category: 场景化
+    question: "对面貂蝉怎么针对"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["141"]
+    expect_type: clarify
+  - id: F-58
+    category: 场景化
+    question: "我用亚瑟碰到兰陵王怎么打"
+    expected_intent: MATCHUP
+    expected_entity_ids: ["166", "153"]
+    expect_type: answer
+
+  # ---------------- 实体未识别（8） ----------------
+  - id: F-59
+    category: 分路口语
+    question: "我想玩个法师"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expect_type: clarify
+  - id: F-60
+    category: 分路口语
+    question: "推荐个打野英雄"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expect_type: clarify
+  - id: F-61
+    category: 不存在的英雄
+    question: "赛博坦这个英雄怎么样"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expect_type: clarify
+    note: "9.2-5：实体未识别必须澄清，禁止走拒答"
+  - id: F-62
+    category: 无实体
+    question: "这个英雄强吗"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expect_type: clarify
+  - id: F-63
+    category: 纯英雄名
+    question: "铠"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: ["193"]
+    expect_type: clarify
+  - id: F-64
+    category: 领域内但无意图
+    question: "有没有克制关系图"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expect_type: clarify
+  - id: F-65
+    category: 分路口语
+    question: "我想练个射手"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expect_type: clarify
+  - id: F-66
+    category: 分路口语
+    question: "帮我选个对抗路英雄"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expect_type: clarify
+
+  # ---------------- 越界（8） ----------------
+  - id: F-67
+    category: 越界
+    question: "今天A股怎么样"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expect_type: reject
+  - id: F-68
+    category: 越界
+    question: "帮我写个Python脚本"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expect_type: reject
+  - id: F-69
+    category: 越界
+    question: "讲个笑话"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expect_type: reject
+  - id: F-70
+    category: 越界
+    question: "北京限行尾号是多少"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expect_type: reject
+  - id: F-71
+    category: 越界
+    question: "怎么减肥"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expect_type: reject
+  - id: F-72
+    category: 越界
+    question: "推荐部好看的电影"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expect_type: reject
+  - id: F-73
+    category: 越界
+    question: "1+1等于几"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expect_type: reject
+  - id: F-74
+    category: 越界
+    question: "明天会下雨吗"
+    expected_intent: OUT_OF_SCOPE
+    expected_entity_ids: []
+    expect_type: reject
