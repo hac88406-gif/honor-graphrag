@@ -1,0 +1,181 @@
+"""生成后校验单测（规格书 4.9 生成约束补强）。
+
+**核心用例来自需求方实测**：给两条资料（含「妲己克制后羿，因后羿怕高爆发法师」），
+`deepseek-chat` 回答成「后羿怕高爆发的法师英雄，比如妲己」—— 把资料里的**解释**当成了**类别**。
+`scripts/compare_llm_models.py` 复跑显示 v4-pro 与 flash 在基础/强化 prompt 下**均复现**，
+故 prompt 挡不住，必须靠本层拦截。
+
+同时把 guard 的**边界**一并固化（哪些情形放过、哪些情形拦下），
+避免后人调规则时不知道原来的边界在哪里 —— 也如实记录启发式的局限。
+"""
+from __future__ import annotations
+
+from app.llm.guard import check_answer
+from app.schemas.chat import Evidence
+
+# 需求方实测的原始资料与原始越界答案
+LEAK_EVIDENCE = [Evidence(
+    kind="graph", content="妲己 克制 后羿：后羿怕高爆发法师", source="official",
+    relation="COUNTERS", patch="2026-10", hero_ids=["131", "169"],
+)]
+LEAK_ANSWER = "后羿怕高爆发的法师英雄，比如妲己。"
+
+
+def _ev(content: str, kind: str = "graph") -> Evidence:
+    return Evidence(kind=kind, content=content, source="official", patch="2026-10")
+
+
+# ---------------------------------------------------------------- G3 类别化外推
+
+def test_class_leak_observed_case_is_rejected():
+    """需求方实测原案：把资料里的解释当类别 -> 必须拦下。"""
+    g = check_answer(LEAK_ANSWER, LEAK_EVIDENCE, "后羿怕什么？")
+    assert not g.ok
+    assert g.reason == "class_leak"
+    assert "怕高爆发的法师" in g.detail
+
+
+def test_class_leak_with_other_relation_words():
+    """同类形态的其它说法（克星 / 被克制 / 天敌）一并覆盖。"""
+    for answer in (
+        "后羿的克星是高爆发法师。",
+        "后羿被刺客克制。",
+        "后羿的天敌是法师英雄。",
+    ):
+        g = check_answer(answer, LEAK_EVIDENCE, "后羿怕什么？")
+        assert not g.ok and g.reason == "class_leak", answer
+
+
+def test_specific_hero_answer_passes():
+    """正确形态：用资料里的**具体英雄**回答 -> 放行。"""
+    g = check_answer("克制后羿的英雄是妲己。", LEAK_EVIDENCE, "后羿怕什么？")
+    assert g.ok, g
+
+
+def test_role_word_without_relation_context_passes():
+    """边界：职业词不与关系词同现时不拦（如「妲己是法师」只是陈述资料事实）。
+
+    启发式的取舍：宁可放过这种，也不误伤「资料里确实写了职业」的正常回答。
+    """
+    g = check_answer("妲己是法师，可以克制后羿。", LEAK_EVIDENCE, "后羿怕什么？")
+    assert g.ok, g
+
+
+def test_class_leak_detected_even_when_phrase_exists_in_evidence():
+    """资料里确实写着「后羿怕高爆发法师」时，**答案照抄这句话当结论**仍算越界。
+
+    这正是实测失败案例的难点：字符串比对无法区分，必须按「关系词 + 职业词」的形态判定。
+    """
+    assert "后羿怕高爆发法师" in LEAK_EVIDENCE[0].content
+    g = check_answer("后羿怕高爆发法师。", LEAK_EVIDENCE, "后羿怕什么？")
+    assert not g.ok and g.reason == "class_leak"
+
+
+# ---------------------------------------------------------------- G2 英雄名越界
+
+def test_hero_not_in_evidence_is_rejected():
+    """答案里出现资料中不存在的英雄 -> 拦下（4.9：不得引入资料外事实）。"""
+    g = check_answer("克制后羿的英雄有妲己和铠。", LEAK_EVIDENCE, "后羿怕什么？")
+    assert not g.ok
+    assert g.reason == "hero_leak"
+    assert g.detail == "铠"
+
+
+def test_hero_from_question_counts_as_traceable():
+    """问句里出现的英雄（本次提问对象）不算越界 —— 用户自己说的，不是模型编的。"""
+    evidence = [_ev("貂蝉 克制 兰陵王：理由")]
+    g = check_answer("貂蝉确实克制兰陵王。", evidence, "貂蝉克制谁？")
+    assert g.ok, g
+
+
+def test_item_name_is_not_treated_as_hero():
+    """装备名不参与英雄名越界判定（G2 只查英雄，避免把装备名误判为编造）。"""
+    evidence = [_ev("暗影战斧：价格 2090（攻击类装备）")]
+    g = check_answer("推荐出暗影战斧和铁剑。", evidence, "铠怎么出装？")
+    assert g.ok, g
+
+
+# ---------------------------------------------------------------- G1 空答案
+
+def test_empty_answer_is_rejected():
+    assert check_answer("", LEAK_EVIDENCE, "后羿怕什么？").reason == "empty"
+    assert check_answer("   \n ", LEAK_EVIDENCE, "后羿怕什么？").reason == "empty"
+
+
+def test_guard_result_is_truthy_when_ok():
+    """GuardResult 支持布尔语义，调用方可直接 `if not result:`。"""
+    assert bool(check_answer("妲己克制后羿。", LEAK_EVIDENCE, "后羿怕什么？")) is True
+    assert bool(check_answer(LEAK_ANSWER, LEAK_EVIDENCE, "后羿怕什么？")) is False
+
+
+# ------------------------------------------------ G3 豁免 R1/R2（2026-10-15 二审裁定 B-1）
+# 加入依据：scripts/measure_guard_fp.py 用真实数据筛测例，实测拦下 7 例、误报 7 例（FP=100%），
+# 故按裁定放松规则。以下用例把两条豁免的**边界**钉住，防止后人把豁免放大成「一律不判」。
+
+def test_reason_question_exempts_class_leak():
+    """R1：问题在问「原因」时，引述资料 reason 属合规行为 -> 不拦。
+
+    实测依据：7 例误报中 5 例是「X为什么克制Y」—— 模型只是把资料 reason（含职业词）原样抄回来。
+    """
+    evidence = [_ev("东皇太一 克制 司马懿：硬控十分克制刺客的突袭，会让司马懿无法进场输出")]
+    g = check_answer(
+        "东皇太一克制司马懿的原因是：硬控十分克制刺客的突袭，会让司马懿无法进场输出。",
+        evidence, "东皇太一为什么克制司马懿？",
+    )
+    assert g.ok, g
+
+
+def test_non_reason_question_still_catches_leak():
+    """R1 边界：同一句话，问题**不是**问原因时仍算越界（R1 只豁免「问原因」这一种情形）。"""
+    g = check_answer("后羿怕高爆发法师。", LEAK_EVIDENCE, "后羿怕什么？")
+    assert not g.ok and g.reason == "class_leak"
+
+
+def test_hero_name_containing_role_word_is_exempt():
+    """R2：命中落在含职业词的英雄名内 -> 不拦。
+
+    实测依据：误报里「盾山怕元流之子(法师)」—— `元流之子` 有 法师/坦克/射手/辅助/刺客
+    五个形态名，职业词是**英雄名的一部分**。
+    """
+    evidence = [_ev("元流之子(法师) 克制 盾山：元流之子-法师没有弹道技能，是一名不太惧怕盾山的法师英雄")]
+    g = check_answer("盾山怕元流之子(法师)。", evidence, "盾山怕什么？")
+    assert g.ok, g
+
+
+def test_r2_exemption_is_position_based():
+    """R2 必须**按位置**判：英雄名之外的裸职业词不被豁免，否则会漏掉真越界。
+
+    「盾山怕法师，元流之子(法师)可以克制它」里的「怕法师」是模型自己的外推，
+    不能因为同一句里恰好出现了含职业词的英雄名就一起放过。
+    """
+    evidence = [_ev("元流之子(法师) 克制 盾山：元流之子-法师没有弹道技能")]
+    g = check_answer("盾山怕法师，元流之子(法师)可以克制它。", evidence, "盾山怕什么？")
+    assert not g.ok and g.reason == "class_leak"
+
+
+def test_r2_exemption_handles_fullwidth_parens():
+    """R2 归一化：模型把英雄名里的半角括号写成**全角**（实测「元流之子（法师）」）也要豁免。
+
+    实测依据：误报例 02 —— 不归一时 `text.find("元流之子(法师)")` 找不到，R2 豁免失效。
+    """
+    evidence = [_ev("元流之子(法师) 克制 盾山：元流之子-法师没有弹道技能")]
+    g = check_answer("盾山怕元流之子（法师）。", evidence, "盾山怕什么？")
+    assert g.ok, g
+
+
+# ---------------------------------------------------------------- B2 降级可见
+
+def test_guard_reports_degraded_when_lexicon_unavailable(monkeypatch):
+    """B2：G2 词典不可用时 fail-open（放行），但降级必须**可见**（degraded=True）。
+
+    只写 logger.warning 等于静默消失 —— 日志没人看。故由 GuardResult 透传到 debug。
+    """
+    import app.retrieval.entity_linking as el
+
+    def _boom(_text):
+        raise RuntimeError("词典不可用")
+
+    monkeypatch.setattr(el, "link", _boom)
+    g = check_answer("妲己克制后羿。", LEAK_EVIDENCE, "后羿怕什么？")
+    assert g.ok is True
+    assert g.degraded is True
