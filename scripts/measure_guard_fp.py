@@ -32,12 +32,14 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
 from app.config import settings  # noqa: E402
 from app.llm.client import LLMGenerationError, get_cloud_client  # noqa: E402
 from app.llm.guard import check_answer  # noqa: E402
 from app.llm.prompts import build_messages  # noqa: E402
 from app.schemas.chat import Evidence  # noqa: E402
+from eval_judge import judge_answer  # noqa: E402
 
 GRAPH = PROJECT_ROOT / "data" / "graph"
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s: %(message)s")
@@ -140,6 +142,7 @@ def main() -> None:
     flagged = 0
     raw_flagged = 0
     failed = 0
+    rows: list[dict] = []
     for i, (group, question, ev) in enumerate(cases, 1):
         try:
             result = client.chat(build_messages(question, ev))
@@ -158,6 +161,16 @@ def main() -> None:
         if raw:
             raw_flagged += 1
 
+        # M6 追加：被任一规则拦下的回答交给判官自动判 TP/FP（口径与 measure_guard_m6.py 一致）。
+        # 原先「待人工分类」不可复跑，比例守不住；自动判分让误报率成为可回归的指标。
+        judge = None
+        if (not verdict.ok) or raw:
+            judge = judge_answer(client, question, ev, result.content)
+
+        rows.append({"group": group, "question": question, "answer": result.content,
+                     "cur_ok": verdict.ok, "cur_reason": verdict.reason, "cur_detail": verdict.detail,
+                     "pre_flag": raw, "judge": judge})
+
         print(f"\n[{i:02d}] 组={group}  问题：{question}")
         for e in ev:
             print(f"      资料：{e.content[:120]}")
@@ -165,7 +178,10 @@ def main() -> None:
         print(f"      放松前规则（仅 G3 正则，无豁免）：{'拦下 ' + raw if raw else '放行'}")
         print(f"      当前规则（R1/R2 豁免 + 括号折叠）：ok={verdict.ok}  "
               f"reason={verdict.reason or '-'}  detail={verdict.detail!r}")
-        print("      判定：待人工按口径分类（TP / FP）")
+        if judge:
+            print(f"      判官：grounded={judge['grounded']} type={judge['violation_type']}  {judge['reason']}")
+        else:
+            print("      判官：未触发任何规则，无需判定")
 
     judged = len(cases) - failed
     print("\n" + "=" * 78)
@@ -173,8 +189,31 @@ def main() -> None:
     print(f"  放松前规则拦下 {raw_flagged} 例（{raw_flagged / judged:.0%} of 判定数）")
     print(f"  当前规则拦下 {flagged} 例（{flagged / judged:.0%} of 判定数）")
     print("两条规则跑的是**同一批模型回答**，差异只来自规则本身（不受采样波动影响）。")
-    print("拦下例的 TP/FP 比例按脚本头口径逐例判定 —— 见 M4 报告 §3.5。")
+
+    def fp_rate(sub: list[dict]) -> tuple[int, int]:
+        fp = sum(1 for r in sub if r["judge"]["violation_type"] != "class_extrapolation")
+        return fp, len(sub)
+
+    pre_fp, pre_n = fp_rate([r for r in rows if r["pre_flag"] and r["judge"]])
+    cur_fp, cur_n = fp_rate([r for r in rows if not r["cur_ok"] and r["judge"]])
+
+    print("\n  【误报率】判官自动分类（真越界 = class_extrapolation；其余一律计误报）")
+    if pre_n:
+        print(f"    放松前规则：拦下 {pre_n} 例，误报 {pre_fp} 例 -> 误报率 {pre_fp / pre_n:.1%}")
+    else:
+        print("    放松前规则：未拦下任何回答 -> 误报率无从计算")
+    if cur_n:
+        print(f"    当前规则  ：拦下 {cur_n} 例，误报 {cur_fp} 例 -> 误报率 {cur_fp / cur_n:.1%}（阈值 20%）")
+    else:
+        print("    当前规则  ：未拦下任何回答 -> 误报率分母为 0，如实记录")
     print("=" * 78)
+
+    out = PROJECT_ROOT / "docs" / "milestones" / "M6-guard-fp-raw.json"
+    out.write_text(json.dumps({"cases": len(cases), "failed": failed, "judged": judged,
+                               "pre_flagged": raw_flagged, "cur_flagged": flagged,
+                               "pre_fp": [pre_fp, pre_n], "cur_fp": [cur_fp, cur_n],
+                               "rows": rows}, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"\n原始记录已写入：{out.relative_to(PROJECT_ROOT)}")
 
 
 main()

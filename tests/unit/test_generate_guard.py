@@ -163,6 +163,36 @@ def test_r2_exemption_handles_fullwidth_parens():
     assert g.ok, g
 
 
+# ------------------------------------------------ M6 复核放松 R3 + G2 别名（2026-10-15）
+# 加入依据：scripts/measure_guard_blocked.py 在常规评测集里把**真正被拦下**的 2 条逐条判定，
+# 2 条全是误报（FP=100%），故按需求方「误报率 >20% 需放松规则」的裁定放松。以下钉住边界。
+
+def test_role_description_exempts_class_leak():
+    """R3：命中片段实为「以…为核心」的角色定位描述 -> 不拦（实测误报例 T-05）。"""
+    evidence = [_ev("东皇太一：定位为游走/对抗路，以压制为核心")]
+    g = check_answer("东皇太一定位为游走/对抗路，以压制为核心。", evidence, "东皇太一的玩法？")
+    assert g.ok, g
+
+
+def test_r3_boundary_real_relation_claim_still_caught():
+    """R3 边界：真正把关系抬成类别的主张（不带「为核心」）仍要拦下。"""
+    g = check_answer("后羿怕高爆发法师。", LEAK_EVIDENCE, "后羿怕什么？")
+    assert not g.ok and g.reason == "class_leak"
+
+
+def test_hero_alias_in_evidence_counts_as_traceable():
+    """G2 放松：资料写的是简称「木兰」，答案照写规范名「花木兰」 -> 可溯源，不拦（实测误报例 F-48）。"""
+    evidence = [_ev("钟馗 的最佳搭档：打野战士（刘备、木兰）")]
+    g = check_answer("可打野的英雄有刘备、花木兰。", evidence, "这版本打野强势的有哪些？")
+    assert g.ok, g
+
+
+def test_g2_alias_relaxation_does_not_over_exempt():
+    """G2 放松的边界：规范名与别名都没在资料里出现时，仍判英雄越界。"""
+    g = check_answer("克制后羿的英雄有妲己和铠。", LEAK_EVIDENCE, "后羿怕什么？")
+    assert not g.ok and g.reason == "hero_leak" and g.detail == "铠"
+
+
 # ---------------------------------------------------------------- B2 降级可见
 
 def test_guard_reports_degraded_when_lexicon_unavailable(monkeypatch):

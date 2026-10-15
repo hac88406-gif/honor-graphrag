@@ -30,6 +30,16 @@
   R2 **命中片段落在英雄名内时不判 G3**。1 例是「盾山怕元流之子(法师)」——
      `元流之子` 有 法师/坦克/射手/辅助/刺客 五个形态名，职业词是**英雄名的一部分**。
 
+**M6 复核后的两条放松（2026-10-15，依据是生产路径实测误报率）**：
+`scripts/measure_guard_blocked.py` 回到常规评测集，把**真正被拦下**的 2 条逐条判定，**2 条全是误报**：
+
+  R3 **命中片段实为角色定位描述时不判 G3**。1 条是「东皇太一定位为游走/对抗路，以压制为核心」——
+     「压制」在这里是名词性描述（该英雄的打法核心），不是「克制某类英雄」的关系主张，
+     却因「压制…游走」同现被正则误判。
+  G2 **改为「任一书写形式出现在资料里即可溯源」**。1 条是「这版本打野强势的有哪些」——
+     资料写的是简称「木兰」（原文「（刘备、木兰）」），答案忠实照写「木兰」，但只拿**规范名**
+     「花木兰」去比对 corpus 就判成了英雄越界。英雄的别名与规范名指同一实体，任一形式命中即算可溯源。
+
 **局限（如实标注，不粉饰）**：
   - 启发式只能覆盖**已观测**的失败形态；未观测到的外推方式（如用「克制类」「后排」等
     非职业词做类别）会漏过。guard 是**下限**而不是保证，M6 评测需按失败样本继续补规则。
@@ -73,6 +83,11 @@ _CLASS_LEAK_HEAD = re.compile(rf"({_ROLE_ALT})[^。；！？，、\n]{{0,6}}(克
 
 # R1：问题在问「原因」时不判 G3（引述 reason 合规）。见模块头「G3 的两条豁免」。
 _REASON_QUESTION = re.compile(r"为什么|为何|原因|缘由|怎么会|咋会|凭什么")
+
+# R3：命中片段实为「以…为核心」的角色定位描述时不判 G3（M6 复核放松，见模块头）。
+# 实测误报例：「东皇太一定位为游走/对抗路，以压制为核心」——「压制」是名词性描述，
+# 不是「克制某类英雄」的关系主张。
+_ROLE_DESC = re.compile(r"为核心|作为核心")
 
 # 括号类全角 -> 半角折叠（R2 用）。模型常把英雄名里的半角括号写成全角
 # （实测「元流之子（法师）」），不折叠 R2 就找不到英雄名 —— 实测误报例 02 正是如此。
@@ -134,7 +149,7 @@ def _span_inside_hero_name(text: str, start: int, end: int) -> bool:
 
 
 def _first_class_leak(text: str) -> str | None:
-    """返回首个**未被 R2 豁免**的 G3 命中片段；无则 None。
+    """返回首个**未被 R2/R3 豁免**的 G3 命中片段；无则 None。
 
     匹配前只做**括号折叠**（不动其它标点）：模型会把英雄名里的半角括号写成全角，
     不折叠就会漏掉 R2 豁免 —— 实测误报例 02 正是如此。
@@ -142,24 +157,45 @@ def _first_class_leak(text: str) -> str | None:
     folded = text.translate(_PUNCT_FOLD)
     for pat in (_CLASS_LEAK, _CLASS_LEAK_HEAD):
         for m in pat.finditer(folded):
-            if not _span_inside_hero_name(folded, m.start(), m.end()):
-                return m.group(0)
+            if _span_inside_hero_name(folded, m.start(), m.end()):
+                continue  # R2
+            if _ROLE_DESC.search(m.group(0)):
+                continue  # R3
+            return m.group(0)
     return None
 
 
-def _hero_names(text: str) -> tuple[set[str], bool]:
-    """文本中出现的英雄规范名（用实体链接的词典，与检索层同一份索引）。
+def _hero_entities(text: str) -> tuple[list, bool]:
+    """文本中出现的英雄实体（用实体链接的词典，与检索层同一份索引）。
 
-    返回 `(名字集合, 是否降级)`：词典不可用时返回 `(set(), True)`，
+    返回 `(实体列表, 是否降级)`：词典不可用时返回 `([], True)`，
     调用方须把降级标记透传到 `debug`（fail-open 但可见）。
     """
     from app.retrieval.entity_linking import link
 
     try:
-        return {e.canonical_name for e in link(text).entities if e.entity_type == "hero"}, False
+        return [e for e in link(text).entities if e.entity_type == "hero"], False
     except Exception as e:  # noqa: BLE001 - 词典不可用时不误伤：跳过 G2
         logger.warning("guard：实体链接不可用，跳过英雄名越界检查（G2 失效）：%s", e)
-        return set(), True
+        return [], True
+
+
+@lru_cache(maxsize=1)
+def _hero_surface_forms() -> dict[str, tuple[str, ...]]:
+    """英雄规范名 -> 该英雄的全部可接受书写形式（规范名 + 别名）。G2 用。
+
+    依据（M6 复核放松，见模块头）：资料里常写简称（实测「（刘备、木兰）」），只拿规范名
+    「花木兰」比对 corpus 会把**忠实照写简称**的答案误判成英雄越界。别名与规范名指同一
+    实体，任一形式出现在资料/问题里即算可溯源。清单不可用时退回「只用规范名」，不放大豁免。
+    """
+    try:
+        heroes = json.loads(
+            (_PROJECT_ROOT / "data" / "graph" / "heroes.json").read_text(encoding="utf-8")
+        )
+    except Exception as e:  # noqa: BLE001 - 清单读不到时退回规范名比对
+        logger.warning("guard：英雄别名不可用，G2 退回规范名比对：%s", e)
+        return {}
+    return {h["name"]: tuple({h["name"], *h.get("aliases", [])}) for h in heroes}
 
 
 def check_answer(answer: str, evidence: list[Evidence], question: str = "") -> GuardResult:
@@ -178,9 +214,12 @@ def check_answer(answer: str, evidence: list[Evidence], question: str = "") -> G
 
     # ---- G2 英雄名越界 ----
     corpus = _evidence_corpus(evidence) + "\n" + (question or "")
-    names, degraded = _hero_names(text)
-    for name in names:
-        if name and name not in corpus:
-            return GuardResult(False, "hero_leak", name, degraded=degraded)
+    heroes, degraded = _hero_entities(text)
+    forms_map = _hero_surface_forms()
+    for ent in heroes:
+        # 该英雄的任一书写形式（规范名 / 别名）出现在资料或问题里即算可溯源（见模块头）。
+        forms = forms_map.get(ent.canonical_name) or (ent.canonical_name,)
+        if not any(f and f in corpus for f in forms):
+            return GuardResult(False, "hero_leak", ent.canonical_name, degraded=degraded)
 
     return GuardResult(True, degraded=degraded)
