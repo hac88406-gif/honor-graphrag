@@ -27,6 +27,7 @@ from typing import Any, AsyncIterator
 
 from langgraph.graph import END, START, StateGraph
 
+from app.agent.citations import build_citations
 from app.agent.nodes.clarify import clarify_node, reject_node
 from app.agent.nodes.confidence import confidence_node
 from app.agent.nodes.entity_linking import entity_linking_node
@@ -206,11 +207,15 @@ async def stream_events(question: str, session_id: str, *, hitl: bool = False) -
       custom(thinking)     -> thinking（「正在思考」，**不含思考正文**）
       custom(token)        -> token（LLM 路径下逐段推送，前缀行先推）
       updates(fuse)        -> evidence（逐条推送来源）
-      结束时               -> token（template 路径整段答案）/ citation / done
+      node_start(generate) -> citation（v1.6 §3.4：依据在检索阶段已确定，提前到生成之前推）
+      结束时               -> token（template 路径整段答案）/ citation（拒答/澄清补空）/ done
     """
     graph = await get_graph()
     config = _config(session_id)
     inputs = {"question": question, "session_id": session_id, "hitl": hitl}
+
+    fused_evidence: list = []
+    citations_pushed = False
 
     async for mode, chunk in graph.astream(inputs, config, stream_mode=["custom", "updates", "debug"]):
         if mode == "custom":
@@ -221,10 +226,25 @@ async def stream_events(question: str, session_id: str, *, hitl: bool = False) -
             payload = chunk.get("payload") or {}
             if chunk.get("type") == "task" and payload.get("name") in NODE_NAMES:
                 yield {"event": "node_start", "data": {"node": payload["name"]}}
+                if payload["name"] == NODE_GENERATE and not citations_pushed:
+                    # 规格书 v1.6 §3.4：依据在检索阶段就已确定（citation 就是 evidence 的 1-based 序号），
+                    # 不必等生成完成 —— 在 generate 起点先推来源，用户立刻看到「查到了这些依据」。
+                    #
+                    # **为什么挂在 generate 起点，而不是 fuse 之后无条件推**：`reject_node` /
+                    # `clarify_node` 明确返回 `citations=[]`（拒答不给来源卡片），而**低置信拒答**
+                    # 这条路径是跑过 fuse 的 —— 若在 fuse 处无条件推，它会「推了来源、终态却说没有来源」，
+                    # 自相矛盾。挂在 generate 起点则只在「真要出答案」的分支推，且与终态 citations
+                    # 必然一致（两者都源自同一份融合后 evidence，顺序与 1-based 序号完全相同）。
+                    yield {
+                        "event": "citation",
+                        "data": {"citations": [c.model_dump() for c in build_citations(fused_evidence)]},
+                    }
+                    citations_pushed = True
         elif mode == "updates":
             for node, output in (chunk or {}).items():
                 if node == NODE_FUSE and isinstance(output, dict):
-                    for e in output.get("evidence", []):
+                    fused_evidence = list(output.get("evidence", []))
+                    for e in fused_evidence:
                         payload = e.model_dump() if hasattr(e, "model_dump") else e
                         yield {"event": "evidence", "data": {"evidence": payload}}
 
@@ -239,10 +259,13 @@ async def stream_events(question: str, session_id: str, *, hitl: bool = False) -
         answer_text = values["answer"]
         for i in range(0, len(answer_text), _TOKEN_CHUNK):
             yield {"event": "token", "data": {"text": answer_text[i:i + _TOKEN_CHUNK]}}
-    yield {
-        "event": "citation",
-        "data": {"citations": [c.model_dump() for c in values.get("citations", [])]},
-    }
+    # 回答路径的 citation 已在 generate 起点推过；拒答/澄清不经 fuse、也走不到 generate，
+    # 故在此补一次空 citation —— 保证每条路径**恰好一次** citation 事件（前端可依赖这一点）。
+    if not citations_pushed:
+        yield {
+            "event": "citation",
+            "data": {"citations": [c.model_dump() for c in values.get("citations", [])]},
+        }
     yield {
         "event": "done",
         "data": {

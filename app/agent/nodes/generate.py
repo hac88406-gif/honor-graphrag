@@ -26,10 +26,11 @@ from __future__ import annotations
 
 import logging
 
+from app.agent.citations import build_citations
 from app.agent.state import AgentState
 from app.config import settings
 from app.llm import LLMCallError, build_messages, check_answer, get_cloud_client
-from app.schemas.chat import Citation, Evidence
+from app.schemas.chat import Evidence
 
 logger = logging.getLogger(__name__)
 
@@ -218,7 +219,7 @@ def generate_node(state: AgentState) -> dict:
             info.setdefault("error", "无可用的模型正文，使用确定性证据组装")
 
     answer = "\n".join(prefix + [body])
-    citations = [_citation(i, e) for i, e in enumerate(evidence, start=1)]
+    citations = build_citations(evidence)
 
     logger.info(
         "答案组装：mode=%s response_type=%s 证据 %d 条 fallback=%s -> citation %d 条",
@@ -230,15 +231,3 @@ def generate_node(state: AgentState) -> dict:
         "response_type": response_type,
         "generation_info": info,
     }
-
-
-def _citation(index: int, e: Evidence) -> Citation:
-    """Evidence -> Citation（规格书 5.1：label 是给用户看的一行来源说明）。"""
-    label = e.content if e.kind == "graph" else f"攻略文本（{e.source}）"
-    return Citation(
-        index=index,
-        kind=e.kind,
-        label=label[:200],
-        url=e.source_url,
-        patch=e.patch,
-    )
