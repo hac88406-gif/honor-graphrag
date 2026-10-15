@@ -1,0 +1,221 @@
+{
+  "cases": 16,
+  "failed": 0,
+  "judged": 16,
+  "pre_flagged": 7,
+  "cur_flagged": 1,
+  "pre_fp": [
+    6,
+    7
+  ],
+  "cur_fp": [
+    0,
+    1
+  ],
+  "rows": [
+    {
+      "group": "L",
+      "question": "后羿怕什么？",
+      "answer": "后羿怕高爆发法师。",
+      "cur_ok": false,
+      "cur_reason": "class_leak",
+      "cur_detail": "怕高爆发法师",
+      "pre_flag": "怕高爆发法师",
+      "judge": {
+        "grounded": false,
+        "violation_type": "class_extrapolation",
+        "unsupported": [
+          "后羿怕高爆发法师"
+        ],
+        "reason": "资料中该句只是对“妲己克制后羿”的解释，不能作为“后羿怕什么”的类别答案。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "L",
+      "question": "盾山怕什么？",
+      "answer": "盾山怕元流之子（法师）。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": "怕元流之子（法师",
+      "judge": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案仅陈述盾山怕元流之子（法师），与资料中‘元流之子(法师)克制盾山’一致。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "L",
+      "question": "弈星怕什么？",
+      "answer": "弈星怕澜。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    },
+    {
+      "group": "L",
+      "question": "安琪拉怕什么？",
+      "answer": "安琪拉怕韩信。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    },
+    {
+      "group": "Q-why",
+      "question": "上官婉儿为什么克制高渐离？",
+      "answer": "上官婉儿克制高渐离的原因是：婉儿在对线期十分克制短手法师，并且当高渐离近身开启爆发时，婉儿可以通过大招躲避伤害。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": "克制短手法师",
+      "judge": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案完整复述了资料中对克制原因的解释，未添加资料外内容。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "东皇太一为什么克制司马懿？",
+      "answer": "因为东皇太一的硬控十分克制刺客的突袭，会让司马懿无法进场输出。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": "克制刺客",
+      "judge": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案完全复述了资料中关于东皇太一克制司马懿的原因说明，未添加无据内容。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "元流之子(法师)为什么克制盾山？",
+      "answer": "因为元流之子(法师)没有弹道技能，是一名不太惧怕盾山的法师英雄。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": "怕盾山的法师",
+      "judge": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案直接复述了资料中对克制关系的解释，未超出资料范围。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "敖隐为什么克制关羽？",
+      "answer": "敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": "针对的射手",
+      "judge": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案内容逐字对应资料中对敖隐克制关羽的说明。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "澜为什么克制弈星？",
+      "answer": "弈星惧怕强突进刺客类英雄，对于贴近的敌人较难去拉开距离，容易被快速击杀。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": "怕强突进刺客",
+      "judge": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案完整复述了资料中对澜克制弈星的原因说明，可完全溯源。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "百里守约为什么克制猪八戒？",
+      "answer": "因为百里守约拥有超远的距离和出色的爆发能力。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    },
+    {
+      "group": "Q-who",
+      "question": "高渐离被谁克制？",
+      "answer": "高渐离被上官婉儿克制。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    },
+    {
+      "group": "Q-who",
+      "question": "司马懿被谁克制？",
+      "answer": "司马懿被东皇太一克制。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    },
+    {
+      "group": "Q-who",
+      "question": "关羽被谁克制？",
+      "answer": "敖隐",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    },
+    {
+      "group": "Q-who",
+      "question": "猪八戒被谁克制？",
+      "answer": "猪八戒被百里守约克制。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    },
+    {
+      "group": "C",
+      "question": "貂蝉的铭文怎么搭配？",
+      "answer": "资料不足。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    },
+    {
+      "group": "C",
+      "question": "铠的出装怎么选？",
+      "answer": "资料不足。",
+      "cur_ok": true,
+      "cur_reason": "",
+      "cur_detail": "",
+      "pre_flag": null,
+      "judge": null
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+﻿.\.venv\Scripts\python.exe : Building prefix dict from the default dictionary ...
+At line:15 char:1601
++ ... pgrep\bin'; .\.venv\Scripts\python.exe scripts/measure_guard_m6.py 2> ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Building prefix... dictionary ...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+DEBUG jieba: Building prefix dict from the default dictionary ...
+Loading model from cache C:\Users\Bless\AppData\Local\Temp\jieba.cache
+DEBUG jieba: Loading model from cache C:\Users\Bless\AppData\Local\Temp\jieba.cache
+Loading model cost 0.568 seconds.
+DEBUG jieba: Loading model cost 0.568 seconds.
+Prefix dict has been built successfully.
+DEBUG jieba: Prefix dict has been built successfully.
+==============================================================================
+M6 guard 测量（真实云端生成；A/B 差异只来自 guard 这一层）
+==============================================================================
+model=deepseek-v4-pro  GUARD_ENABLED=True  生成方式=llm（直接喂同一份资料，隔离出 guard 的净效果）
+诱导集 21 条（含 L 诱导 7 / Q-why 8 / Q-who 4 / 对照 2）
+
+[01] L-诱导  后羿怕什么？   （预期：越界风险最高：资料自带类别解释）
+      资料：妲己 克制 后羿：后羿怕高爆发法师
+      原始回答(B/guard-off)：'后羿怕妲己。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'后羿怕妲己。'
+      判官·B组：grounded=True type=none  资料中明确有“妲己克制后羿”，可支持“后羿怕妲己”的表述。
+      判官·A组：grounded=True type=none  资料明确记载妲己克制后羿，可推出后羿怕妲己。
+
+[02] L-诱导  盾山怕什么？   （预期：同 L 组）
+      资料：元流之子(法师) 克制 盾山：元流之子-法师没有弹道技能，是一名不太惧怕盾山的法师英雄
+      原始回答(B/guard-off)：'盾山怕元流之子(法师)。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'盾山怕元流之子(法师)。'
+      判官·B组：grounded=True type=none  答案由资料中“元流之子(法师)克制盾山”直接推出，属于同一克制关系的反向表述。
+      判官·A组：grounded=True type=none  答案将资料中“元流之子(法师)克制盾山”反向表述为“盾山怕元流之子(法师)”，语义等价且可推出。
+
+[03] L-诱导  弈星怕什么？   （预期：同 L 组）
+      资料：澜 克制 弈星：弈星惧怕强突进刺客类英雄，对于贴近的敌人较难去拉开距离，容易被快速击杀
+      原始回答(B/guard-off)：'弈星怕澜。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'弈星怕澜。'
+      判官·B组：grounded=True type=none  资料明确写明澜克制弈星，答案“弈星怕澜”可直接从该克制关系推出。
+      判官·A组：grounded=True type=none  资料明确记载澜克制弈星，可推出弈星怕澜。
+
+[04] L-诱导  安琪拉怕什么？   （预期：同 L 组）
+      资料：韩信 克制 安琪拉：身为脆皮法师，安琪拉害怕韩信等位移多伤害高的刺客英雄
+      原始回答(B/guard-off)：'安琪拉怕韩信。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'安琪拉怕韩信。'
+      判官·B组：grounded=True type=none  资料明确提到安琪拉害怕韩信，答案可直接推出。
+      判官·A组：grounded=True type=none  答案中的事实性陈述“安琪拉怕韩信”能在资料中找到直接依据。
+
+[05] L-诱导  小乔怕什么？   （预期：同 L 组）
+      资料：韩信 克制 小乔：身为脆皮法师，小乔害怕韩信等位移多伤害高的刺客英雄
+      原始回答(B/guard-off)：'小乔怕韩信。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'小乔怕韩信。'
+      判官·B组：grounded=True type=none  资料明确提到小乔害怕韩信，答案可直接推出。
+      判官·A组：grounded=True type=none  资料明确提到小乔害怕韩信，因此答案可完全溯源。
+
+[06] L-诱导  武则天怕什么？   （预期：同 L 组）
+      资料：韩信 克制 武则天：身为脆皮法师，武则天害怕韩信等位移多伤害高的刺客英雄
+      原始回答(B/guard-off)：'武则天怕韩信。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'武则天怕韩信。'
+      判官·B组：grounded=True type=none  答案“武则天怕韩信”可直接从资料“韩信 克制 武则天：...武则天害怕韩信等位移多伤害高的刺客英雄”中推出。
+      判官·A组：grounded=True type=none  资料明确提到武则天害怕韩信，答案完全有据可依。
+
+[07] L-诱导  王昭君怕什么？   （预期：同 L 组）
+      资料：韩信 克制 王昭君：身为脆皮法师，王昭君害怕韩信等位移多伤害高的刺客英雄
+      原始回答(B/guard-off)：'王昭君怕韩信。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'王昭君怕韩信。'
+      判官·B组：grounded=True type=none  资料明确提到王昭君害怕韩信，因此答案可完全溯源。
+      判官·A组：grounded=True type=none  资料明确提到王昭君害怕韩信，答案可直接溯源。
+
+[08] Q-why  上官婉儿为什么克制高渐离？   （预期：引述 reason 属合规（R1 豁免），预期不拦）
+      资料：上官婉儿 克制 高渐离：婉儿在对线期十分克制短手法师，并且当高渐离找到机会近身开启爆发时，婉儿可以通过大招躲避伤害
+      原始回答(B/guard-off)：'上官婉儿在对线期十分克制短手法师，并且当高渐离找到机会近身开启爆发时，婉儿可以通过大招躲避伤害。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'上官婉儿在对线期十分克制短手法师，并且当高渐离找到机会近身开启爆发时，婉儿可以通过大招躲避伤害。'
+      判官·B组：grounded=True type=none  答案内容完全复述自资料中对上官婉儿克制高渐离的原因说明，有直接依据。
+      判官·A组：grounded=True type=none  答案完全复述资料中对上官婉儿克制高渐离的原因说明，未增添资料外事实。
+
+[09] Q-why  东皇太一为什么克制司马懿？   （预期：引述 reason 属合规（R1 豁免），预期不拦）
+      资料：东皇太一 克制 司马懿：硬控十分克制刺客的突袭，会让司马懿无法进场输出
+      原始回答(B/guard-off)：'因为东皇太一的硬控十分克制刺客的突袭，会让司马懿无法进场输出。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'因为东皇太一的硬控十分克制刺客的突袭，会让司马懿无法进场输出。'
+      判官·B组：grounded=True type=none  答案内容与资料中关于东皇太一克制司马懿的解释完全一致，可溯源。
+      判官·A组：grounded=True type=none  答案内容完全来自资料中对东皇太一克制司马懿的原因说明。
+
+[10] Q-why  元流之子(法师)为什么克制盾山？   （预期：引述 reason 属合规（R1 豁免），预期不拦）
+      资料：元流之子(法师) 克制 盾山：元流之子-法师没有弹道技能，是一名不太惧怕盾山的法师英雄
+      原始回答(B/guard-off)：'因为元流之子（法师）没有弹道技能，是一名不太惧怕盾山的法师英雄。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'因为元流之子（法师）没有弹道技能，是一名不太惧怕盾山的法师英雄。'
+      判官·B组：grounded=True type=none  答案完全复述资料中对元流之子(法师)克制盾山的原因说明，可溯源。
+      判官·A组：grounded=True type=none  答案直接复述了资料中对元流之子(法师)克制盾山的原因说明，未添加资料外事实。
+
+[11] Q-why  敖隐为什么克制关羽？   （预期：引述 reason 属合规（R1 豁免），预期不拦）
+      资料：敖隐 克制 关羽：敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手
+      原始回答(B/guard-off)：'敖隐克制关羽的原因：敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'敖隐克制关羽的原因：敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手。'
+      判官·B组：grounded=True type=none  答案完全复述了资料中对敖隐克制关羽原因的解释，均可溯源。
+      判官·A组：grounded=True type=none  答案完全复述资料中对敖隐克制关羽的原因说明，未添加任何资料外内容。
+
+[12] Q-why  澜为什么克制弈星？   （预期：引述 reason 属合规（R1 豁免），预期不拦）
+      资料：澜 克制 弈星：弈星惧怕强突进刺客类英雄，对于贴近的敌人较难去拉开距离，容易被快速击杀
+      原始回答(B/guard-off)：'澜克制弈星的原因：弈星惧怕强突进刺客类英雄，对于贴近的敌人较难拉开距离，容易被快速击杀。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'澜克制弈星的原因：弈星惧怕强突进刺客类英雄，对于贴近的敌人较难拉开距离，容易被快速击杀。'
+      判官·B组：grounded=True type=none  答案内容直接来自资料中对澜克制弈星的原因说明，未新增或偏离事实。
+      判官·A组：grounded=True type=none  答案完全复述资料中澜克制弈星的原因说明。
+
+[13] Q-why  百里守约为什么克制猪八戒？   （预期：引述 reason 属合规（R1 豁免），预期不拦）
+      资料：百里守约 克制 猪八戒：超远的距离和出色的爆发能力，让其是为数不多可以克制猪八戒的射手英雄
+      原始回答(B/guard-off)：'因为百里守约拥有超远的距离和出色的爆发能力，所以是为数不多可以克制猪八戒的射手英雄。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'因为百里守约拥有超远的距离和出色的爆发能力，所以是为数不多可以克制猪八戒的射手英雄。'
+      判官·B组：grounded=True type=none  答案完整复述了资料中对百里守约克制猪八戒的原因解释，未添加资料外事实。
+      判官·A组：grounded=True type=none  答案完全复述资料中百里守约克制猪八戒的原因，未增加无据事实或类别主张。
+
+[14] Q-why  韩信为什么克制安琪拉？   （预期：引述 reason 属合规（R1 豁免），预期不拦）
+      资料：韩信 克制 安琪拉：身为脆皮法师，安琪拉害怕韩信等位移多伤害高的刺客英雄
+      原始回答(B/guard-off)：'因为安琪拉身为脆皮法师，害怕韩信等位移多、伤害高的刺客英雄。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'因为安琪拉身为脆皮法师，害怕韩信等位移多、伤害高的刺客英雄。'
+      判官·B组：grounded=True type=none  答案直接复述了资料中对韩信克制安琪拉的原因说明，完全可溯源。
+      判官·A组：grounded=True type=none  答案完全复述资料中对韩信克制安琪拉的解释，无额外或无据事实。
+
+[15] Q-why  韩信为什么克制小乔？   （预期：引述 reason 属合规（R1 豁免），预期不拦）
+      资料：韩信 克制 小乔：身为脆皮法师，小乔害怕韩信等位移多伤害高的刺客英雄
+      原始回答(B/guard-off)：'因为小乔身为脆皮法师，害怕韩信等位移多伤害高的刺客英雄。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'因为小乔身为脆皮法师，害怕韩信等位移多伤害高的刺客英雄。'
+      判官·B组：grounded=True type=none  答案直接复述资料中对韩信克制小乔的原因说明，完全有据可循。
+      判官·A组：grounded=True type=none  答案完全复述了资料中关于韩信克制小乔的原因说明，无未依据内容。
+
+[16] Q-who  高渐离被谁克制？   （预期：正确答案是具体英雄，预期不拦）
+      资料：上官婉儿 克制 高渐离：婉儿在对线期十分克制短手法师，并且当高渐离找到机会近身开启爆发时，婉儿可以通过大招躲避伤害
+      原始回答(B/guard-off)：'高渐离被上官婉儿克制。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'高渐离被上官婉儿克制。'
+      判官·B组：grounded=True type=none  资料明确写着上官婉儿克制高渐离，因此答案可完全推出。
+      判官·A组：grounded=True type=none  答案直接对应资料中“上官婉儿 克制 高渐离”的事实。
+
+[17] Q-who  司马懿被谁克制？   （预期：正确答案是具体英雄，预期不拦）
+      资料：东皇太一 克制 司马懿：硬控十分克制刺客的突袭，会让司马懿无法进场输出
+      原始回答(B/guard-off)：'东皇太一克制司马懿。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'东皇太一克制司马懿。'
+      判官·B组：grounded=True type=none  答案所述克制关系可直接在资料中找到依据。
+      判官·A组：grounded=True type=none  答案直接对应资料中的克制关系。
+
+[18] Q-who  关羽被谁克制？   （预期：正确答案是具体英雄，预期不拦）
+      资料：敖隐 克制 关羽：敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手
+      原始回答(B/guard-off)：'关羽被敖隐克制。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'关羽被敖隐克制。'
+      判官·B组：grounded=True type=none  答案直接对应资料中“敖隐 克制 关羽”的事实。
+      判官·A组：grounded=True type=none  资料明确写明敖隐克制关羽，答案直接对应。
+
+[19] Q-who  猪八戒被谁克制？   （预期：正确答案是具体英雄，预期不拦）
+      资料：百里守约 克制 猪八戒：超远的距离和出色的爆发能力，让其是为数不多可以克制猪八戒的射手英雄
+      原始回答(B/guard-off)：'猪八戒被百里守约克制。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'猪八戒被百里守约克制。'
+      判官·B组：grounded=True type=none  答案将资料中的“百里守约克制猪八戒”反向表述为“猪八戒被百里守约克制”，完全可从资料推出。
+      判官·A组：grounded=True type=none  答案直接对应资料中“百里守约克制猪八戒”的陈述。
+
+[20] C-对照  貂蝉的铭文怎么搭配？   （预期：无职业词，预期不拦）
+      资料：蓝色：调和（最大生命+45、每5秒回血+5.2、移速+0.4%）
+      原始回答(B/guard-off)：'资料不足。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'资料不足。'
+      判官·B组：grounded=True type=none  答案仅指出资料不足，未提出任何无据的事实性陈述。
+      判官·A组：grounded=True type=none  答案仅指出资料不足，未提供任何无法溯源的事实性内容。
+
+[21] C-对照  铠的出装怎么选？   （预期：无职业词，预期不拦）
+      资料：暗影战斧：物理攻击+85、冷却缩减+15%、最大生命+500
+      原始回答(B/guard-off)：'资料不足。'
+      guard：ok=True reason=- detail=''
+      A组(guard-on) 交付给用户的答案：'资料不足。'
+      判官·B组：grounded=True type=none  答案仅声明资料不足，未提供任何无法溯源的具体事实。
+      判官·A组：grounded=True type=none  答案仅表示资料不足，未提出任何无法从资料溯源的事实性主张。
+
+==============================================================================
+【1. guard 触发率】
+==============================================================================
+  诱导集实际判定 21 条（另有 0 条因 fail-fast 未产出答案）
+  guard 拦下 0 条 -> 触发率 0.0%
+
+==============================================================================
+【2. guard 误报率】拦下的每一条按判官口径判 TP/FP
+==============================================================================
+  本轮没有拦下任何回答 —— 误报率无从计算（分母为 0），如实记录。
+
+==============================================================================
+【3. guard on/off 对「答案有据率」的 A/B】
+==============================================================================
+  A 组（guard ON ）答案有据率：21/21 = 100.0%
+  B 组（guard OFF）答案有据率：21/21 = 100.0%
+  A 组类别化外推（越界）条数：0
+  B 组类别化外推（越界）条数：0
+
+  说明：A 组越界为 0 是因为被拦下的回答已回落确定性组装（构造上不含归纳），
+        这正是 guard 的作用方式 —— 它不改写答案，只把越界答案换成证据罗列。
+
+原始记录已写入：docs\milestones\M6-guard-raw.json

@@ -1,0 +1,211 @@
+﻿========================================================================
+[verify] 数据层复跑校验  快照 = 20261014-230459
+========================================================================
+
+【1】源数据层（data/raw/{snapshot}/parsed，未去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+
+【2】导出层（data/graph/relations.json，按页展开，仍不去重）
+  英雄 = 133  装备 = 115  铭文 = 93
+  关系行数 = 798
+    COUNTERS                 = 532
+    SYNERGIZES               = 266
+  [ OK ] 导出层行数 == 源数据层行数（798，未去重）
+  [ OK ] 英雄节点数 == 抓取英雄数（133，全量 133）
+  导出层关系：source 空 = 0，patch 空 = 0，reason 空 = 0
+  [ OK ] 导出层全部关系都有 source
+  [ OK ] 导出层全部关系都有 patch
+  源数据层重复边（会被 MERGE 合并）：COUNTERS 5 条，SYNERGIZES 0 条
+
+【3】入库后层（Neo4j，MERGE 唯一键 = 起点+类型+终点+patch，已去重）
+  [重导入] 幂等写入 data/graph/*.json ...
+  本次写入：{'full_heroes': 133, 'stub_heroes': 0, 'items': 115, 'inscriptions': 93, 'hero_rel_rows': 798, 'item_edge_rows': 1574, 'ins_edge_rows': 798, 'skipped_item_refs': 20, 'skipped_ins_refs': 0}
+  节点：{'Hero': 133, 'Inscription': 93, 'Item': 115}
+  关系：{'COUNTERS': 527, 'RECOMMENDS_INSCRIPTION': 798, 'RECOMMENDS_ITEM': 1574, 'SYNERGIZES': 266}
+  [ OK ] 幂等：连续两次导入后节点数/关系数逐项不变
+  去重口径推导：源 COUNTERS 532 - 合并 5 = 527
+              源 SYNERGIZES 266 - 合并 0 = 266
+  [ OK ] 入库后 COUNTERS（527）== 去重后口径
+  [ OK ] 入库后 SYNERGIZES（266）== 去重后口径
+  完整性检查（空 = NULL 或 空串）：
+    Hero.source 空            = 0
+    Hero.patch 空             = 0
+    Item.source 空            = 0
+    Inscription.source 空     = 0
+    关系.source 空              = 0
+    关系.patch 空               = 0
+    COUNTERS.reason 空        = 0
+    SYNERGIZES.reason 空      = 0
+
+【4】向量库（Chroma collection 'guides'）
+.\.venv\Scripts\python.exe : 
+At line:15 char:1601
++ ... pgrep\bin'; .\.venv\Scripts\python.exe scripts/verify_data_layer.py 2 ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 391/391 [00:00<00:00, 23495.99it/s]
+  collection.count() = 540（文档数，M1b 验收要求 ≥ 100）
+  缺 patch 元数据 = 0，缺 hero_ids = 0，缺 source_url = 0
+  patch 分布 = {'2026-10': 540}
+  [ OK ] 向量库文档数 540 ≥ 100
+  [ OK ] 向量库元数据（patch / hero_ids / source_url）完整
+
+========================================================================
+[verify] 结论：PASS —— 数据层复跑校验全部通过，检索层未破坏数据
+========================================================================
+........................................................................ [ 26%]
+........................................................................ [ 53%]
+........................................................................ [ 79%]
+......................................................F                  [100%]
+================================== FAILURES ===================================
+_____________________ test_hybrid_search_returns_evidence _____________________
+
+query = '貂蝉怎么出装', hero_id = '141', patches = None, top_k = 3
+collection_name = 'guides'
+
+    def raw_query(
+        query: str,
+        *,
+        hero_id: str | None = None,
+        patches: list[str] | None = None,
+        top_k: int | None = None,
+        collection_name: str = COLLECTION_NAME,
+    ) -> dict:
+        """底层查询，返回 chromadb 原始结果（测试用它断言 ids/distances）。"""
+        try:
+            collection = get_collection(collection_name)
+        except Exception as e:
+            raise VectorStoreUnavailable(f"collection '{collection_name}' 不可用：{e}") from e
+    
+        n = top_k or settings.VECTOR_TOP_K
+        where = build_where(hero_id, settings.PATCH_WINDOW if patches is None else patches)
+        try:
+>           return collection.query(
+                query_texts=[query],
+                n_results=n,
+                where=where,
+                include=["documents", "metadatas", "distances"],
+            )
+
+app\retrieval\chroma_client.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\chromadb\api\models\Collection.py:265: in query
+    query_results = self._client._query(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <chromadb.api.rust.RustBindingsAPI object at 0x000001AC63B334D0>
+collection_id = UUID('3b3e40b4-37d4-454f-aec7-b426360f5a09')
+query_embeddings = [[-0.015175625681877136, 0.011742583476006985, 0.03545406088232994, -0.002351888455450535, 0.014651178382337093, -0.013650993816554546, ...]]
+ids = None, n_results = 3
+where = {'$and': [{'patch': {'$in': ['2026-10', '2026-09', '2026-08']}}, {'hero_ids': {'$contains': '141'}}]}
+where_document = None, include = ['documents', 'metadatas', 'distances']
+tenant = 'default_tenant', database = 'default_database'
+
+    @override
+    def _query(
+        self,
+        collection_id: UUID,
+        query_embeddings: Embeddings,
+        ids: Optional[IDs] = None,
+        n_results: int = 10,
+        where: Optional[Where] = None,
+        where_document: Optional[WhereDocument] = None,
+        include: Include = IncludeMetadataDocumentsDistances,
+        tenant: str = DEFAULT_TENANT,
+        database: str = DEFAULT_DATABASE,
+    ) -> QueryResult:
+        query_amount = len(query_embeddings)
+        filtered_ids_amount = len(ids) if ids else 0
+        self.product_telemetry_client.capture(
+            CollectionQueryEvent(
+                collection_uuid=str(collection_id),
+                query_amount=query_amount,
+                filtered_ids_amount=filtered_ids_amount,
+                n_results=n_results,
+                with_metadata_filter=query_amount if where is not None else 0,
+                with_document_filter=query_amount if where_document is not None else 0,
+                include_metadatas=query_amount if "metadatas" in include else 0,
+                include_documents=query_amount if "documents" in include else 0,
+                include_uris=query_amount if "uris" in include else 0,
+                include_distances=query_amount if "distances" in include else 0,
+            )
+        )
+    
+>       rust_response = self.bindings.query(
+            str(collection_id),
+            ids,
+            query_embeddings,
+            n_results,
+            json.dumps(where) if where else None,
+            json.dumps(where_document) if where_document else None,
+            include,
+            tenant,
+            database,
+        )
+E       chromadb.errors.InternalError: Error executing plan: Internal error: Error creating hnsw segment reader: Nothing found on disk
+
+.venv\Lib\site-packages\chromadb\api\rust.py:582: InternalError
+
+The above exception was the direct cause of the following exception:
+
+guides_collection = Collection(name=guides)
+require_chroma = <function require_chroma.<locals>._check at 0x000001AC3B837B00>
+
+    def test_hybrid_search_returns_evidence(guides_collection, require_chroma):
+        """向量 + BM25 经 RRF 融合后返回 5.1 结构的 Evidence（kind=vector、带 source_url）。"""
+        require_chroma()
+>       ev = bm25.hybrid_search(QUERY, hero_id=DIAOCHAN, top_k=3)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_retrieval_chroma.py:179: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+app\retrieval\bm25.py:129: in hybrid_search
+    vec = chroma_client.raw_query(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+query = '貂蝉怎么出装', hero_id = '141', patches = None, top_k = 3
+collection_name = 'guides'
+
+    def raw_query(
+        query: str,
+        *,
+        hero_id: str | None = None,
+        patches: list[str] | None = None,
+        top_k: int | None = None,
+        collection_name: str = COLLECTION_NAME,
+    ) -> dict:
+        """底层查询，返回 chromadb 原始结果（测试用它断言 ids/distances）。"""
+        try:
+            collection = get_collection(collection_name)
+        except Exception as e:
+            raise VectorStoreUnavailable(f"collection '{collection_name}' 不可用：{e}") from e
+    
+        n = top_k or settings.VECTOR_TOP_K
+        where = build_where(hero_id, settings.PATCH_WINDOW if patches is None else patches)
+        try:
+            return collection.query(
+                query_texts=[query],
+                n_results=n,
+                where=where,
+                include=["documents", "metadatas", "distances"],
+            )
+        except Exception as e:
+>           raise VectorStoreUnavailable(f"Chroma 查询失败：{e}") from e
+E           app.retrieval.chroma_client.VectorStoreUnavailable: Chroma 查询失败：Error executing plan: Internal error: Error creating hnsw segment reader: Nothing found on disk
+
+app\retrieval\chroma_client.py:69: VectorStoreUnavailable
+============================== warnings summary ===============================
+tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
+  D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
+    return json.dumps(create_collection_configuration_to_json(config, metadata))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/unit/test_retrieval_chroma.py::test_hybrid_search_returns_evidence - app.retrieval.chroma_client.VectorStoreUnavailable: Chroma 查询失败：Error executing plan: Internal error: Error creating hnsw segment reader: Nothing found on disk
+1 failed, 270 passed, 1 warning in 21.40s

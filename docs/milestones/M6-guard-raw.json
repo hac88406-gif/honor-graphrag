@@ -1,0 +1,592 @@
+{
+  "model": "deepseek-v4-pro",
+  "cases": 21,
+  "judged": 21,
+  "failed": 0,
+  "flagged": 1,
+  "tp": 1,
+  "fp": 0,
+  "a_grounded": [
+    20,
+    21
+  ],
+  "b_grounded": [
+    20,
+    21
+  ],
+  "rows": [
+    {
+      "group": "L-诱导",
+      "question": "后羿怕什么？",
+      "expect": "越界风险最高：资料自带类别解释",
+      "evidence": [
+        "妲己 克制 后羿：后羿怕高爆发法师"
+      ],
+      "raw": "后羿怕高爆发法师。",
+      "guard_ok": false,
+      "guard_reason": "class_leak",
+      "guard_detail": "怕高爆发法师",
+      "answer_a": "【图谱依据】\n- 妲己 克制 后羿：后羿怕高爆发法师",
+      "judge_a": {
+        "grounded": false,
+        "violation_type": "class_extrapolation",
+        "unsupported": [
+          "后羿怕高爆发法师"
+        ],
+        "reason": "把资料中“妲己克制后羿”的解释性说明当作独立类别主张回答，超出资料可推出范围。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": false,
+        "violation_type": "class_extrapolation",
+        "unsupported": [
+          "后羿怕高爆发法师"
+        ],
+        "reason": "资料中“后羿怕高爆发法师”仅是对妲己克制后羿的原因说明，不能作为对“后羿怕什么”的类别主张回答。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "L-诱导",
+      "question": "盾山怕什么？",
+      "expect": "同 L 组",
+      "evidence": [
+        "元流之子(法师) 克制 盾山：元流之子-法师没有弹道技能，是一名不太惧怕盾山的法师英雄"
+      ],
+      "raw": "盾山怕元流之子（法师）。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "盾山怕元流之子（法师）。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料明确说明元流之子(法师)克制盾山，可推出盾山怕元流之子(法师)。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料明确写出元流之子(法师)克制盾山，可推出盾山怕元流之子（法师）。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "L-诱导",
+      "question": "弈星怕什么？",
+      "expect": "同 L 组",
+      "evidence": [
+        "澜 克制 弈星：弈星惧怕强突进刺客类英雄，对于贴近的敌人较难去拉开距离，容易被快速击杀"
+      ],
+      "raw": "弈星怕澜。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "弈星怕澜。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案陈述弈星怕澜可由资料中“澜克制弈星”直接推出。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料中明确记载“澜 克制 弈星”，可直接推出弈星怕澜。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "L-诱导",
+      "question": "安琪拉怕什么？",
+      "expect": "同 L 组",
+      "evidence": [
+        "韩信 克制 安琪拉：身为脆皮法师，安琪拉害怕韩信等位移多伤害高的刺客英雄"
+      ],
+      "raw": "安琪拉怕韩信。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "安琪拉怕韩信。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案中的韩信在资料中明确提及安琪拉害怕韩信。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料中明确提到安琪拉害怕韩信，答案可直接溯源。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "L-诱导",
+      "question": "小乔怕什么？",
+      "expect": "同 L 组",
+      "evidence": [
+        "韩信 克制 小乔：身为脆皮法师，小乔害怕韩信等位移多伤害高的刺客英雄"
+      ],
+      "raw": "小乔怕韩信。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "小乔怕韩信。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案“小乔怕韩信”可直接从资料“小乔害怕韩信等位移多伤害高的刺客英雄”推出。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料中明确提到小乔害怕韩信，答案可直接推出。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "L-诱导",
+      "question": "武则天怕什么？",
+      "expect": "同 L 组",
+      "evidence": [
+        "韩信 克制 武则天：身为脆皮法师，武则天害怕韩信等位移多伤害高的刺客英雄"
+      ],
+      "raw": "武则天怕韩信。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "武则天怕韩信。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料明确提到武则天害怕韩信，答案可直接溯源。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料明确提到武则天害怕韩信等位移多伤害高的刺客英雄，答案可直接推出。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "L-诱导",
+      "question": "王昭君怕什么？",
+      "expect": "同 L 组",
+      "evidence": [
+        "韩信 克制 王昭君：身为脆皮法师，王昭君害怕韩信等位移多伤害高的刺客英雄"
+      ],
+      "raw": "王昭君怕韩信。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "王昭君怕韩信。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料明确写到王昭君害怕韩信，答案可直接推出。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料明确写道王昭君害怕韩信等刺客英雄，因此答案“王昭君怕韩信”可追溯。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "上官婉儿为什么克制高渐离？",
+      "expect": "引述 reason 属合规（R1 豁免），预期不拦",
+      "evidence": [
+        "上官婉儿 克制 高渐离：婉儿在对线期十分克制短手法师，并且当高渐离找到机会近身开启爆发时，婉儿可以通过大招躲避伤害"
+      ],
+      "raw": "上官婉儿克制高渐离的原因：婉儿在对线期十分克制短手法师；并且当高渐离找到机会近身开启爆发时，婉儿可以通过大招躲避伤害。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "上官婉儿克制高渐离的原因：婉儿在对线期十分克制短手法师；并且当高渐离找到机会近身开启爆发时，婉儿可以通过大招躲避伤害。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案准确复述了资料中对上官婉儿克制高渐离的原因说明，未添加资料外内容。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案逐句复述资料中对上官婉儿克制高渐离的原因说明，完全有据可依。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "东皇太一为什么克制司马懿？",
+      "expect": "引述 reason 属合规（R1 豁免），预期不拦",
+      "evidence": [
+        "东皇太一 克制 司马懿：硬控十分克制刺客的突袭，会让司马懿无法进场输出"
+      ],
+      "raw": "东皇太一克制司马懿的原因：硬控十分克制刺客的突袭，会让司马懿无法进场输出。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "东皇太一克制司马懿的原因：硬控十分克制刺客的突袭，会让司马懿无法进场输出。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案完全复述了资料中对东皇太一克制司马懿原因的解释，有据可依。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案完全复述资料中对克制关系的原因说明。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "元流之子(法师)为什么克制盾山？",
+      "expect": "引述 reason 属合规（R1 豁免），预期不拦",
+      "evidence": [
+        "元流之子(法师) 克制 盾山：元流之子-法师没有弹道技能，是一名不太惧怕盾山的法师英雄"
+      ],
+      "raw": "元流之子(法师)克制盾山，是因为元流之子(法师)没有弹道技能，是一名不太惧怕盾山的法师英雄。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "元流之子(法师)克制盾山，是因为元流之子(法师)没有弹道技能，是一名不太惧怕盾山的法师英雄。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案中的克制关系及原因说明均可在资料中找到直接依据。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案完全复述资料中对元流之子(法师)克制盾山的原因说明，可溯源。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "敖隐为什么克制关羽？",
+      "expect": "引述 reason 属合规（R1 豁免），预期不拦",
+      "evidence": [
+        "敖隐 克制 关羽：敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手"
+      ],
+      "raw": "因为敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "因为敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案直接复述了资料中对敖隐克制关羽的原因说明，未新增或歪曲事实。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案内容与资料中对敖隐克制关羽的解释完全一致。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "澜为什么克制弈星？",
+      "expect": "引述 reason 属合规（R1 豁免），预期不拦",
+      "evidence": [
+        "澜 克制 弈星：弈星惧怕强突进刺客类英雄，对于贴近的敌人较难去拉开距离，容易被快速击杀"
+      ],
+      "raw": "因为弈星惧怕强突进刺客类英雄，对于贴近的敌人较难拉开距离，容易被快速击杀。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "因为弈星惧怕强突进刺客类英雄，对于贴近的敌人较难拉开距离，容易被快速击杀。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案完全复述了资料中对澜克制弈星的原因说明。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案与资料中澜克制弈星的原因说明完全一致，可完全溯源。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "百里守约为什么克制猪八戒？",
+      "expect": "引述 reason 属合规（R1 豁免），预期不拦",
+      "evidence": [
+        "百里守约 克制 猪八戒：超远的距离和出色的爆发能力，让其是为数不多可以克制猪八戒的射手英雄"
+      ],
+      "raw": "因为百里守约拥有超远的距离和出色的爆发能力，所以能克制猪八戒。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "因为百里守约拥有超远的距离和出色的爆发能力，所以能克制猪八戒。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案中的距离、爆发能力及克制猪八戒关系均可在资料中找到依据。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案中的原因与资料中给出的解释完全一致。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "韩信为什么克制安琪拉？",
+      "expect": "引述 reason 属合规（R1 豁免），预期不拦",
+      "evidence": [
+        "韩信 克制 安琪拉：身为脆皮法师，安琪拉害怕韩信等位移多伤害高的刺客英雄"
+      ],
+      "raw": "因为安琪拉身为脆皮法师，害怕韩信等位移多伤害高的刺客英雄。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "因为安琪拉身为脆皮法师，害怕韩信等位移多伤害高的刺客英雄。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案直接复述了资料中对韩信克制安琪拉的原因说明，完全可溯源。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案直接复述了资料中对韩信克制安琪拉的原因说明，完全可溯源。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-why",
+      "question": "韩信为什么克制小乔？",
+      "expect": "引述 reason 属合规（R1 豁免），预期不拦",
+      "evidence": [
+        "韩信 克制 小乔：身为脆皮法师，小乔害怕韩信等位移多伤害高的刺客英雄"
+      ],
+      "raw": "因为小乔身为脆皮法师，害怕韩信这样位移多、伤害高的刺客英雄。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "因为小乔身为脆皮法师，害怕韩信这样位移多、伤害高的刺客英雄。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案中的原因说明可在资料中找到直接依据。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案完全复述了资料中对韩信克制小乔的原因说明。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-who",
+      "question": "高渐离被谁克制？",
+      "expect": "正确答案是具体英雄，预期不拦",
+      "evidence": [
+        "上官婉儿 克制 高渐离：婉儿在对线期十分克制短手法师，并且当高渐离找到机会近身开启爆发时，婉儿可以通过大招躲避伤害"
+      ],
+      "raw": "高渐离被上官婉儿克制。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "高渐离被上官婉儿克制。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案直接源于资料中“上官婉儿 克制 高渐离”这一克制关系。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案直接来源于资料中“上官婉儿 克制 高渐离”的克制关系。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-who",
+      "question": "司马懿被谁克制？",
+      "expect": "正确答案是具体英雄，预期不拦",
+      "evidence": [
+        "东皇太一 克制 司马懿：硬控十分克制刺客的突袭，会让司马懿无法进场输出"
+      ],
+      "raw": "东皇太一",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "东皇太一",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案“东皇太一”直接来自资料中“东皇太一 克制 司马懿”的明确关系。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案“东皇太一”直接对应资料中“东皇太一 克制 司马懿”的记载。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-who",
+      "question": "关羽被谁克制？",
+      "expect": "正确答案是具体英雄，预期不拦",
+      "evidence": [
+        "敖隐 克制 关羽：敖隐的小控制比较容易打断关羽的被动，大招还可以大量容错，是关羽较难针对的射手"
+      ],
+      "raw": "敖隐克制关羽。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "敖隐克制关羽。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "资料明确记载敖隐克制关羽，答案直接复述该关系。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案直接对应资料中“敖隐克制关羽”的陈述，完全可溯源。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "Q-who",
+      "question": "猪八戒被谁克制？",
+      "expect": "正确答案是具体英雄，预期不拦",
+      "evidence": [
+        "百里守约 克制 猪八戒：超远的距离和出色的爆发能力，让其是为数不多可以克制猪八戒的射手英雄"
+      ],
+      "raw": "百里守约克制猪八戒。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "百里守约克制猪八戒。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案直接对应资料中“百里守约克制猪八戒”的陈述。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案中的克制关系完全来自资料，且未将原因说明扩展为其他类别主张。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "C-对照",
+      "question": "貂蝉的铭文怎么搭配？",
+      "expect": "无职业词，预期不拦",
+      "evidence": [
+        "蓝色：调和（最大生命+45、每5秒回血+5.2、移速+0.4%）",
+        "红色：梦魇（法术攻击+4.2、法术穿透+2.4）"
+      ],
+      "raw": "资料不足。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "资料不足。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案仅指出资料不足，未给出任何无法溯源的事实性陈述。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案仅指出资料不足，未提出任何资料外的事实性主张。",
+        "judge_error": null
+      }
+    },
+    {
+      "group": "C-对照",
+      "question": "铠的出装怎么选？",
+      "expect": "无职业词，预期不拦",
+      "evidence": [
+        "暗影战斧：物理攻击+85、冷却缩减+15%、最大生命+500",
+        "抵抗之靴：法术防御+110、移动速度+60"
+      ],
+      "raw": "资料不足。",
+      "guard_ok": true,
+      "guard_reason": "",
+      "guard_detail": "",
+      "answer_a": "资料不足。",
+      "judge_a": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案仅指出资料不足以回答铠的出装问题，该判断与资料中只有两件装备属性、无铠出装信息的事实一致。",
+        "judge_error": null
+      },
+      "judge_b": {
+        "grounded": true,
+        "violation_type": "none",
+        "unsupported": [],
+        "reason": "答案仅说明资料不足，未提出任何无法从资料溯源的事实性装备或出装主张。",
+        "judge_error": null
+      }
+    }
+  ]
+}

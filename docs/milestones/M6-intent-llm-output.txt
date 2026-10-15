@@ -1,0 +1,157 @@
+==============================================================================
+M6 LLM 意图路径（route_llm）对比 · model=qwen2.5:3b
+==============================================================================
+问句 108 条（已排除多轮追问：其期望值依赖指代消解，两条路径都拿不到上下文）
+
+  合计：规则 96/108 = 88.9%     LLM 45/108 = 41.7%
+  覆盖集：规则 33/34 = 97.1%     LLM 18/34 = 52.9%
+  泛化集：规则 63/74 = 85.1%     LLM 27/74 = 36.5%
+
+  单次耗时：规则 mean=8.6ms    LLM mean=2.83s (min=2.65s max=7.84s)
+  LLM 路径实际生效（method=llm）条数：108/108
+
+--- 两条路径结论不同的用例（逐条列全） ---
+  [G-01] '铠被谁克制'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=COUNTER_OF  -> 规则更准
+  [G-02] '谁能打铠'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=MATCHUP  -> 规则更准
+  [G-03] '后羿怕谁'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=MATCHUP  -> 规则更准
+  [G-04] '鲁班七号被谁克制'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=COUNTER_OF  -> 规则更准
+  [G-05] '貂蝉克制谁'
+      期望=COUNTER_OF  规则=COUNTER_OF  LLM=MATCHUP  -> 规则更准
+  [G-06] '兰陵王能打谁'
+      期望=COUNTER_OF  规则=COUNTER_OF  LLM=MATCHUP  -> 规则更准
+  [B-03] '貂蝉的铭文怎么搭配'
+      期望=INSCRIPTION  规则=INSCRIPTION  LLM=ITEM_BUILD  -> 规则更准
+  [S-01] '谁和鲁班七号配合好'
+      期望=SYNERGY  规则=SYNERGY  LLM=MATCHUP  -> 规则更准
+  [S-02] '貂蝉的搭档是谁'
+      期望=SYNERGY  规则=SYNERGY  LLM=COUNTER_OF  -> 规则更准
+  [T-01] '貂蝉对线思路'
+      期望=GAMEPLAY  规则=GAMEPLAY  LLM=ITEM_BUILD  -> 规则更准
+  [H-05] '怎么针对兰陵王'
+      期望=MATCHUP  规则=MATCHUP  LLM=COUNTER_BY  -> 规则更准
+  [R-03] '推荐几部好看的电影'
+      期望=OUT_OF_SCOPE  规则=ENTITY_UNKNOWN  LLM=OUT_OF_SCOPE  -> LLM 更准
+  [E-01] '凯被谁克制'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=COUNTER_OF  -> 规则更准
+  [E-02] '兰凌王能打谁'
+      期望=COUNTER_OF  规则=COUNTER_OF  LLM=MATCHUP  -> 规则更准
+  [E-03] '猴子怕谁'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=MATCHUP  -> 规则更准
+  [E-04] '我想玩个射手'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=ITEM_BUILD  -> 规则更准
+  [E-05] '赛博坦这个英雄怎么样'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 规则更准
+  [F-01] '铠谁打得过他啊'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=COUNTER_OF  -> 规则更准
+  [F-02] '后羿最怕啥英雄'
+      期望=COUNTER_BY  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 都错/都另有出入
+  [F-03] '我拿谁好打鲁班七号'
+      期望=COUNTER_BY  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 都错/都另有出入
+  [F-04] '貂蝉的天敌是哪些'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=MATCHUP  -> 规则更准
+  [F-05] '哪个英雄能压制兰陵王'
+      期望=COUNTER_BY  规则=ENTITY_UNKNOWN  LLM=COUNTER_OF  -> 都错/都另有出入
+  [F-06] '花木兰怕什么英雄'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=MATCHUP  -> 规则更准
+  [F-07] '谁能针对猴子'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=COUNTER_OF  -> 规则更准
+  [F-08] '铠能打过谁'
+      期望=COUNTER_OF  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 都错/都另有出入
+  [F-09] '兰陵王克谁'
+      期望=COUNTER_OF  规则=COUNTER_OF  LLM=MATCHUP  -> 规则更准
+  [F-10] '貂蝉压制哪些英雄'
+      期望=COUNTER_OF  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 都错/都另有出入
+  [F-11] '孙悟空打得过谁'
+      期望=COUNTER_OF  规则=COUNTER_OF  LLM=MATCHUP  -> 规则更准
+  [F-13] '后羿能欺负谁'
+      期望=COUNTER_OF  规则=COUNTER_OF  LLM=MATCHUP  -> 规则更准
+  [F-14] '对面选貂蝉我选谁能克制她'
+      期望=COUNTER_BY  规则=COUNTER_BY  LLM=COUNTER_OF  -> 规则更准
+  [F-15] '铠跟谁配合比较猛'
+      期望=SYNERGY  规则=SYNERGY  LLM=MATCHUP  -> 规则更准
+  [F-16] '后羿配谁'
+      期望=SYNERGY  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 都错/都另有出入
+  [F-17] '鲁班七号适合和谁一队'
+      期望=SYNERGY  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 都错/都另有出入
+  [F-18] '貂蝉开黑搭谁'
+      期望=SYNERGY  规则=SYNERGY  LLM=COUNTER_OF  -> 规则更准
+  [F-19] '东皇太一和谁一起玩强'
+      期望=SYNERGY  规则=SYNERGY  LLM=MATCHUP  -> 规则更准
+  [F-20] '宫本武藏的组合英雄有谁'
+      期望=SYNERGY  规则=SYNERGY  LLM=MATCHUP  -> 规则更准
+  [F-24] '后羿鞋子买哪个'
+      期望=ITEM_BUILD  规则=ITEM_BUILD  LLM=COUNTER_OF  -> 规则更准
+  [F-27] '铠带什么铭文'
+      期望=INSCRIPTION  规则=INSCRIPTION  LLM=ITEM_BUILD  -> 规则更准
+  [F-28] '亚瑟符文怎么配'
+      期望=INSCRIPTION  规则=INSCRIPTION  LLM=ITEM_BUILD  -> 规则更准
+  [F-29] '貂蝉的铭文推荐'
+      期望=INSCRIPTION  规则=INSCRIPTION  LLM=ITEM_BUILD  -> 规则更准
+  [F-30] '后羿用什么铭文好'
+      期望=INSCRIPTION  规则=INSCRIPTION  LLM=ITEM_BUILD  -> 规则更准
+  [F-31] '东皇太一铭文搭配'
+      期望=INSCRIPTION  规则=INSCRIPTION  LLM=ITEM_BUILD  -> 规则更准
+  [F-32] '兰陵王带啥铭文'
+      期望=INSCRIPTION  规则=INSCRIPTION  LLM=ITEM_BUILD  -> 规则更准
+  [F-34] '亚瑟的对线思路'
+      期望=GAMEPLAY  规则=GAMEPLAY  LLM=MATCHUP  -> 规则更准
+  [F-36] '兰陵王打野节奏怎么带'
+      期望=GAMEPLAY  规则=ENTITY_UNKNOWN  LLM=ITEM_BUILD  -> 都错/都另有出入
+  [F-37] '后羿怎么发育'
+      期望=GAMEPLAY  规则=ENTITY_UNKNOWN  LLM=ITEM_BUILD  -> 都错/都另有出入
+  [F-38] '花木兰上手难不难'
+      期望=GAMEPLAY  规则=GAMEPLAY  LLM=MATCHUP  -> 规则更准
+  [F-39] '东皇太一的意识'
+      期望=GAMEPLAY  规则=GAMEPLAY  LLM=INSCRIPTION  -> 规则更准
+  [F-40] '貂蝉打团思路'
+      期望=GAMEPLAY  规则=GAMEPLAY  LLM=MATCHUP  -> 规则更准
+  [F-42] '兰陵王怎么抓人'
+      期望=GAMEPLAY  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 都错/都另有出入
+  [F-46] '当前谁值得练'
+      期望=TIER_META  规则=TIER_META  LLM=ITEM_BUILD  -> 规则更准
+  [F-47] '版本答案是什么'
+      期望=TIER_META  规则=TIER_META  LLM=OUT_OF_SCOPE  -> 规则更准
+  [F-48] '这版本打野强势的有哪些'
+      期望=TIER_META  规则=TIER_META  LLM=MATCHUP  -> 规则更准
+  [F-53] '我拿后羿怎么对线百里守约'
+      期望=MATCHUP  规则=MATCHUP  LLM=ITEM_BUILD  -> 规则更准
+  [F-56] '东皇太一怎么破'
+      期望=MATCHUP  规则=MATCHUP  LLM=COUNTER_OF  -> 规则更准
+  [F-57] '对面貂蝉怎么针对'
+      期望=MATCHUP  规则=MATCHUP  LLM=COUNTER_OF  -> 规则更准
+  [F-59] '我想玩个法师'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=ITEM_BUILD  -> 规则更准
+  [F-60] '推荐个打野英雄'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 规则更准
+  [F-61] '赛博坦这个英雄怎么样'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 规则更准
+  [F-62] '这个英雄强吗'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=TIER_META  -> 规则更准
+  [F-63] '铠'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 规则更准
+  [F-64] '有没有克制关系图'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 规则更准
+  [F-65] '我想练个射手'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=ITEM_BUILD  -> 规则更准
+  [F-66] '帮我选个对抗路英雄'
+      期望=ENTITY_UNKNOWN  规则=ENTITY_UNKNOWN  LLM=MATCHUP  -> 规则更准
+  [F-72] '推荐部好看的电影'
+      期望=OUT_OF_SCOPE  规则=ENTITY_UNKNOWN  LLM=OUT_OF_SCOPE  -> LLM 更准
+
+--- 规则路径判错的用例（LLM 是否能救回） ---
+  [R-03] '推荐几部好看的电影' 期望=OUT_OF_SCOPE 规则=ENTITY_UNKNOWN LLM=OUT_OF_SCOPE -> LLM 救回
+  [F-02] '后羿最怕啥英雄' 期望=COUNTER_BY 规则=ENTITY_UNKNOWN LLM=MATCHUP -> LLM 也错
+  [F-03] '我拿谁好打鲁班七号' 期望=COUNTER_BY 规则=ENTITY_UNKNOWN LLM=MATCHUP -> LLM 也错
+  [F-05] '哪个英雄能压制兰陵王' 期望=COUNTER_BY 规则=ENTITY_UNKNOWN LLM=COUNTER_OF -> LLM 也错
+  [F-08] '铠能打过谁' 期望=COUNTER_OF 规则=ENTITY_UNKNOWN LLM=MATCHUP -> LLM 也错
+  [F-10] '貂蝉压制哪些英雄' 期望=COUNTER_OF 规则=ENTITY_UNKNOWN LLM=MATCHUP -> LLM 也错
+  [F-16] '后羿配谁' 期望=SYNERGY 规则=ENTITY_UNKNOWN LLM=MATCHUP -> LLM 也错
+  [F-17] '鲁班七号适合和谁一队' 期望=SYNERGY 规则=ENTITY_UNKNOWN LLM=MATCHUP -> LLM 也错
+  [F-36] '兰陵王打野节奏怎么带' 期望=GAMEPLAY 规则=ENTITY_UNKNOWN LLM=ITEM_BUILD -> LLM 也错
+  [F-37] '后羿怎么发育' 期望=GAMEPLAY 规则=ENTITY_UNKNOWN LLM=ITEM_BUILD -> LLM 也错
+  [F-42] '兰陵王怎么抓人' 期望=GAMEPLAY 规则=ENTITY_UNKNOWN LLM=MATCHUP -> LLM 也错
+  [F-72] '推荐部好看的电影' 期望=OUT_OF_SCOPE 规则=ENTITY_UNKNOWN LLM=OUT_OF_SCOPE -> LLM 救回

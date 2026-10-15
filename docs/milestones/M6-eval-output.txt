@@ -1,0 +1,225 @@
+﻿==============================================================================
+【评测集 coverage】38 条用例
+==============================================================================
+  OK  G-01  铠被谁克制  -> ['COUNTER_BY'] / ['answer']
+  OK  G-02  谁能打铠  -> ['COUNTER_BY'] / ['answer']
+  OK  G-03  后羿怕谁  -> ['COUNTER_BY'] / ['answer']
+  OK  G-04  鲁班七号被谁克制  -> ['COUNTER_BY'] / ['answer']
+  OK  G-05  貂蝉克制谁  -> ['COUNTER_OF'] / ['answer']
+  OK  G-06  兰陵王能打谁  -> ['COUNTER_OF'] / ['answer']
+.\.venv\Scripts\python.exe : 
+At line:15 char:1601
++ ... pgrep\bin'; .\.venv\Scripts\python.exe scripts/run_eval.py --set all  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 391/391 [00:00<00:00, 27711.61it/s]
+  OK  B-01  铠的出装  -> ['ITEM_BUILD'] / ['answer']
+  OK  B-02  亚瑟怎么出装  -> ['ITEM_BUILD'] / ['answer']
+  OK  B-03  貂蝉的铭文怎么搭配  -> ['INSCRIPTION'] / ['answer']
+  OK  B-04  后羿铭文  -> ['INSCRIPTION'] / ['answer']
+  OK  S-01  谁和鲁班七号配合好  -> ['SYNERGY'] / ['answer']
+  OK  S-02  貂蝉的搭档是谁  -> ['SYNERGY'] / ['answer']
+  OK  T-01  貂蝉对线思路  -> ['GAMEPLAY'] / ['answer']
+  OK  T-02  铠怎么玩  -> ['GAMEPLAY'] / ['answer']
+  OK  T-03  兰陵王的连招技巧  -> ['GAMEPLAY'] / ['answer']
+  OK  T-04  后羿的打法  -> ['GAMEPLAY'] / ['answer']
+  OK  T-05  东皇太一的玩法  -> ['GAMEPLAY'] / ['answer']
+  OK  T-06  花木兰怎么玩  -> ['GAMEPLAY'] / ['answer']
+  OK  T-07  这个版本谁强  -> ['TIER_META'] / ['low_confidence']
+  OK  T-08  当前版本哪些英雄强势  -> ['TIER_META'] / ['answer']
+  OK  H-01  我玩铠怎么打吕布  -> ['MATCHUP'] / ['answer']
+  OK  H-02  铠怎么打后羿  -> ['MATCHUP'] / ['answer']
+  OK  H-03  我玩貂蝉怎么打张良  -> ['MATCHUP'] / ['answer']
+  OK  H-04  怎么打东皇太一  -> ['MATCHUP'] / ['clarify']
+  OK  H-05  怎么针对兰陵王  -> ['MATCHUP'] / ['clarify']
+  OK  M-01  M-01  -> ['COUNTER_BY', 'INSCRIPTION'] / ['answer', 'answer']
+  OK  M-02  M-02  -> ['ITEM_BUILD', 'COUNTER_BY'] / ['answer', 'answer']
+  OK  M-03  M-03  -> ['COUNTER_BY', 'MATCHUP'] / ['answer', 'clarify']
+  OK  M-04  M-04  -> ['ENTITY_UNKNOWN', 'COUNTER_OF'] / ['clarify', 'answer']
+  OK  R-01  今天天气怎么样  -> ['OUT_OF_SCOPE'] / ['reject']
+  OK  R-02  北京到上海多远  -> ['OUT_OF_SCOPE'] / ['reject']
+  ERR R-03  推荐几部好看的电影  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  R-04  1+1等于几  -> ['OUT_OF_SCOPE'] / ['reject']
+  OK  E-01  凯被谁克制  -> ['COUNTER_BY'] / ['answer']
+  OK  E-02  兰凌王能打谁  -> ['COUNTER_OF'] / ['answer']
+  OK  E-03  猴子怕谁  -> ['COUNTER_BY'] / ['answer']
+  OK  E-04  我想玩个射手  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  E-05  赛博坦这个英雄怎么样  -> ['ENTITY_UNKNOWN'] / ['clarify']
+==============================================================================
+【评测集 freeform】74 条用例
+==============================================================================
+  OK  F-01  铠谁打得过他啊  -> ['COUNTER_BY'] / ['answer']
+  ERR F-02  后羿最怕啥英雄  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  ERR F-03  我拿谁好打鲁班七号  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-04  貂蝉的天敌是哪些  -> ['COUNTER_BY'] / ['answer']
+  ERR F-05  哪个英雄能压制兰陵王  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-06  花木兰怕什么英雄  -> ['COUNTER_BY'] / ['answer']
+  OK  F-07  谁能针对猴子  -> ['COUNTER_BY'] / ['answer']
+  ERR F-08  铠能打过谁  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-09  兰陵王克谁  -> ['COUNTER_OF'] / ['answer']
+  ERR F-10  貂蝉压制哪些英雄  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-11  孙悟空打得过谁  -> ['COUNTER_OF'] / ['answer']
+  OK  F-12  花木兰克制什么英雄  -> ['COUNTER_OF'] / ['answer']
+  OK  F-13  后羿能欺负谁  -> ['COUNTER_OF'] / ['answer']
+  OK  F-14  对面选貂蝉我选谁能克制她  -> ['COUNTER_BY'] / ['answer']
+  OK  F-15  铠跟谁配合比较猛  -> ['SYNERGY'] / ['answer']
+  ERR F-16  后羿配谁  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  ERR F-17  鲁班七号适合和谁一队  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-18  貂蝉开黑搭谁  -> ['SYNERGY'] / ['answer']
+  OK  F-19  东皇太一和谁一起玩强  -> ['SYNERGY'] / ['answer']
+  OK  F-20  宫本武藏的组合英雄有谁  -> ['SYNERGY'] / ['answer']
+  OK  F-21  铠出什么装备好  -> ['ITEM_BUILD'] / ['answer']
+  OK  F-22  亚瑟第一件出啥  -> ['ITEM_BUILD'] / ['answer']
+  OK  F-23  貂蝉六神装  -> ['ITEM_BUILD'] / ['answer']
+  OK  F-24  后羿鞋子买哪个  -> ['ITEM_BUILD'] / ['answer']
+  OK  F-25  东皇太一怎么出装啊  -> ['ITEM_BUILD'] / ['answer']
+  OK  F-26  花木兰核心装是啥  -> ['ITEM_BUILD'] / ['answer']
+  OK  F-27  铠带什么铭文  -> ['INSCRIPTION'] / ['answer']
+  OK  F-28  亚瑟符文怎么配  -> ['INSCRIPTION'] / ['answer']
+  OK  F-29  貂蝉的铭文推荐  -> ['INSCRIPTION'] / ['answer']
+  OK  F-30  后羿用什么铭文好  -> ['INSCRIPTION'] / ['answer']
+  OK  F-31  东皇太一铭文搭配  -> ['INSCRIPTION'] / ['answer']
+  OK  F-32  兰陵王带啥铭文  -> ['INSCRIPTION'] / ['answer']
+  OK  F-33  铠怎么玩才厉害  -> ['GAMEPLAY'] / ['answer']
+  OK  F-34  亚瑟的对线思路  -> ['GAMEPLAY'] / ['answer']
+  OK  F-35  貂蝉连招怎么放  -> ['GAMEPLAY'] / ['answer']
+  ERR F-36  兰陵王打野节奏怎么带  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  ERR F-37  后羿怎么发育  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-38  花木兰上手难不难  -> ['GAMEPLAY'] / ['low_confidence']
+  OK  F-39  东皇太一的意识  -> ['GAMEPLAY'] / ['low_confidence']
+  OK  F-40  貂蝉打团思路  -> ['GAMEPLAY'] / ['answer']
+  OK  F-41  铠的技巧有哪些  -> ['GAMEPLAY'] / ['answer']
+  ERR F-42  兰陵王怎么抓人  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-43  现在版本谁最强  -> ['TIER_META'] / ['low_confidence']
+  OK  F-44  这个赛季上分用啥英雄  -> ['TIER_META'] / ['answer']
+  OK  F-45  2026年10月版本梯队  -> ['TIER_META'] / ['low_confidence']
+  OK  F-46  当前谁值得练  -> ['TIER_META'] / ['low_confidence']
+  OK  F-47  版本答案是什么  -> ['TIER_META'] / ['reject']
+  OK  F-48  这版本打野强势的有哪些  -> ['TIER_META'] / ['answer']
+  OK  F-49  我玩铠怎么打吕布  -> ['MATCHUP'] / ['answer']
+  OK  F-50  亚瑟对线吕布怎么打  -> ['MATCHUP'] / ['answer']
+  OK  F-51  怎么打貂蝉  -> ['MATCHUP'] / ['clarify']
+  OK  F-52  貂蝉打张良怎么打  -> ['MATCHUP'] / ['low_confidence']
+  OK  F-53  我拿后羿怎么对线百里守约  -> ['MATCHUP'] / ['answer']
+  OK  F-54  花木兰怎么打铠  -> ['MATCHUP'] / ['answer']
+  OK  F-55  铠对线怎么打后羿  -> ['MATCHUP'] / ['answer']
+  OK  F-56  东皇太一怎么破  -> ['MATCHUP'] / ['low_confidence']
+  OK  F-57  对面貂蝉怎么针对  -> ['MATCHUP'] / ['low_confidence']
+  OK  F-58  我用亚瑟碰到兰陵王怎么打  -> ['MATCHUP'] / ['low_confidence']
+  OK  F-59  我想玩个法师  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-60  推荐个打野英雄  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-61  赛博坦这个英雄怎么样  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-62  这个英雄强吗  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-63  铠  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-64  有没有克制关系图  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-65  我想练个射手  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-66  帮我选个对抗路英雄  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-67  今天A股怎么样  -> ['OUT_OF_SCOPE'] / ['reject']
+  OK  F-68  帮我写个Python脚本  -> ['OUT_OF_SCOPE'] / ['reject']
+  OK  F-69  讲个笑话  -> ['OUT_OF_SCOPE'] / ['reject']
+  OK  F-70  北京限行尾号是多少  -> ['OUT_OF_SCOPE'] / ['reject']
+  OK  F-71  怎么减肥  -> ['OUT_OF_SCOPE'] / ['reject']
+  ERR F-72  推荐部好看的电影  -> ['ENTITY_UNKNOWN'] / ['clarify']
+  OK  F-73  1+1等于几  -> ['OUT_OF_SCOPE'] / ['reject']
+  OK  F-74  明天会下雨吗  -> ['OUT_OF_SCOPE'] / ['reject']
+
+==============================================================================
+【指标汇总】（规格书 8.2；覆盖集与泛化集分开报）
+==============================================================================
+
+[coverage]
+  意图路由准确率：41/42 = 97.6%
+  实体链接准确率：34/34 = 100.0%（分母=标注了应有实体的 turn）
+  检索 Recall@5 ：26/26 = 100.0%（分母=标注了关键依据的 turn）
+
+  --- coverage 意图错误样例：错误样例全列（1 条）---
+    [R-03#1] '推荐几部好看的电影'
+        期望 intent=OUT_OF_SCOPE / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['558'] names=['影'] （期望 []）
+
+  --- coverage 实体错误样例：错误样例全列（0 条）---
+    （无）
+
+  --- coverage Recall@5 未命中：错误样例全列（0 条）---
+    （无）
+
+[freeform]
+  意图路由准确率：63/74 = 85.1%
+  实体链接准确率：53/53 = 100.0%（分母=标注了应有实体的 turn）
+  检索 Recall@5 ：0/0 = n/a（分母=标注了关键依据的 turn）
+
+  --- freeform 意图错误样例：错误样例全列（11 条）---
+    [F-02#1] '后羿最怕啥英雄'
+        期望 intent=COUNTER_BY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['169'] names=['后羿'] （期望 ['169']）
+    [F-03#1] '我拿谁好打鲁班七号'
+        期望 intent=COUNTER_BY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['112'] names=['鲁班七号'] （期望 ['112']）
+        标注说明：『我拿谁好打 X』= 谁克制 X；关键词表未收『好打』
+    [F-05#1] '哪个英雄能压制兰陵王'
+        期望 intent=COUNTER_BY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['153'] names=['兰陵王'] （期望 ['153']）
+    [F-08#1] '铠能打过谁'
+        期望 intent=COUNTER_OF / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['193'] names=['铠'] （期望 ['193']）
+    [F-10#1] '貂蝉压制哪些英雄'
+        期望 intent=COUNTER_OF / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['141'] names=['貂蝉'] （期望 ['141']）
+    [F-16#1] '后羿配谁'
+        期望 intent=SYNERGY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['169'] names=['后羿'] （期望 ['169']）
+    [F-17#1] '鲁班七号适合和谁一队'
+        期望 intent=SYNERGY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['112'] names=['鲁班七号'] （期望 ['112']）
+    [F-36#1] '兰陵王打野节奏怎么带'
+        期望 intent=GAMEPLAY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['153'] names=['兰陵王', '打野'] （期望 ['153']）
+        标注说明：**预期失败**：『节奏/怎么带』不在关键词表；只有『打野』落在领域词里
+    [F-37#1] '后羿怎么发育'
+        期望 intent=GAMEPLAY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['169'] names=['后羿'] （期望 ['169']）
+        标注说明：**预期失败**：『发育』既不是 GAMEPLAY 词根也不是领域词（只有『发育路』）
+    [F-42#1] '兰陵王怎么抓人'
+        期望 intent=GAMEPLAY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['153'] names=['兰陵王'] （期望 ['153']）
+        标注说明：**预期失败**：『抓人』不在关键词表也不在领域词里
+    [F-72#1] '推荐部好看的电影'
+        期望 intent=OUT_OF_SCOPE / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['558'] names=['影'] （期望 []）
+
+  --- freeform 实体错误样例：错误样例全列（0 条）---
+    （无）
+
+  --- freeform Recall@5 未命中：错误样例全列（0 条）---
+    （无）
+
+[拒答正确率·双向]
+  该拒未拒：2/12 = 16.7%  （标注应拒答的 turn 里没拒的）
+      [R-03#1] '推荐几部好看的电影' -> type=clarify
+      [F-72#1] '推荐部好看的电影' -> type=clarify
+  不该拒乱拒：1/104 = 1.0%  （标注不该拒的 turn 里被拒的）
+      [F-47#1] '版本答案是什么' -> intent=TIER_META type=reject note=None
+
+[复合意图占比] 命中 ≥2 个意图：5/116 = 4.3%
+      [B-03#1] '貂蝉的铭文怎么搭配' -> ['INSCRIPTION', 'SYNERGY']
+      [T-01#1] '貂蝉对线思路' -> ['GAMEPLAY', 'MATCHUP']
+      [F-07#1] '谁能针对猴子' -> ['COUNTER_BY', 'MATCHUP']
+      [F-31#1] '东皇太一铭文搭配' -> ['INSCRIPTION', 'SYNERGY']
+      [F-34#1] '亚瑟的对线思路' -> ['GAMEPLAY', 'MATCHUP']
+
+[guard 触发率] 走 LLM 生成的 turn 中 guard 拦下：2/77 = 2.6%
+      [T-05#1] '东皇太一的玩法' -> class_leak: '压制为核心的游走/对抗路'
+      [F-48#1] '这版本打野强势的有哪些' -> hero_leak: '花木兰'
+
+[/api/chat/sync 端到端耗时·按响应类型]（秒；流式首 token 见 M6-latency）
+      answer           n=68   mean=6.53    p50=3.52    max=33.31
+      clarify          n=27   mean=0.01    p50=0.01    max=0.02
+      low_confidence   n=10   mean=8.41    p50=6.92    max=22.76
+      reject           n=11   mean=0.03    p50=0.01    max=0.19
+
+[降级] 本轮 degraded=True 的 turn：0 条
+
+原始记录已写入：docs\milestones\M6-eval-raw.json（116 个 turn）

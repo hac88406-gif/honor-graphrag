@@ -1,0 +1,95 @@
+﻿==============================================================================
+M6 答案有据率（LLM 判官；口径见模块头）
+==============================================================================
+候选答案 78 条（type ∈ ('answer', 'low_confidence')）
+  [01] OK  G-01#1 [llm/answer] vt=none 答案列出的四个英雄克制铠均可在资料中找到对应条目，且未将解释性说明抬成类别主张。
+  [02] OK  G-02#1 [llm/answer] vt=none 答案所列英雄均可在资料中找到克制铠的记录
+  [03] OK  G-03#1 [llm/answer] vt=none 答案所列英雄均可在资料中找到对应克制后羿的记录。
+  [04] OK  G-04#1 [llm/answer] vt=none 答案列出的克制鲁班七号的英雄均可在资料中找到对应条目。
+  [05] OK  G-05#1 [llm/answer] vt=none 答案所列英雄均可在资料中找到貂蝉克制对应条目。
+  [06] OK  G-06#1 [llm/answer] vt=none 答案列出的所有被克制英雄均可在资料中找到对应条目，未添加资料外内容。
+  [07] OK  B-01#1 [llm/answer] vt=none 答案中的推荐出装两套均可在资料中找到对应。
+  [08] OK  B-02#1 [llm/answer] vt=none 答案中的两套出装及定位说明均能在资料中的推荐出装与Tips中找到对应依据，未添加资料外内容。
+  [09] JUDGE? B-03#1 [llm/answer] vt=judge_error LLMGenerationError: 生成结果不可用：空答案（finish_reason=length）
+  [10] OK  B-04#1 [llm/answer] vt=none 答案完全复述资料中的后羿两套铭文配置，无额外主张。
+  [11] OK  S-01#1 [llm/answer] vt=none 资料中明确列出太乙真人、牛魔均为鲁班七号的官方推荐搭档，可推出配合好。
+  [12] OK  S-02#1 [llm/answer] vt=none 资料明确列出貂蝉与庄周、白起是官方推荐搭档。
+  [13] OK  T-01#1 [llm/answer] vt=none 答案忠实转述了资料中关于貂蝉对线期保持花之印记、叠满四层触发真实伤害与减速的内容。
+  [14] OK  T-02#1 [llm/answer] vt=none 答案内容均可在资料中找到对应原文片段
+  [15] OK  T-03#1 [llm/answer] vt=none 答案中的连招顺序、技能名称与触发效果均能在资料中找到对应原文，未添加资料外实体或泛化出新类别。
+  [16] OK  T-04#1 [llm/answer] vt=none 答案中的打法、克制关系、搭档与出装说明均可在资料中找到对应依据，未发现无据事实或类别外推。
+  [17] OK  T-05#1 [llm/answer] vt=none 答案所有内容均可在资料中找到依据。
+  [18] OK  T-06#1 [llm/answer] vt=none 答案内容均可在资料原文中找到对应，未引入新实体或扩展类别。
+  [19] OK  T-07#1 [llm/low_confidence] vt=none 答案仅说明资料不足，未给出无法溯源的具体强度判断或事实性陈述。
+  [20] OK  T-08#1 [llm/answer] vt=none 答案仅引用资料中明确提到的高渐离为版本最强AOE爆发输出流法师之一，并说明其他英雄强势资料不足，无编造或过度推断。
+  [21] OK  H-01#1 [llm/answer] vt=none 答案如实说明资料中没有铠对吕布的打法内容，未编造任何事实。
+  [22] OK  H-02#1 [llm/answer] vt=none 答案仅说明资料不足，未提供任何无据的事实性内容，且资料中确实没有关于铠如何对战后羿的信息。
+  [23] OK  H-03#1 [llm/answer] vt=none 答案仅指出资料不足，未提出任何无法溯源的事实性主张。
+  [24] OK  M-01#1 [llm/answer] vt=none 答案列举的四位克制铠的英雄均可在资料中找到对应克制关系。
+  [25] OK  M-01#2 [llm/answer] vt=none 答案准确列出资料中的两套铭文及对应颜色名称，完全可溯源。
+  [26] OK  M-02#1 [llm/answer] vt=none 答案中的两套出装及思路均能在资料中找到对应依据。
+  [27] OK  M-02#2 [llm/answer] vt=none 答案中所有英雄和理由均可在资料中找到依据。
+  [28] OK  M-03#1 [llm/answer] vt=none 答案列举的英雄均在资料中明确标注为克制貂蝉，可合理推出为貂蝉怕的英雄。
+  [29] OK  M-04#2 [llm/answer] vt=none 答案所列英雄均在资料中明确为东皇太一克制对象。
+  [30] OK  E-01#1 [llm/answer] vt=none 答案中列出的克制关系均可在资料中找到对应依据。
+  [31] OK  E-02#1 [llm/answer] vt=none 答案所列英雄均可在资料中找到兰陵王克制对应英雄的依据，可由克制推出能打。
+  [32] OK  E-03#1 [llm/answer] vt=none 答案列出的英雄均来自资料中明确标注克制孙悟空的条目。
+  [33] OK  F-01#1 [llm/answer] vt=none 答案列出的克制铠的英雄均可在资料中找到直接对应关系。
+  [34] OK  F-04#1 [llm/answer] vt=none 答案列出的克制貂蝉英雄均能在资料中找到对应克制关系依据。
+  [35] OK  F-06#1 [llm/answer] vt=none 答案列出的庄周、牛魔、诸葛亮均可在资料中找到作为克制花木兰的英雄。
+  [36] OK  F-07#1 [llm/answer] vt=none 答案列出的克制孙悟空的英雄均可在资料中找到对应克制关系。
+  [37] OK  F-09#1 [llm/answer] vt=none 答案列出的克制对象均可在资料中找到对应的克制关系记录，无额外或无法溯源的内容。
+  [38] OK  F-11#1 [llm/answer] vt=none 答案仅复述资料中明确记载的孙悟空克制妲己、马可波罗两条关系，均有依据。
+  [39] OK  F-12#1 [llm/answer] vt=none 答案列出的每个克制英雄均在资料中有对应条目，无额外或无法溯源内容。
+  [40] OK  F-13#1 [llm/answer] vt=none 答案列出的克制对象均可在资料中找到对应克制关系。
+  [41] OK  F-14#1 [llm/answer] vt=none 答案列出的所有英雄均在资料中明确作为克制貂蝉的英雄出现，无额外事实主张。
+  [42] OK  F-15#1 [llm/answer] vt=none 答案中的配合对象宫本武藏和花木兰及“配合比较猛”均可从资料中“配合小团战战斗力爆表”推出。
+  [43] OK  F-18#1 [llm/answer] vt=none 答案中提到的庄周、白起均可在资料中找到官方推荐搭档依据。
+  [44] OK  F-19#1 [llm/answer] vt=none 答案中的搭档关系及强度评价均可由资料中的官方推荐搭档及配合效果说明推出。
+  [45] OK  F-20#1 [llm/answer] vt=none 资料明确列出宫本武藏与刘邦、瑶为官方推荐搭档，答案可完全溯源。
+  [46] OK  F-21#1 [llm/answer] vt=none 答案中的两套出装序列及半肉、全输出表述均可在资料的推荐出装与Tips中找到对应依据。
+  [47] OK  F-22#1 [llm/answer] vt=none 资料中亚瑟两套出装的第一件均为抵抗之靴，答案可溯源。
+  [48] OK  F-23#1 [llm/answer] vt=none 答案中的两套出装均能在资料的推荐出装一和推荐出装二中找到完全一致的依据。
+  [49] OK  F-24#1 [llm/answer] vt=none 资料中后羿两套推荐出装第一件均为急速战靴，可作为鞋子选择依据。
+  [50] OK  F-25#1 [llm/answer] vt=none 答案的推荐出装和出装思路均可在资料中找到对应原文依据。
+  [51] OK  F-26#1 [llm/answer] vt=none 答案仅指出资料不足，未提出无法溯源的事实性断言。
+  [52] OK  F-27#1 [llm/answer] vt=none 答案内容完全来自资料中铠的两套铭文信息。
+  [53] OK  F-28#1 [llm/answer] vt=none 答案中的铭文搭配完全来自资料，且未添加任何资料外事实。
+  [54] OK  F-29#1 [llm/answer] vt=none 答案中的两套铭文均与资料逐项一致，可完全推出。
+  [55] OK  F-30#1 [llm/answer] vt=none 答案列出的两套铭文及对应颜色均可在资料中找到，且对资料未比较优劣的说明也符合资料内容。
+  [56] JUDGE? F-31#1 [llm/answer] vt=judge_error LLMGenerationError: 生成结果不可用：空答案（finish_reason=length）
+  [57] OK  F-32#1 [llm/answer] vt=none 答案中的两套铭文与资料完全一致，均可从资料找到依据。
+  [58] JUDGE? F-33#1 [llm/answer] vt=judge_error LLMGenerationError: 生成结果不可用：空答案（finish_reason=length）
+  [59] OK  F-34#1 [llm/answer] vt=none 答案中的打法思路均可在资料原文中找到对应依据，无新增或无法溯源的事实。
+  [60] OK  F-35#1 [llm/answer] vt=none 答案仅说明资料不足，未给出任何无据事实，且资料中无明确连招顺序。
+  [61] JUDGE? F-38#1 [llm/low_confidence] vt=judge_error LLMGenerationError: 生成结果不可用：空答案（finish_reason=length）
+  [62] OK  F-39#1 [llm/low_confidence] vt=none 答案各要点均可在资料的Tips、概述、搭档与克制理由中找到依据。
+  [63] OK  F-40#1 [llm/answer] vt=none 答案中的所有打团思路都能在资料中找到对应依据。
+  [64] OK  F-41#1 [llm/answer] vt=none 答案中的两条技巧均直接来自资料中的Tips，内容一致。
+  [65] OK  F-43#1 [llm/low_confidence] vt=none 答案仅表示资料不足，未作出无法从资料推出的事实性陈述。
+  [66] OK  F-44#1 [llm/answer] vt=none 答案仅表示资料不足，未提出任何无法从资料溯源的事实性陈述。
+  [67] OK  F-45#1 [llm/low_confidence] vt=none 答案仅声明资料不足，未提出任何无法从资料溯源的事实性陈述。
+  [68] OK  F-46#1 [llm/low_confidence] vt=none 答案仅声明资料不足，未给出任何无法溯源的事实性主张。
+  [69] JUDGE? F-48#1 [llm/answer] vt=judge_error LLMGenerationError: 生成结果不可用：空答案（finish_reason=length）
+  [70] OK  F-49#1 [llm/answer] vt=none 答案仅表示资料不足，资料中确实没有铠对吕布的打法内容，未出现无据事实。
+  [71] OK  F-50#1 [llm/answer] vt=none 答案如实说明资料不足，未编造任何游戏内事实或英雄关系。
+  [72] OK  F-52#1 [llm/low_confidence] vt=none 答案仅声明资料不足，未给出事实性主张，且资料确实未提供貂蝉打张良的具体打法。
+  [73] OK  F-53#1 [llm/answer] vt=none 答案陈述可完整追溯至资料中“后羿克制百里守约”的官方说明。
+  [74] OK  F-54#1 [llm/answer] vt=none 答案仅指出资料不足，未提出资料中不存在的事实性陈述。
+  [75] OK  F-55#1 [llm/answer] vt=none 资料中确实没有铠对线后羿的相关内容，答案仅声明资料不足，未提出无据事实。
+  [76] OK  F-56#1 [llm/low_confidence] vt=none 答案中蔡文姬、牛魔、扁鹊克制东皇太一的依据均可在资料中找到对应说明。
+  [77] OK  F-57#1 [llm/low_confidence] vt=none 答案中张良、花木兰、蔡文姬针对貂蝉的理由均能在资料中找到对应依据。
+  [78] OK  F-58#1 [llm/low_confidence] vt=none 答案仅声明资料不足，未提出任何无法从资料中溯源的事实性内容。
+
+==============================================================================
+【答案有据率】
+==============================================================================
+  llm 生成路径（非降级）：73/73 = 100.0%（判官失败 5 条已剔除分母）
+  全体答案（非降级）：73/73 = 100.0%（判官失败 5 条已剔除分母）
+
+  越界类型分布：{'none': 73, 'judge_error': 5}
+
+  说明：判官是 LLM，不是独立第三方；对判 False 的每一条已附原文与无据片段，
+        便于人工复核。判官与 guard 共用同一份 rubric（scripts/eval_judge.py）。
+
+原始记录已写入：docs\milestones\M6-grounded-raw.json
