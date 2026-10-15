@@ -181,6 +181,20 @@ def test_llm_guard_rejects_class_leak_and_falls_back(fake_cloud):
     assert GRAPH_EV.content in out["answer"]
 
 
+def test_blocked_answer_is_kept_for_audit(fake_cloud):
+    """被 guard 拦下的**原始正文**必须留痕（debug.generation.raw_answer）。
+
+    理由（M6 实测）：拦下即回落，正文若不存就永久消失，8.2 的「抽检被拦下回答判真越界/误报」
+    只能靠同题重采样去猜 —— 重采样常复现不出当初那句话，会把真越界记成误报。
+    """
+    fake_cloud(content=LEAK_ANSWER)
+    out = generate_node(_state([GRAPH_EV]))
+
+    info = out["generation_info"]
+    assert info["raw_answer"] == LEAK_ANSWER, "被拦下的原文必须留存"
+    assert LEAK_ANSWER not in out["answer"], "留痕不等于交付"
+
+
 def test_guard_can_be_disabled_by_config(fake_cloud, monkeypatch):
     """`GUARD_ENABLED=False` 时放行（保留开关，便于对照实验与 M6 评测）。"""
     monkeypatch.setattr(settings, "GUARD_ENABLED", False)

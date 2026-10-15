@@ -41,6 +41,24 @@ _SSE_HEADERS = {
 }
 
 
+# 证据在 debug 里的字段白名单（M6 新增，理由见 `_debug` 的说明）
+_EVIDENCE_FIELDS = ("kind", "content", "relation", "score", "source", "patch", "hero_ids")
+
+
+def _evidence_dump(state: dict) -> list[dict]:
+    """融合后 evidence 的紧凑快照（M6 评测 Recall@5 需要，仅 DEBUG=1 返回）。
+
+    为什么必须给到**原文**而不是只给条数：8.2 的 Recall@5 是「关键依据是否出现在 top-5」，
+    而 `citations` 里向量侧的 label 只有「攻略文本（来源）」——不含 chunk 正文，
+    光看 citations 根本算不出向量路的召回。给 content 才能让评测脚本按 evidence 顺序判定。
+    """
+    out: list[dict] = []
+    for e in state.get("evidence") or []:
+        d = e.model_dump() if hasattr(e, "model_dump") else dict(e)
+        out.append({k: d.get(k) for k in _EVIDENCE_FIELDS})
+    return out
+
+
 def _debug(state: dict) -> dict:
     """DEBUG=1 时的排查信息（5.1：`debug` 仅在 DEBUG=1 时返回）。
 
@@ -58,6 +76,8 @@ def _debug(state: dict) -> dict:
         "degradation_note": state.get("degradation_note"),
         "top_score": state.get("top_score"),
         "evidence_count": len(state.get("evidence") or []),
+        # 融合后 evidence 原文（M6 新增）：Recall@5 只能从 evidence 顺序判，见 `_evidence_dump`
+        "evidence": _evidence_dump(state),
         "generation": state.get("generation_info") or {},
         # 生成后校验的 G2 因词典不可用而失效时为 True（fail-open，但必须可见）
         "guard_degraded": bool((state.get("generation_info") or {}).get("guard_degraded")),

@@ -180,6 +180,11 @@ def _llm_body(state: AgentState, evidence: list[Evidence], writer) -> tuple[str 
         # G2 词典不可用属 fail-open，但降级必须可见（只写日志等于静默消失）——见 DECISIONS 2026-10-15
         info["guard_degraded"] = g.degraded
         if not g.ok:
+            # 被拦下的**原始正文**必须留痕（M6 新增）：拦下即回落，正文若不存就永久消失，
+            # 8.2 的「抽检被 guard 拦下的回答判真越界/误报」就只能靠同题重采样去猜 ——
+            # 重采样常复现不出当初那句话，会把真越界记成误报（M6 实测踩过）。
+            # 只在判否时记录：校验通过时正文即交付答案，重复存没有信息增量。
+            info["raw_answer"] = text
             info.update({"fallback": True, "error": f"生成后校验不通过（{g.reason}）：{g.detail}"})
             logger.warning("生成后校验不通过，回落确定性组装：%s / %s", g.reason, g.detail)
             return None, info
