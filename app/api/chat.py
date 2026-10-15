@@ -1,24 +1,44 @@
-"""/api/chat/sync：同步问答（规格书 5.2 / 5.1 ChatResponse 契约）。
+"""/api/chat：SSE 流式问答；/api/chat/sync：同步问答（规格书 5.2 / 5.3 / 5.1 契约）。
 
-M3 只落这一条最小骨架——5.2 明确「`/api/chat/sync` **必须存在**」，M6 的评测脚本依赖它
-批量跑分（否则要解析 SSE，容易出错）。SSE 版 `POST /api/chat` 与
-`/api/graph/import`、`/api/docs/upload`、`DELETE /api/session/{id}` 随 M4/M5 引入。
+M3 落了 `/api/chat/sync` 最小骨架（5.2 明确它必须存在，M6 评测脚本依赖它批量跑分）。
+M5 补上 SSE 版 `POST /api/chat` —— 前端「过程展示 + 逐字显示」必须有它。
+
+**为什么用 FastAPI 原生 StreamingResponse 而不是 sse-starlette**（M5 决策，见 DECISIONS）：
+本项目的既定取向是「够用且可控、不引额外依赖」。SSE 帧（`event:` 行 + `data:` 行 + 空行）
+就是三行字符串拼接，原生 `StreamingResponse` 足够；为它引一个包只为省这几行不划算。
 
 **为什么这里没有 try/except 兜底 Neo4j**（4.8-5 / M3 验收：模拟 Neo4j 断开必须返回 200 而非 500）：
 降级是 `graph_query` 节点的职责，异常在编排层内部就被收敛成 `degraded=True`，
 根本不会穿透到本层。若在此处再包一层「Neo4j 异常 -> 200」，就会把真正的编程错误
 （如 State 字段拼错）一起吞掉 —— 那正是本项目一直在防的静默失败。
 故本层只做 State -> ChatResponse 的映射，不吞异常。
+
+**SSE 路径唯一的 except 是「把异常转成 `event: error`」**：HTTP 头在流开始时就已发出，
+流中途抛异常无法再改状态码；不转成 error 事件的话，前端只会看到连接莫名中断（静默失败）。
+该分支用 `logger.exception` 打完整堆栈 —— 转成事件是为了让前端可见，不是为了把错误藏起来。
 """
 from __future__ import annotations
 
-from fastapi import APIRouter
+import json
+import logging
 
-from app.agent.graph import run
+from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
+
+from app.agent.graph import run, stream_events
 from app.config import settings
 from app.schemas.chat import ChatRequest, ChatResponse
 
 router = APIRouter(tags=["chat"])
+
+logger = logging.getLogger(__name__)
+
+_SSE_HEADERS = {
+    "Cache-Control": "no-cache",
+    "Connection": "keep-alive",
+    # 关掉反代（Nginx 等）的响应缓冲：否则流会被攒起来一次性吐给前端，看起来像没流式
+    "X-Accel-Buffering": "no",
+}
 
 
 def _debug(state: dict) -> dict:
@@ -45,9 +65,8 @@ def _debug(state: dict) -> dict:
     }
 
 
-@router.post("/chat/sync", response_model=ChatResponse)
-async def chat_sync(req: ChatRequest) -> ChatResponse:
-    state = await run(req.question, req.session_id)
+def _to_response(req: ChatRequest, state: dict) -> ChatResponse:
+    """State -> ChatResponse（5.1 契约）。SSE 的非流式分支与 /chat/sync 共用。"""
     return ChatResponse(
         session_id=req.session_id,
         type=state.get("response_type") or "reject",
@@ -59,3 +78,36 @@ async def chat_sync(req: ChatRequest) -> ChatResponse:
         clarify_options=state.get("clarify_options") or [],
         debug=_debug(state) if settings.DEBUG else None,
     )
+
+
+def _sse(event: str, data: dict) -> str:
+    """5.3 的一帧：`event: <名>` + `data: <json>` + 空行。
+
+    `ensure_ascii=False` 保证中文在 data 里是原文（前端直接可读，不用再解 \\uXXXX）。
+    """
+    return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+
+
+@router.post("/chat/sync", response_model=ChatResponse)
+async def chat_sync(req: ChatRequest) -> ChatResponse:
+    state = await run(req.question, req.session_id)
+    return _to_response(req, state)
+
+
+@router.post("/chat")
+async def chat(req: ChatRequest):
+    """SSE 流式问答（5.2 / 5.3）。事件：node_start / thinking / evidence / token / citation / done / error。"""
+    if not req.stream:
+        # 不是「静默忽略」这个字段：5.2 把 /api/chat 定义为 SSE 流式问答，
+        # 显式 stream=False 时按同步返回完整 ChatResponse（与 /chat/sync 同构）。
+        return _to_response(req, await run(req.question, req.session_id))
+
+    async def gen():
+        try:
+            async for ev in stream_events(req.question, req.session_id):
+                yield _sse(ev["event"], ev["data"])
+        except Exception as e:  # noqa: BLE001 - 流已开始，无法再改状态码，只能转成 error 事件
+            logger.exception("SSE 流中断：%s", e)
+            yield _sse("error", {"message": f"服务异常：{type(e).__name__}，请重试或换个问法。"})
+
+    return StreamingResponse(gen(), media_type="text/event-stream", headers=_SSE_HEADERS)

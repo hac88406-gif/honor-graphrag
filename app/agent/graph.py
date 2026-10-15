@@ -60,6 +60,10 @@ NODE_NAMES: tuple[str, ...] = (
     NODE_FUSE, NODE_CONFIDENCE, NODE_GENERATE, NODE_CLARIFY, NODE_REJECT, NODE_MEMORY,
 )
 
+# 每个 token 帧最多这么多字（与 generate 节点的 _emit_text 取同一粒度）：
+# 5.3 的示例是「一帧一小段文本」，整段一次推给前端就只剩「一次性显示」，不是流式。
+_TOKEN_CHUNK = 8
+
 # 条件边的候选目标（path_map 用列表声明，返回列表即并行）
 _AFTER_INTENT_TARGETS = [NODE_GRAPH, NODE_VECTOR, NODE_CLARIFY, NODE_REJECT]
 _AFTER_GRAPH_TARGETS = [NODE_VECTOR, NODE_FUSE]
@@ -230,7 +234,11 @@ async def stream_events(question: str, session_id: str, *, hitl: bool = False) -
     info = values.get("generation_info") or {}
     # LLM 路径下正文已由 generate 节点逐段推送（含前缀行），此处不得重复推送整段答案
     if values.get("answer") and not info.get("streamed"):
-        yield {"event": "token", "data": {"text": values["answer"]}}
+        # template 路径（或 llm 回落）的整段答案在此处按小块推：一帧整段不算流式（5.3 是逐段）。
+        # 这里推的是**终态 answer**，已经过 generate 节点组装/校验，不存在「未校验内容先到前端」。
+        answer_text = values["answer"]
+        for i in range(0, len(answer_text), _TOKEN_CHUNK):
+            yield {"event": "token", "data": {"text": answer_text[i:i + _TOKEN_CHUNK]}}
     yield {
         "event": "citation",
         "data": {"citations": [c.model_dump() for c in values.get("citations", [])]},
@@ -243,6 +251,10 @@ async def stream_events(question: str, session_id: str, *, hitl: bool = False) -
             # 生成层是否回落到确定性组装（M4 新增字段，便于前端/评测看到「这次不是模型答的」）
             "fallback": bool(info.get("fallback")),
             "generation_mode": info.get("mode"),
+            # 澄清候选（M5 新增字段）：type == "clarify" 时前端要渲染成可点选的问题，
+            # 只靠 5.3 原协议的 done（type/confidence）拿不到候选，前端就无法差异化渲染澄清。
+            "clarify_options": list(values.get("clarify_options") or []),
+            "intent": values.get("intent") or "",
         },
     }
 

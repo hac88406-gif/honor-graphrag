@@ -69,6 +69,22 @@ def _emit(writer, event: str, data: dict) -> None:
         logger.warning("流式事件推送失败（%s）：%s", event, e)
 
 
+# 每个 token 帧最多这么多字。5.3 的示例是「一帧一小段文本」，整段一次推出去不算流式。
+_TOKEN_CHUNK = 8
+
+
+def _emit_text(writer, text: str) -> None:
+    """把**已校验通过**的正文按小块推给前端（M5「SSE 流式逐字显示」）。
+
+    **为什么是「先校验、后分块」而不是「边生成边推」**：guard 的 G2（英雄名越界）要拿全篇
+    英雄名去比对、G3 要按句子窗口判，都必须**完整正文**才判得准；若边收边推，未校验内容
+    会先到达前端 —— 推出去就撤不回，等于把 guard 架空。故校验完再分块推：协议上仍是多帧
+    流式（前端逐段 append），但交付给用户的每一个字都已通过校验。
+    """
+    for i in range(0, len(text), _TOKEN_CHUNK):
+        _emit(writer, "token", {"text": text[i:i + _TOKEN_CHUNK]})
+
+
 # ---------------------------------------------------------------- 前缀与兜底正文
 
 def _multi_intent_note(state: AgentState) -> str | None:
@@ -189,8 +205,8 @@ def generate_node(state: AgentState) -> dict:
         body, info = _llm_body(state, evidence, writer)
         info["streamed"] = writer is not None
         if body is not None:
-            # 校验通过才推正文（空答案/截断不得先推后撤）
-            _emit(writer, "token", {"text": body})
+            # 校验通过才推正文（空答案/截断不得先推后撤），按小块推以便前端逐段显示
+            _emit_text(writer, body)
 
     if body is None:
         body = _template_body(state, evidence)
