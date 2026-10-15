@@ -8,7 +8,8 @@
   4. test_ef_restart_regression          —— 写入 → 重启 → 重取 collection → 同一句查询结果一致
 
 依赖说明：用例 1 需 Neo4j 可达、用例 3/4 需已建好的 Chroma collection（scripts/init_chroma.py）。
-依赖缺失时 skip（视为「未执行」而非失败），保证纯数据用例仍可离线运行。
+依赖缺失时走 `require_neo4j` / `require_chroma` 门禁（见 tests/conftest.py）：
+开发模式跳过（视为「未执行」），**验收模式（REQUIRE_SERVICES=1）下 fail**。
 """
 from __future__ import annotations
 
@@ -34,32 +35,33 @@ def latest_snapshot() -> Path:
 
 @pytest.fixture(scope="module")
 def guides_collection():
-    """已建好的 guides collection（显式传 bge EF 获取）。未建库则 skip。"""
+    """已建好的 guides collection（显式传 bge EF 获取）。
+
+    本夹具不自行 skip；门禁由 `require_chroma` 在用例体内执行（11.3 v1.5：验收模式必须 fail）。
+    """
     from app.utils.chroma import COLLECTION_NAME, get_client, get_collection
 
     if COLLECTION_NAME not in [c.name for c in get_client().list_collections()]:
-        pytest.skip(f"Chroma collection '{COLLECTION_NAME}' 未建立，请先运行 scripts/init_chroma.py")
+        return None
     return get_collection()
 
 
 # ---------------------------------------------------------------- 1. 幂等
 
-def test_neo4j_import_idempotent():
+def test_neo4j_import_idempotent(require_neo4j):
     """同一份 data/graph/*.json 连续导入两次，节点数与关系数必须逐项不变。"""
     import init_graph
     from neo4j import GraphDatabase
 
     from app.config import settings
 
-    try:
-        driver = GraphDatabase.driver(
-            settings.NEO4J_URI,
-            auth=(settings.NEO4J_USER, settings.NEO4J_PASSWORD),
-            connection_timeout=settings.NEO4J_CONNECT_TIMEOUT,
-        )
-        driver.verify_connectivity()
-    except Exception as e:  # Neo4j 未启动时跳过，不算失败
-        pytest.skip(f"Neo4j 不可用（{settings.NEO4J_URI}）：{e}")
+    require_neo4j()
+
+    driver = GraphDatabase.driver(
+        settings.NEO4J_URI,
+        auth=(settings.NEO4J_USER, settings.NEO4J_PASSWORD),
+        connection_timeout=settings.NEO4J_CONNECT_TIMEOUT,
+    )
 
     try:
         with driver.session() as s:
@@ -119,7 +121,7 @@ def test_list_field_operator_in_vs_contains(guides_collection):
 
 # ---------------------------------------------------------------- 4. EF 重启回归
 
-def test_ef_restart_regression(guides_collection):
+def test_ef_restart_regression(guides_collection, require_chroma):
     """写入 → 重启 → 重取 collection → 查同一句，结果必须一致。
 
     「重启」用「全新 PersistentClient + 显式传 bge EF 重新 get_collection」模拟：
@@ -130,6 +132,8 @@ def test_ef_restart_regression(guides_collection):
 
     from app.config import settings
     from app.utils.chroma import COLLECTION_NAME, load_embedding_function
+
+    require_chroma()
 
     where = {"hero_ids": {"$contains": HERO_ID_DIAOCHAN}}
     before = guides_collection.query(query_texts=[QUERY_TEXT], n_results=3, where=where)

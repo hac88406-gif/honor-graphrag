@@ -6,7 +6,10 @@
   2. 动态：真实 Neo4j 上，COUNTERS_OF_HERO 返回的 subject 恒为被查英雄、COUNTERS_BY_HERO
      返回的 target 恒为被查英雄，并用一条已知边（兰陵王→李白）做正反交叉验证。
 
-Neo4j 不可达时相关用例 skip（视为「未执行」而非失败），静态用例仍离线运行。
+Neo4j 不可达时相关用例走 `require_neo4j` 门禁（见 tests/conftest.py）：
+开发模式跳过（视为「未执行」），**验收模式（REQUIRE_SERVICES=1）下 fail**——
+方向性动态断言是防静默方向错误的核心保护，不允许在验收时静默跳过。
+静态用例始终离线运行。
 """
 from __future__ import annotations
 
@@ -26,11 +29,6 @@ LANLINGWANG = "153"   # 兰陵王
 LIBAI = "131"         # 李白
 # 已知单向边（源数据层 relations.json 中 兰陵王 克制 李白，且无 李白→兰陵王 反向边）
 KNOWN_FROM, KNOWN_TO = LANLINGWANG, LIBAI
-
-
-def _require_neo4j():
-    if not neo4j_client.health():
-        pytest.skip(f"Neo4j 不可达（{settings.NEO4J_URI}），方向性动态断言跳过")
 
 
 def _load_relations() -> list[dict]:
@@ -93,28 +91,28 @@ def test_graph_templates_filter_by_patch():
 
 # ---------------------------------------------------------------- 动态（Neo4j）
 
-def test_counters_of_hero_rows_subject_is_queried_hero():
+def test_counters_of_hero_rows_subject_is_queried_hero(require_neo4j):
     """COUNTERS_OF_HERO（X 克制谁，出边）：每行的 subject 必须是被查英雄本身。
 
     若方向写反（查成入边），subject 会变成对方英雄，此断言立即失败。
     """
-    _require_neo4j()
+    require_neo4j()
     rows = neo4j_client.run_template("COUNTERS_OF_HERO", hero_id=LANLINGWANG, limit=100)
     assert rows, "兰陵王应有出边 COUNTERS（克制谁）"
     assert all(r["subject_id"] == LANLINGWANG for r in rows), "subject 不是被查英雄，方向可能写反"
 
 
-def test_counters_by_hero_rows_target_is_queried_hero():
+def test_counters_by_hero_rows_target_is_queried_hero(require_neo4j):
     """COUNTERS_BY_HERO（X 被谁克制，入边）：每行的 target 必须是被查英雄本身。"""
-    _require_neo4j()
+    require_neo4j()
     rows = neo4j_client.run_template("COUNTERS_BY_HERO", hero_id=LANLINGWANG, limit=100)
     assert rows, "兰陵王应有入边 COUNTERS（被谁克制）"
     assert all(r["target_id"] == LANLINGWANG for r in rows), "target 不是被查英雄，方向可能写反"
 
 
-def test_counter_edge_cross_consistency_known_pair():
+def test_counter_edge_cross_consistency_known_pair(require_neo4j):
     """用已知单向边 兰陵王→李白 做正反交叉验证（同一事实从两个方向查得到）。"""
-    _require_neo4j()
+    require_neo4j()
     of_targets = {
         r["target_id"]
         for r in neo4j_client.run_template("COUNTERS_OF_HERO", hero_id=KNOWN_FROM, limit=100)
@@ -135,13 +133,13 @@ def test_counter_edge_cross_consistency_known_pair():
     assert KNOWN_TO not in by_llw, "李白 不应出现在 兰陵王 的『被谁克制』里（方向写反）"
 
 
-def test_counter_out_degree_dedup_caliber():
+def test_counter_out_degree_dedup_caliber(require_neo4j):
     """出度对账：入库后（去重）出度 == 源数据层出度按 (起点,类型,终点) 去重后的条数。
 
     兰陵王 源数据层出边 24 条，其中 兰陵王→鲁班七号 被两处官方页各述一次，
     MERGE（唯一键含 patch）后合并为 1 条 -> 入库后 23 条。这正是「三层计数口径」的落点。
     """
-    _require_neo4j()
+    require_neo4j()
     src_out = [
         r["to_id"]
         for r in _load_relations()
@@ -157,9 +155,9 @@ def test_counter_out_degree_dedup_caliber():
     assert duplicated == ["112"], f"唯一被合并的边应是 兰陵王→鲁班七号，实际 {duplicated}"
 
 
-def test_graph_version_filter_returns_no_rows_for_old_patch():
+def test_graph_version_filter_returns_no_rows_for_old_patch(require_neo4j):
     """图谱侧版本过滤：窗口外的 patch 不应召回任何行（实际召回结果，非 count）。"""
-    _require_neo4j()
+    require_neo4j()
     rows = neo4j_client.run_template(
         "COUNTERS_OF_HERO", hero_id=LANLINGWANG, limit=100, patches=["1999-01"]
     )
@@ -168,9 +166,9 @@ def test_graph_version_filter_returns_no_rows_for_old_patch():
     assert neo4j_client.run_template("COUNTERS_OF_HERO", hero_id=LANLINGWANG, limit=100)
 
 
-def test_query_evidence_structure_matches_5_1():
+def test_query_evidence_structure_matches_5_1(require_neo4j):
     """图谱 Evidence 结构符合 5.1：kind=graph、relation/source/source_url/patch 齐备、score=None。"""
-    _require_neo4j()
+    require_neo4j()
     ev = neo4j_client.query_evidence("COUNTERS_OF_HERO", hero_id=LANLINGWANG, limit=3)
     assert ev
     e = ev[0]
@@ -184,9 +182,9 @@ def test_query_evidence_structure_matches_5_1():
     assert len(e.hero_ids) == 2 and e.hero_ids[0] == KNOWN_FROM
 
 
-def test_items_and_inscriptions_templates():
+def test_items_and_inscriptions_templates(require_neo4j):
     """出装 / 铭文模板可查且 hero_id 恒为被查英雄。"""
-    _require_neo4j()
+    require_neo4j()
     items = neo4j_client.run_template("ITEMS_BY_HERO", hero_id="166", limit=20)  # 亚瑟
     assert items and all(r["hero_id"] == "166" for r in items)
 
@@ -194,9 +192,9 @@ def test_items_and_inscriptions_templates():
     assert ins and all(r["hero_id"] == "141" for r in ins)
 
 
-def test_hero_by_name_and_role_templates():
+def test_hero_by_name_and_role_templates(require_neo4j):
     """按规范名/别名反查英雄；按分路列英雄。"""
-    _require_neo4j()
+    require_neo4j()
     by_name = neo4j_client.run_template("HERO_BY_NAME", name="东皇太一")
     assert by_name and by_name[0]["id"] == "187"
 

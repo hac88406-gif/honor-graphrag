@@ -33,3 +33,18 @@ def ask(graph):
         )
 
     return _ask
+
+
+@pytest.fixture
+def retrieval_stubbed(monkeypatch):
+    """把图谱与向量检索换成可控输入（不依赖 Neo4j / Chroma，结果确定）。
+
+    用于「检索两路皆空 -> 拒答」「答案只由 evidence 摘录而来」这类**编排级**断言：
+    真实检索会引入数据依赖与不确定性，而这里要测的是编排与生成层的接线。
+    """
+    def _install(*, graph: list, vector: list):
+        monkeypatch.setattr("app.agent.nodes.graph_query.query_evidence",
+                            lambda template, **kw: list(graph))
+        monkeypatch.setattr("app.agent.nodes.vector_search.hybrid_search",
+                            lambda question, **kw: list(vector))
+    return _install

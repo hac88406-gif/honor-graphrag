@@ -5,8 +5,8 @@ M2 验收的三项断言在本文件落地（检索层视角，与 M1b 的 colle
   2. **embedding function 重启回归**：重开 PersistentClient + 显式传 EF，同一句结果一致；
   3. **版本过滤实际召回**：写入一条旧 patch 文档，断言它不被召回（断言 ids，不是 count）。
 
-离线用例（build_where / rrf_fuse / tokenize）不依赖任何外部服务；其余在 Chroma collection
-缺失时 skip（视为「未执行」而非失败）。
+离线用例（build_where / rrf_fuse / tokenize）不依赖任何外部服务；其余用例走 `require_chroma`
+门禁（见 tests/conftest.py）：开发模式跳过（视为「未执行」），**验收模式（REQUIRE_SERVICES=1）下 fail**。
 """
 from __future__ import annotations
 
@@ -27,9 +27,14 @@ TMP_COLLECTION = "m2_version_filter_ut"
 
 @pytest.fixture(scope="module")
 def guides_collection():
-    """已建好的 guides collection（走统一 get_collection，显式传 bge EF）。未建库则 skip。"""
+    """已建好的 guides collection（走统一 get_collection，显式传 bge EF）。
+
+    本夹具**不**自行 skip —— 门禁由 `require_chroma` 在**用例体内**执行：
+    `pytest.fail` 需发生在用例体中才会被计为 failed（11.3 v1.5 的 fail-fast 要求）。
+    未建库时返回 None，用例会先调 `require_chroma()` 停下。
+    """
     if COLLECTION_NAME not in [c.name for c in get_client().list_collections()]:
-        pytest.skip(f"Chroma collection '{COLLECTION_NAME}' 未建立，请先运行 scripts/init_chroma.py")
+        return None
     return get_collection()
 
 
@@ -70,8 +75,9 @@ def test_tokenize_drops_punctuation():
 
 # ---------------------------------------------------------------- 算子差异（M2 断言 1）
 
-def test_metadata_operator_in_vs_contains(guides_collection):
+def test_metadata_operator_in_vs_contains(guides_collection, require_chroma):
     """hero_ids 是列表字段：$in 静默返回空，$contains 才命中（把差异固化）。"""
+    require_chroma()
     res_in = guides_collection.query(
         query_texts=[QUERY], n_results=5, where={"hero_ids": {"$in": [DIAOCHAN]}}
     )
@@ -82,8 +88,9 @@ def test_metadata_operator_in_vs_contains(guides_collection):
     assert len(res_contains["ids"][0]) > 0, "$contains 应命中（否则列表字段过滤失效）"
 
 
-def test_hero_filter_actual_recall(guides_collection):
+def test_hero_filter_actual_recall(guides_collection, require_chroma):
     """实际召回：带 hero_id 过滤时，返回的每条都属该英雄（防跨英雄串味）。"""
+    require_chroma()
     ev = chroma_client.search(QUERY, hero_id=DIAOCHAN, top_k=5)
     assert ev, "带英雄过滤应有召回"
     assert all(DIAOCHAN in e.hero_ids for e in ev), "召回结果混入了其他英雄的语料"
@@ -91,7 +98,7 @@ def test_hero_filter_actual_recall(guides_collection):
 
 # ---------------------------------------------------------------- EF 重启回归（M2 断言 2）
 
-def test_ef_restart_regression():
+def test_ef_restart_regression(require_chroma):
     """写入 → 重开 client → 重取 collection（显式传 EF）→ 查同一句，命中 id/距离一致。
 
     若重开时漏传 EF，chromadb 回退默认 ONNX 模型，查询向量与写入向量不同源，
@@ -101,8 +108,7 @@ def test_ef_restart_regression():
 
     from app.utils.chroma import load_embedding_function
 
-    if COLLECTION_NAME not in [c.name for c in get_client().list_collections()]:
-        pytest.skip(f"Chroma collection '{COLLECTION_NAME}' 未建立")
+    require_chroma()
 
     where = chroma_client.build_where(hero_id=DIAOCHAN, patches=settings.PATCH_WINDOW)
     before = chroma_client.raw_query(QUERY, hero_id=DIAOCHAN, top_k=3)
@@ -167,8 +173,9 @@ def test_version_filter_actual_recall():
 
 # ---------------------------------------------------------------- 混合检索
 
-def test_hybrid_search_returns_evidence(guides_collection):
+def test_hybrid_search_returns_evidence(guides_collection, require_chroma):
     """向量 + BM25 经 RRF 融合后返回 5.1 结构的 Evidence（kind=vector、带 source_url）。"""
+    require_chroma()
     ev = bm25.hybrid_search(QUERY, hero_id=DIAOCHAN, top_k=3)
     assert ev, "混合检索应有召回"
     e = ev[0]
