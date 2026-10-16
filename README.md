@@ -2,7 +2,25 @@
 
 自然语言提问 → 实体链接 + 意图识别 → **Neo4j 图谱**（结构化关系）与 **Chroma 向量库**（非结构化攻略）双路召回**可追溯依据** → 融合生成**带来源标注**的回答；依据不足时拒答或澄清反问。
 
-（README 骨架，M0。完整版含架构图 / 启动步骤 / 数据来源声明 / 技术决策记录，见 M7。）
+## 数据来源与使用声明
+
+> 本节按规格书 6.5 要求显式声明数据来源、抓取时间、覆盖规模、生成数据与已知局限。
+
+- **来源**：王者荣耀官方公开页面（`pvp.qq.com` 英雄详情页 / 装备与铭文列表页），由
+  `scripts/fetch_official.py` 按 **0.6s/请求**限速抓取，快照落在 `data/raw/<时间戳>/`；
+  **抓取时间 2026-10-14**，`patch=2026-10`（端点清单见规格书 6.1b）。
+- **覆盖规模**：英雄 **133** · 装备 **115** · 铭文 **93** · 英雄关系 **798 条**（源数据层）·
+  语料 **138 篇**（C1 官方聚合 133 + C2 LLM 生成 5）。
+- **可追溯**：每条关系与每篇语料均保留原始 `source` URL，可点回官方页面核对；审核清单见
+  [`data/REVIEW.md`](data/REVIEW.md)。
+- **生成数据（非官方原文）**：`data/guides/c2-*.md` 共 **5 篇**「对线思路」为 **LLM 生成**
+  （`data_source=llm_assisted`，事实源为官方页面、表达由模型撰写），已在 `data/REVIEW.md` §3.1 单列待审。
+- **版权与使用范围**：本项目**仅用于技术演示与学习**，**未用于任何商业用途**。
+  仓库虽已公开，但**库内不含官方全量文案**——C1 语料（`data/guides/c1-*.md`，官方表达性文本聚合）与
+  抓取快照（`data/raw/`）**均不入库**（`.gitignore` 排除），由脚本从快照**确定性重建**（见「快速开始」前置步骤）；
+  经 `POST /api/docs/upload` 上传的攻略文本遵循同一规则（`doc_id` 强制 `upload-*` 前缀，落盘文件同样被排除）。
+- **已知局限（主动声明）**：官方每英雄仅 **2+2 条**克制数据，密度低于玩家社区认知；数据随版本变化，
+  需重新抓取才能跟进新版本。完整清单见下文「数据局限」。
 
 ## 三条核心设计
 
@@ -10,43 +28,124 @@
 2. **模板化 Cypher**：LLM 只输出 `{intent, slots}`，绝不接触查询字符串（规格书 2.2 / 4.7）。
 3. **三档置信度 + 确定性拒答**：澄清反问 / 拒答 / 低置信降级 / 正常回答，判定由确定性规则完成（规格书 4.9）。
 
+## 架构与处理流程
+
+编排层为 LangGraph `StateGraph`，实际编译结果（`graph.get_graph().draw_mermaid()` 导出，M3 验收项）：
+
+```mermaid
+graph TD;
+        __start__([__start__]):::first
+        entity_linking(entity_linking)
+        intent_routing(intent_routing)
+        graph_query(graph_query)
+        vector_search(vector_search)
+        fuse(fuse)
+        confidence(confidence)
+        generate(generate)
+        clarify(clarify)
+        reject(reject)
+        memory(memory)
+        __end__([__end__]):::last
+        __start__ --> entity_linking;
+        clarify --> memory;
+        confidence -.-> generate;
+        confidence -.-> reject;
+        entity_linking --> intent_routing;
+        fuse --> confidence;
+        generate --> memory;
+        graph_query -.-> fuse;
+        graph_query -.-> vector_search;
+        intent_routing -.-> clarify;
+        intent_routing -.-> graph_query;
+        intent_routing -.-> reject;
+        intent_routing -.-> vector_search;
+        reject --> memory;
+        vector_search --> fuse;
+        memory --> __end__;
+```
+
+实线 = 无条件边，虚线 = 条件边。**两条并行检索分支**（`graph_query` ∥ `vector_search`）汇到 `fuse`；
+`confidence` 按三档置信度分流到 `generate`（正常回答）或 `reject`（拒答）；
+`intent_routing` 可在检索前直接分流到 `clarify`（指代不明 → 澄清反问）或 `reject`（越界/未知实体）。
+所有路径最终经 `memory` 落 checkpointer（`thread_id = session_id`，多轮记忆）。
+
+| 节点 | 职责 |
+| --- | --- |
+| `entity_linking` | 别名表 → 拼音模糊，封闭实体集（133 英雄 + 115 装备 + 93 铭文 + 5 分路），不调 LLM |
+| `intent_routing` | 确定性关键词规则 → 7 类意图 + 槽位；多意图在 `matched_intents` 留痕 |
+| `graph_query` | 模板化 Cypher（7 个参数化模板）取结构化事实，绝不拼接查询字符串 |
+| `vector_search` | Chroma（bge）+ BM25 → RRF 融合，按 `hero_ids`/`patch` 元数据过滤 |
+| `fuse` | 两路证据融合 + citation 编号（1-based，与答案 `【1】` 对齐） |
+| `confidence` | 三档判定：正常 / 低置信降级 / 拒答（确定性规则，规格书 4.9） |
+| `generate` | 证据摘录组装（`template`）或云端 LLM 生成（`llm`）+ **生成后校验**（guard） |
+| `clarify` / `reject` | 澄清反问（带可点候选）/ 拒答，明确返回 `citations=[]` |
+| `memory` | 写 SqliteSaver checkpoint；`DELETE /api/session/{id}` 清该 thread |
+
 ## 技术栈
 
 Python 3.12 · FastAPI · LangGraph（SqliteSaver 多轮记忆）· Neo4j 5.x · Chroma（嵌入式）· bge-large-zh-v1.5 · BM25 混合检索 · Vue3 单页
 
 外部依赖**仅 Neo4j 一个**（Docker 或 Desktop）；Chroma 与会话记忆零外部依赖（规格书 4.12）。
 
-## 当前里程碑状态
+## 里程碑状态
 
-| 里程碑 | 状态 |
-| --- | --- |
-| M0 骨架与环境 | ✅ 完成 |
-| M1a 数据层（抓取 + 样例） | ✅ 完成（需求方审核通过） |
-| M1b 数据层（全量 133 英雄） | ✅ 完成（需求方审核通过） |
-| M2 检索层 | ✅ 完成（需求方审核通过，见 `docs/milestones/M2-report.md`） |
-| M3 LangGraph 编排 | ✅ 完成（需求方审核通过，三项修改已落实，见 `docs/milestones/M3-report.md`） |
-| M4 生成层 | ✅ 完成（需求方二审通过；裁定 A / B1–B3 / C1 已落实，见 `docs/milestones/M4-report.md`） |
-| M5 前端 | ✅ 完成（待需求方审核；按 1.6 边界：来源卡片 + 过程展示 + 拒答/澄清差异化渲染，不引 Pinia/Router/UI 库，见 `docs/milestones/M5-report.md`） |
-| M6 评测 | ✅ 完成（待需求方审核；评测集 38+74 条、8.2 全指标实测、四项裁定已落地，见 [`docs/eval_report.md`](docs/eval_report.md)） |
-| M7 打磨 | ⏳ |
+| 里程碑 | 状态 | 模块说明 | 交付报告 |
+| --- | --- | --- | --- |
+| M0 骨架与环境 | ✅ 完成 | [`m0-skeleton.md`](docs/module-notes/m0-skeleton.md) | — |
+| M1a 数据层（抓取 + 样例） | ✅ 完成（需求方审核通过） | [`m1a-data.md`](docs/module-notes/m1a-data.md) | [`M1a-report.md`](docs/milestones/M1a-report.md) |
+| M1b 数据层（全量 133 英雄） | ✅ 完成（需求方审核通过） | [`m1b-data.md`](docs/module-notes/m1b-data.md) | [`M1b-report.md`](docs/milestones/M1b-report.md) |
+| M2 检索层 | ✅ 完成（需求方审核通过） | [`m2-retrieval.md`](docs/module-notes/m2-retrieval.md) | [`M2-report.md`](docs/milestones/M2-report.md) |
+| M3 LangGraph 编排 | ✅ 完成（需求方审核通过，三项修改已落实） | [`m3-orchestration.md`](docs/module-notes/m3-orchestration.md) | [`M3-report.md`](docs/milestones/M3-report.md) |
+| M4 生成层 | ✅ 完成（需求方二审通过；裁定 A / B1–B3 / C1 已落实） | [`m4-generation.md`](docs/module-notes/m4-generation.md) | [`M4-report.md`](docs/milestones/M4-report.md) |
+| M5 前端 | ✅ 完成（需求方审核通过；按 1.6 边界，不引 Pinia/Router/UI 库） | [`m5-frontend.md`](docs/module-notes/m5-frontend.md) | [`M5-report.md`](docs/milestones/M5-report.md) |
+| M6 评测 | ✅ 完成（需求方二审通过；147 turn 固化答案集口径、8.2 全指标实测） | [`m6-eval.md`](docs/module-notes/m6-eval.md) | [`eval_report.md`](docs/eval_report.md) |
+| M7 打磨 | ✅ 完成（README 定稿 + 演示脚本 + 接口补全 + 最终验收） | — | [演示脚本](docs/demo-script.md) · [最终验收证据](docs/milestones/M7-verify-output.txt) |
 
-## 启动（M0 阶段可用部分）
+## 环境要求
+
+| 项 | 要求 | 说明 |
+| --- | --- | --- |
+| Python | **3.12** | `py -3.12 -m venv .venv` |
+| Neo4j | **5.x** | **唯一外部依赖**；用 Docker（`docker-compose.yml`）或 Neo4j Desktop |
+| Docker | 可选 | 仅当用 Docker 跑 Neo4j 时需要（需先启动 Docker Desktop 守护进程） |
+| Node.js | 18+ | 仅前端需要（Vite） |
+| 网络 | 首次需联网 | 拉 embedding 模型（ModelScope）；生成侧走云端 LLM，需 API Key |
+
+Chroma 与多轮记忆（SQLite）**零外部依赖**；embedding 模型 1.24GB 走本地目录加载、不入库（规格书 4.12）。
+
+## 快速开始（陌生人 15 分钟跑起来）
+
+> **前置步骤不能省**：`models/`（1.24GB embedding 模型）与 `data/guides/c1-*.md`（C1 语料）
+> **都不在版本库内**（前者太大、后者是官方表达性文本的派生数据）。跳过第 2、3 步，向量库会是空的、
+> 检索层建不起来。
 
 ```powershell
+# 0) 配置：复制 .env.example 为 .env，填入云端 LLM 的 CLOUD_API_KEY / CLOUD_BASE_URL / CLOUD_CHAT_MODEL
+Copy-Item .env.example .env
+
 # 1) 建 venv 并装依赖（Windows，Python 3.12）
 py -3.12 -m venv .venv
 .\.venv\Scripts\python -m pip install -r requirements.txt
 
-# 2) 启动 Neo4j（Docker 方案；守护进程需先启动 Docker Desktop）
-#    注：本机 docker compose 子命令不可用，统一使用 docker-compose（带横线）
-docker-compose up -d
+# 2) 【前置】下载 embedding 模型（bge-large-zh-v1.5，约 1.24GB，断点续跑）
+.\.venv\Scripts\python scripts\download_embedding_model.py
 
-# 3) 启动 API
+# 3) 【前置】重建数据层：抓取快照 → 重建 C1 语料 → 导入图谱与向量库
+.\.venv\Scripts\python scripts\fetch_official.py      # 落 data/raw/<时间戳>/（约 2 分钟，限速 0.6s/请求）
+.\.venv\Scripts\python scripts\build_graph_data.py    # 从快照导出入库数据
+.\.venv\Scripts\python scripts\build_guides.py        # 从快照重建 C1 语料（133 篇，确定性可复现）
+docker-compose up -d                                  # 起 Neo4j（注意：带横线的 docker-compose）
+.\.venv\Scripts\python scripts\init_graph.py          # 导入 Neo4j（MERGE 幂等）
+.\.venv\Scripts\python scripts\init_chroma.py         # 导入 Chroma（切分 + bge embedding，删库重建）
+
+# 4) 启动 API
 .\.venv\Scripts\python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
-# 4) 验证
-curl http://127.0.0.1:8000/api/health
+# 5) 验证三项组件状态
+curl http://127.0.0.1:8000/api/health   # 期望 {"neo4j":{"ok":true,...},"chroma":{"ok":true,...},"llm":{"ok":true,...}}
 ```
+
+跑通后按 [`docs/demo-script.md`](docs/demo-script.md) 的演示问题清单逐条体验（附预期输出与真实跑批结果）。
 
 ## 接口清单（与规格书 5.2 表**逐条一致**）
 
@@ -59,7 +158,7 @@ curl http://127.0.0.1:8000/api/health
 | POST | `/api/chat/sync` | 同步问答（评测用，返回完整 `ChatResponse`） | ✅ 已实现 |
 | GET | `/api/health` | 返回 `{neo4j, chroma, llm}` 三项状态 | ✅ 已实现 |
 | DELETE | `/api/session/{session_id}` | 清空会话状态 | ✅ 已实现（M6，幂等；清 checkpointer 中 `thread_id = session_id` 的全部 checkpoint） |
-| POST | `/api/docs/upload` | 上传攻略文本（multipart，必须带 metadata） | 📌 归 M7（与 C1 语料版权声明一并处理） |
+| POST | `/api/docs/upload` | 上传攻略文本（multipart，必须带 metadata） | ✅ 已实现（M7；与全库重建共用切分与元数据转换，同 `doc_id` 重复上传为整体替换） |
 | POST | `/api/graph/import` | 导入图谱数据（幂等，整体校验后才写入） | ❌ v1 不实现（见「非目标」） |
 
 ## 前端（M5，最简聊天页）
@@ -155,6 +254,31 @@ COUNTERS 出度/入度画像与边界英雄清单见 [`data/data_profile.md`](da
    已在 [`data/REVIEW.md`](data/REVIEW.md) §3.1 单列待审。
 5. **数据随版本变化**：当前 `patch=2026-10`，需重新抓取才能跟进新版本。
 
+## 评测结果（规格书 8.2，覆盖集 / 泛化集分开统计）
+
+> **口径声明**：下表除注明外均基于**单份固化答案集**（[`docs/milestones/M6-golden-answers.json`](docs/milestones/M6-golden-answers.json)，
+> 147 turn · `deepseek-v4-pro` · `temperature=0.0` / `seed=42`）。v4-pro 存在与采样参数无关的**内置非确定性**
+> （实测同输入连跑 3 次仅 2/5 组逐字一致），故**点估计 ≠「换台机器复跑也是这个数」**——涉及小样本的比例一律
+> 附区间或注明单集口径（见下文「已知局限」）。完整报告与逐条错误样例见 [`docs/eval_report.md`](docs/eval_report.md)。
+
+| 指标 | 目标 | 实测 | 结论 |
+| --- | --- | --- | --- |
+| 意图路由准确率（覆盖集 73 turn） | ≥85% | **72/73 = 98.6%** | 通过 |
+| 意图路由准确率（泛化集 74 turn） | ≥85% | **63/74 = 85.1%** | 通过（刚好过线） |
+| 实体链接准确率（覆盖集 / 泛化集） | ≥90% | **34/34 = 100%** / **53/53 = 100%** | 通过 |
+| 检索 Recall@5（覆盖集） | ≥80% | **26/26 = 100%** | 通过 |
+| **答案有据率**（LLM-as-judge + 人工抽检各 50%） | — | **≈ 96.7% ± 2pt**（单份固化答案集点估计 **77/78 = 98.7%**） | 通过（口径见下） |
+| 拒答正确率（双向） | ≥85% | 合计 **144/147 = 98.0%**；该拒未拒 2/43 = 4.7%、不该拒乱拒 1/104 = 1.0% | 通过 |
+| 首 token 延迟（llm 生成路径） | ≤2.5s | **mean 4.22s**（n=7） | **未达标**（已登记偏差，见下节） |
+| 首 token 延迟（template / 非生成路径） | ≤2.5s | **mean 0.02s** | 通过 |
+| 复合意图占比 | — | **6/147 = 4.1%** | → 多意图合并**永久不做** |
+
+> **「答案有据率」区间口径（务必连区间一起引用）**：点估计 98.7% 来自 78 条候选答案的**单次**跑批，
+> 分母仅 78，且判官自身有 1 条误报（全量判官口径 97.4% 比人工复核低 1.3pt），故按 **≈ 96.7% ± 2pt** 报。
+> 这是**对单份固化答案集的保守区间**，**不是**多次重复采样得到的置信区间（模型内置非确定性使「逐字重放」不成立）；
+> 已如实登记于 [`docs/eval_report.md`](docs/eval_report.md) §2.4.1 / §2.10。
+> **不得单独引用 98.7%**——那会把「单次单集」读成「稳定值」。
+
 ## 已知偏差（**显式记录，不是隐藏缺陷**）
 
 ### 首 token 延迟：正常回答路径达不到 3.4 的「≤2.5s」
@@ -167,7 +291,8 @@ COUNTERS 出度/入度画像与边界英雄清单见 [`data/data_profile.md`](da
   正文（`content`）在其后才开始产生 —— 首 token 被**思考时间**主导。同一批真实问句实测：
   v4-pro 首 token **5.01s**（reasoning_tokens 均值 233），`deepseek-chat` 首 token **1.09s**
   （reasoning_tokens=0），两者答案有据率同为 **7/7 = 100%**（`scripts/compare_first_token_models.py`，
-  见 `docs/milestones/M6-firsttoken-model-compare-output.txt`）。
+  见 `docs/milestones/M6-firsttoken-model-compare-output.txt`）。**注**：7 条为小样本对照，此处
+  `100%` 仅用于**相对比较**（同一批问句上两模型质量等价），**不可作为绝对有据率引用**。
 - **次因：guard 需完整正文。** guard 必须拿完整正文才能判（G2 英雄名越界要全篇比对、
   G3 类别化外推要按句子窗口判），未校验的内容推出去撤不回，故正文在**校验通过之后**才按块推。
   但 M6 实测**句级增量校验收益 0.00s**（整段答案只有 1 句）—— 该改法换不来收益，
@@ -234,6 +359,24 @@ COUNTERS 出度/入度画像与边界英雄清单见 [`data/data_profile.md`](da
   **没有一条是路由逻辑判错**。同批 108 条上本地 LLM 意图路径只有 **41.7%**、延迟是规则的 330 倍，
   故生产路径只保留确定性规则；`route_llm` 与 Ollama 依赖已按 M6 裁定**整体删除**（预案被数据否决，
   见 DECISIONS.md 2026-10-16 条）。
+
+- **评测指标基于单份固化答案集，存在采样噪声（如实声明）**：`deepseek-v4-pro` 是推理模型，实测
+  **存在与 `temperature` / `seed` 无关的内置非确定性**（同问句 + 同依据连跑 3 次，仅 2/5 组逐字一致）。
+  故 8.2 各指标（尤其分母小的答案有据率、拒答率）**不是「换台机器复跑必然复现」的常数**：
+  报告一律附区间（如答案有据率 **≈ 96.7% ± 2pt**）或注明「基于单份固化答案集」。
+  答案集已固化（`M6-golden-answers.json`）以保证**同一批判定跨轮次可比**，但**跨机器的绝对数值可能小幅波动**。
+  这是选型带来的局限，不隐藏。
+- **`guard` 是启发式下限，不是完备的越界检测**：生成后校验用正则 + 别名表 + 语料溯源判定，
+  只能拦住**已枚举的越界形态**（英雄名越界、类别化外推），对未知形态无能为力；
+  且为控误报做过两条放松（R3 角色描述、G2 英雄别名可溯源），**放松处即漏拦风险所在**。
+  M6 实测生产路径触发率仅 1/79，样本太薄、不足以证明「几乎不越界」，只说明**当前评测集上未见**。
+- **`MATCHUP`（对位）只有「谁克制谁」，没有逐对位打法**：库里图谱只存英雄间克制/搭档关系，
+  **没有「铠 对 吕布」这类任意两英雄对的打法文本**，故这类问题会退回通用克制事实，
+  模型可能判定证据不足、如实回「资料不足。」（M7 演示 H-01 实测即如此，见
+  [`docs/demo-script.md`](docs/demo-script.md) §四·观察 3）。**这不是空答案也不是拒答**，
+  是检索粒度局限——要真正回答「怎么打」，需要按英雄对抓取对位攻略语料，当前数据源不提供。
+- **C2 语料为 LLM 生成**：5 篇对线思路的事实源是官方页面，但表达由模型撰写（`data_source=llm_assisted`），
+  不能当作官方口径引用；已在 `data/REVIEW.md` §3.1 单列待审。
 
 ## 技术决策记录
 
