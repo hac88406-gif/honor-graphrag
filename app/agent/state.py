@@ -45,6 +45,10 @@ class AgentState(TypedDict, total=False):
     intent_method: str            # rule | llm
     # 本轮命中的全部意图（按优先级序，M2 条件三）；用于 M6 归因「答案不全」。
     matched_intents: list[str]
+    # 澄清类型标记（D1 缺陷 L3）：4.4 的意图枚举封闭、实现方不得新增取值，故用标记而非新意图
+    # 表达「用户想查英雄之间的关系但没说方向」。取值见 `app/retrieval/intent.IntentResult.clarify_kind`：
+    #   "" / "counter_direction"（反问克制方向）/ "relation_direction"（反问要哪种关系）。
+    clarify_kind: str
 
     # ---------- [2] 检索（4.2 步骤 2） ----------
     graph_evidence: list[Evidence]

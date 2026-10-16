@@ -58,10 +58,15 @@ def intent_node(state: AgentState) -> dict:
             coref_resolved = f"「{question}」→「{resolved_question}」（规则2·继承意图 {last_intent}）"
             logger.info("指代消解：%s", coref_resolved)
 
+    # 澄清类型标记只在「本轮意图确实由关键词路由给出」时才成立。规则 2 会把本轮意图改写成
+    # 上一轮意图（如「那关系呢」→ 继承 COUNTER_BY），此时用户并不是在问「无方向的关系」，
+    # 沿用标记会让澄清节点问出错误的方向问题，故必须清零（D1 缺陷 L3 的边界）。
+    clarify_kind = routed.clarify_kind if intent == routed.intent else ""
+
     # 9.1-6：日志记录关键中间结果（意图 / 槽位 / 是否需要澄清 / 多意图留痕），便于排查静默失败
     logger.info(
-        "意图路由：intent=%s slots=%s need_clarify=%s matched_intents=%s",
-        intent, slots, need_clarify, matched,
+        "意图路由：intent=%s slots=%s need_clarify=%s matched_intents=%s clarify_kind=%s",
+        intent, slots, need_clarify, matched, clarify_kind or "-",
     )
     return {
         "entities": entities,
@@ -70,6 +75,7 @@ def intent_node(state: AgentState) -> dict:
         "need_clarify": need_clarify,
         "intent_method": routed.method,
         "matched_intents": matched,
+        "clarify_kind": clarify_kind,
         "coref_resolved": coref_resolved,
         "resolved_question": resolved_question,
     }
