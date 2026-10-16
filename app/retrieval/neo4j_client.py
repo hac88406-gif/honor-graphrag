@@ -114,3 +114,25 @@ def rows_to_evidence(template_name: str, rows: list[dict]) -> list[Evidence]:
 def query_evidence(template: str, **params) -> list[Evidence]:
     """模板查询并直接返回 Evidence 列表（M3 的 graph_query 节点调用入口）。"""
     return rows_to_evidence(template, run_template(template, **params))
+
+
+def run_cypher(cypher: str, **params) -> list[dict]:
+    """原语级语句执行（补丁 P1 的图谱写入侧唯一入口）。
+
+    **为什么必须开这个口子**：模板注册表（`cypher_templates.TEMPLATES`）覆盖的是**读语义**，
+    而 P1 契约明确禁止新增模板；于是 P1-3 的「写前查节点是否存在」与「MERGE 单条 upsert」
+    两句话在注册表里**无处安放**。若让端点在 `app/api/graph.py` 里自己拿 `_driver()`，
+    「驱动获取」与「异常 -> GraphUnavailable」这两件事就被抄成了第二份 ——
+    这正是本项目反复踩的「同一件事两个口径」。
+
+    **纪律（与 9.1-4 一致）**：语句必须是**常量字符串 + `$param` 绑定**，禁止拼接用户输入
+    （关系类型是封闭白名单，需拼进语句时先校验枚举，照 `scripts/init_graph.py` 的做法）。
+    **回答用户问题的读路径仍必须走 `run_template` / `query_evidence`**；本函数只服务 P1-3 的
+    写协议（写前节点存在性校验 + 单条 upsert），不得用来绕开模板注册表做检索。
+    """
+    try:
+        with _driver().session() as session:
+            return [dict(rec) for rec in session.run(cypher, **params)]
+    except Exception as e:
+        raise GraphUnavailable(f"Neo4j 语句执行失败：{e}") from e
+
