@@ -1,0 +1,23 @@
+﻿.\.venv\Scripts\python.exe : Building prefix dict from the default dictionary ...
+At line:15 char:1600
++ ... pgrep\bin'; .\.venv\Scripts\python.exe C:\Users\Bless\AppData\Local\T ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Building prefix... dictionary ...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Loading model from cache C:\Users\Bless\AppData\Local\Temp\jieba.cache
+Loading model cost 0.551 seconds.
+Prefix dict has been built successfully.
+问句                  intent          need_clarify  实体           未识别残句
+--------------------------------------------------------------------------------------------
+镜的克制关系                ENTITY_UNKNOWN  True          镜              —
+铠的克制关系                ENTITY_UNKNOWN  True          铠              —
+镜的关系                  ENTITY_UNKNOWN  True          镜              —
+铠关系                   ENTITY_UNKNOWN  True          铠              —
+克制关系                  ENTITY_UNKNOWN  True          —              —
+镜的搭档关系                SYNERGY         False         镜              —
+铠被谁克制                 COUNTER_BY      False         铠              —
+镜克制谁                  COUNTER_OF      False         镜              —
+谁能克制镜                 COUNTER_BY      False         镜              —
+镜怎么出装                 ITEM_BUILD      False         镜              —
+镜的铭文                  INSCRIPTION     False         镜              —

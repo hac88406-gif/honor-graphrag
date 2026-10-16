@@ -159,7 +159,10 @@ curl http://127.0.0.1:8000/api/health   # 期望 {"neo4j":{"ok":true,...},"chrom
 | GET | `/api/health` | 返回 `{neo4j, chroma, llm}` 三项状态 | ✅ 已实现 |
 | DELETE | `/api/session/{session_id}` | 清空会话状态 | ✅ 已实现（M6，幂等；清 checkpointer 中 `thread_id = session_id` 的全部 checkpoint） |
 | POST | `/api/docs/upload` | 上传攻略文本（multipart，必须带 metadata） | ✅ 已实现（M7；与全库重建共用切分与元数据转换，同 `doc_id` 重复上传为整体替换） |
-| POST | `/api/graph/import` | 导入图谱数据（幂等，整体校验后才写入） | ❌ v1 不实现（见「非目标」） |
+| POST | `/api/graph/relations` | 按英雄查图谱关系（克制 / 搭档 / 出装 / 铭文），只读 | ✅ 已实现（补丁 P1-1；`relation` 枚举即项目一公开意图名，依赖不可用一律 503 不降级） |
+| POST | `/api/retrieval/search` | 向量 + BM25 混合检索攻略**原文片段**，只读 | ✅ 已实现（补丁 P1-2；直接调用 `bm25.hybrid_search`，依赖不可用一律 503 不降级） |
+| PUT | `/api/graph/relations` | 单条关系 upsert（**高危写端点**，仅 `COUNTERS` / `SYNERGIZES`） | ✅ 已实现（补丁 P1-3；写前校验节点存在 + 写后模板回读 `verified`，回读不到即 500） |
+| POST | `/api/graph/import` | 导入图谱数据（幂等，整体校验后才写入） | ❌ v1 不实现完整版（见「非目标」）；**单条关系写入**由 `PUT /api/graph/relations` 以受限形式提供（补丁 P1-3） |
 
 ## 前端（M5，最简聊天页）
 
@@ -205,6 +208,22 @@ npm run build
 
 # 7) 回归测试（幂等 / 配对 / 算子差异 / EF 重启）
 .\.venv\Scripts\python -m pytest -v
+```
+
+## 图谱复位（补丁 P1，写脏后回基线）
+
+`scripts/init_graph.py` 是**纯 MERGE**，它只写不删 —— 一旦通过 `PUT /api/graph/relations`
+写入了一条额外关系，重跑 `init_graph.py` **修不回来**（MERGE 认的是「起点+类型+终点+patch」唯一键，
+键不同的脏关系永远匹配不到、自然也不会被覆盖）。而数据层基线（341 节点 / 3165 关系 / COUNTERS 527）
+是写进本 README 并被 `scripts/verify_data_layer.py` 断言的。
+
+```powershell
+# 语义：MATCH ()-[r]->() DELETE r 删掉全部关系，再复用 init_graph.import_all 从 data/graph/*.json 全量重建
+# （只删关系、不删节点：P1-3 唯一能改的就是关系，节点保持不动可避免约束/索引被短暂拆掉）
+.\.venv\Scripts\python scripts\reset_graph.py
+
+# 复位后核对基线（以本脚本为准，打印前后计数）
+.\.venv\Scripts\python scripts\verify_data_layer.py   # 期望 341 节点 / 3165 关系 / COUNTERS 527
 ```
 
 ## 数据来源与数据画像（M1b）
@@ -273,6 +292,13 @@ COUNTERS 出度/入度画像与边界英雄清单见 [`data/data_profile.md`](da
 | 首 token 延迟（template / 非生成路径） | ≤2.5s | **mean 0.02s** | 通过 |
 | 复合意图占比 | — | **6/147 = 4.1%** | → 多意图合并**永久不做** |
 
+> **D1 之后的评测集规模（口径标注，勿混）**：`tests/eval/freeform.yaml` 于 2026-10-16 追加 **4 条「零提示自然说法」用例**
+> （`F-75 ~ F-78`，缺陷 D1 的 L4 交付，每条标注需求方手测来源），泛化集**文件规模**由 74 → **82 turn**。
+> 上表「泛化集 74 turn」是 **M6 指标口径**（单份固化答案集 147 turn）的**分母**，**不因 D1 而改变**——这 4 条全部落在
+> **澄清路径**（检索前分流、不调用 LLM、离线可验），按「离线可验证的改动不得触发答案重新生成」原则**不重跑 M6**。
+> 故引用泛化集指标时分母是 **74（M6 口径）**，不是 82（当前文件规模）。详见
+> [`docs/milestones/D1-report.md`](docs/milestones/D1-report.md) §10。
+
 > **「答案有据率」区间口径（务必连区间一起引用）**：点估计 98.7% 来自 78 条候选答案的**单次**跑批，
 > 分母仅 78，且判官自身有 1 条误报（全量判官口径 97.4% 比人工复核低 1.3pt），故按 **≈ 96.7% ± 2pt** 报。
 > 这是**对单份固化答案集的保守区间**，**不是**多次重复采样得到的置信区间（模型内置非确定性使「逐字重放」不成立）；
@@ -340,10 +366,12 @@ COUNTERS 出度/入度画像与边界英雄清单见 [`data/data_profile.md`](da
 
 ## 非目标（v1 明确不做）
 
-- **`POST /api/graph/import`**：幂等导入的**核心能力已存在且被测试覆盖** ——
+- **`POST /api/graph/import`（批量导入端点）**：幂等导入的**核心能力已存在且被测试覆盖** ——
   `scripts/init_graph.py` 支持幂等重跑，`tests/...::test_neo4j_import_idempotent` 钉住了该行为。
   API 端点只是对同一能力的 HTTP 包装，**边际价值低**；而实现它需要额外的鉴权、大文件分片、
   部分失败回滚等设计，性价比不足。故 v1 明确不提供该端点（规格书 v1.6 §5.2）。
+  **补丁 P1 以受限形式补上了「单条关系写入」**（`PUT /api/graph/relations`，仅 `COUNTERS` / `SYNERGIZES`），
+  批量导入端点仍不提供；P1-3 只做输入校验与写入协议，鉴权 / 限流 / 审计由下游网关负责（本仓库不引入第二套鉴权）。
 - 登录 / 历史会话管理页 / 设置页 / 主题切换 / 移动端适配 / 动画特效（规格书 1.6）。
 
 ## 已知局限

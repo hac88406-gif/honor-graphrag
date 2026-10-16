@@ -1,0 +1,59 @@
+﻿[health] HTTP 200 {"neo4j":{"ok":true,"detail":"connected: bolt://localhost:7687"},"chroma":{"ok":true,"detail":"persistent@ data/chroma, 
+
+=== 报告 §1 复现表 11 句 · 修复后（真实 HTTP /api/chat/sync，端口 8001）===
+问句                  HTTP  type            intent          entities    clarify_options
+--------------------------------------------------------------------------------------------------------------
+镜的克制关系              200   clarify         ENTITY_UNKNOWN  镜           镜克制谁,谁克制镜
+铠的克制关系              200   clarify         ENTITY_UNKNOWN  铠           铠克制谁,谁克制铠
+镜的关系                200   clarify         ENTITY_UNKNOWN  镜           镜克制谁,谁克制镜,镜的搭档
+铠关系                 200   clarify         ENTITY_UNKNOWN  铠           铠克制谁,谁克制铠,铠的搭档
+克制关系                200   clarify         ENTITY_UNKNOWN  —           亚瑟,后羿,鲁班七号,貂蝉,铠,东皇太一,兰陵王,蔡文姬,孙悟空,安琪拉
+镜的搭档关系              200   answer          SYNERGY         镜           —
+铠被谁克制               200   answer          COUNTER_BY      铠           —
+镜克制谁                200   answer          COUNTER_OF      镜           —
+谁能克制镜               200   answer          COUNTER_BY      镜           —
+镜怎么出装               200   answer          ITEM_BUILD      镜           —
+镜的铭文                200   answer          INSCRIPTION     镜           —
+
+=== 澄清卡全文与候选（前端聊天页实际展示的内容）===
+
+[镜的克制关系] HTTP 200  type=clarify  intent=ENTITY_UNKNOWN  0.03s
+  answer         : 「镜」的克制关系有两个方向，你想问哪个？（镜克制谁 / 谁克制镜）
+  clarify_options: ['镜克制谁', '谁克制镜']
+
+[镜的关系] HTTP 200  type=clarify  intent=ENTITY_UNKNOWN  0.04s
+  answer         : 「镜」的关系有好几种，你想问哪一种？（镜克制谁 / 谁克制镜 / 镜的搭档）
+  clarify_options: ['镜克制谁', '谁克制镜', '镜的搭档']
+
+[克制关系] HTTP 200  type=clarify  intent=ENTITY_UNKNOWN  0.02s
+  answer         : 你想问哪个英雄的克制关系？
+  clarify_options: ['亚瑟', '后羿', '鲁班七号', '貂蝉', '铠', '东皇太一', '兰陵王', '蔡文姬', '孙悟空', '安琪拉']
+
+[赛博坦这个英雄怎么样] HTTP 200  type=clarify  intent=ENTITY_UNKNOWN  0.04s
+  answer         : 没认出「赛博坦」，你是指下面哪个英雄？
+  clarify_options: ['亚瑟', '后羿', '鲁班七号', '貂蝉', '铠', '东皇太一', '兰陵王', '蔡文姬', '孙悟空', '安琪拉']
+
+[铠的老婆是谁] HTTP 200  type=clarify  intent=ENTITY_UNKNOWN  0.03s
+  answer         : 你想问「铠」的什么？（克制关系 / 出装 / 铭文 / 打法）
+  clarify_options: ['铠克制谁', '谁克制铠', '铠怎么出装', '铠的铭文', '铠怎么玩']
+
+=== 点选澄清候选后的真实答案（说明「一次点击即得答案」）===
+
+[点选候选 → 镜克制谁] HTTP 200  type=answer  intent=COUNTER_OF  confidence=0.75  citations=2  2.24s
+  answer: 镜克制伽罗、西施。
+
+[点选候选 → 谁克制镜] HTTP 200  type=answer  intent=COUNTER_BY  confidence=0.85  citations=3  3.21s
+  answer: 澜、王昭君、项羽。
+
+[点选候选 → 镜的搭档] HTTP 200  type=answer  intent=SYNERGY  confidence=0.75  citations=2  5.11s
+  answer: 镜的官方推荐搭档有：瑶、鬼谷子。  
+- 瑶：提供辅助能力，帮助镜更轻松安全地作战。  
+- 鬼谷子：把对手拉在一起时，镜的爆发可打出巨量伤害。
+
+=== SSE 逐帧（前端聊天页消费的载荷；问句「镜的克制关系」）===
+HTTP 200  0.03s
+  data: {"node": "entity_linking"}
+  data: {"node": "intent_routing"}
+  data: {"node": "clarify"}
+  data: {"node": "memory"}
+  data: {"type": "clarify", "confidence": 0.0, "fallback": false, "generation_mode": null, "clarify_options": ["镜克制谁", "谁克制镜"], "intent": "ENTITY_UNKNOWN"}
