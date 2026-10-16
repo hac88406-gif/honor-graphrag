@@ -61,14 +61,17 @@ def test_role_word_without_relation_context_passes():
     assert g.ok, g
 
 
-def test_class_leak_detected_even_when_phrase_exists_in_evidence():
-    """资料里确实写着「后羿怕高爆发法师」时，**答案照抄这句话当结论**仍算越界。
+def test_class_leak_traceable_to_evidence_is_exempt():
+    """依据本身写了类别式句子时，模型**照抄**这句当结论 -> 可溯源，放行（M6 审核后的 R1）。
 
-    这正是实测失败案例的难点：字符串比对无法区分，必须按「关系词 + 职业词」的形态判定。
+    旧口径（M6 审核前）要求「即使资料里写着这句，照抄当结论仍算越界」，但那与「引述 reason
+    合规」自相矛盾，且实测误报率 87.5%。新口径按需求方 2026-10-16 裁定改为**按溯源判**：
+    片段能在依据原文找到即属「有据」，guard 只查「答案是否越界」，不查「依据本身合不合规」。
+    代价（如实标注）：依据自己写了类别式句子时，照抄会被放过。
     """
     assert "后羿怕高爆发法师" in LEAK_EVIDENCE[0].content
     g = check_answer("后羿怕高爆发法师。", LEAK_EVIDENCE, "后羿怕什么？")
-    assert not g.ok and g.reason == "class_leak"
+    assert g.ok, g
 
 
 # ---------------------------------------------------------------- G2 英雄名越界
@@ -111,23 +114,42 @@ def test_guard_result_is_truthy_when_ok():
 # ------------------------------------------------ G3 豁免 R1/R2（2026-10-15 二审裁定 B-1）
 # 加入依据：scripts/measure_guard_fp.py 用真实数据筛测例，实测拦下 7 例、误报 7 例（FP=100%），
 # 故按裁定放松规则。以下用例把两条豁免的**边界**钉住，防止后人把豁免放大成「一律不判」。
+#
+# R1 在 M6 审核后**收窄**（2026-10-16）：旧粒度是「问句含为什么/为何即整个 G3 关闭」，
+# 需求方实测点出这是原则缺陷 —— 真实语料里 0 条含「后羿怕高爆发法师」，可只要问句带「为什么」，
+# 模型自编的这类类别主张就完全不被检查；而「问原因」恰是类别外推的高发场景。
+# 新粒度：**命中片段能在依据原文里溯源才豁免**（引述 reason 合规），溯源不到仍判 G3。
+# 注意下面的 `evidence` 都不含类别句 —— 与真实语料一致（0 条含「后羿怕高爆发法师」）。
 
-def test_reason_question_exempts_class_leak():
-    """R1：问题在问「原因」时，引述资料 reason 属合规行为 -> 不拦。
+def test_traceable_reason_quote_is_exempt():
+    """R1 新口径：答案把依据里的 reason 原样引述 -> 可溯源，豁免。
 
-    实测依据：7 例误报中 5 例是「X为什么克制Y」—— 模型只是把资料 reason（含职业词）原样抄回来。
+    豁免与「问不问原因」**无关**，只看片段能不能在依据里找到。
     """
     evidence = [_ev("东皇太一 克制 司马懿：硬控十分克制刺客的突袭，会让司马懿无法进场输出")]
     g = check_answer(
         "东皇太一克制司马懿的原因是：硬控十分克制刺客的突袭，会让司马懿无法进场输出。",
-        evidence, "东皇太一为什么克制司马懿？",
+        evidence, "东皇太一克制司马懿吗？",   # 问句不含「为什么」，照样豁免
     )
     assert g.ok, g
 
 
-def test_non_reason_question_still_catches_leak():
-    """R1 边界：同一句话，问题**不是**问原因时仍算越界（R1 只豁免「问原因」这一种情形）。"""
-    g = check_answer("后羿怕高爆发法师。", LEAK_EVIDENCE, "后羿怕什么？")
+def test_reason_question_no_longer_disables_g3():
+    """R1 收窄的**核心断言**：问句带「为什么」不再整体关闭 G3。
+
+    实测依据（需求方 2026-10-16）：真实语料里 0 条含「后羿怕高爆发法师」，
+    旧 R1 却让「后羿怕哪些英雄？为什么？」下的自编类别主张全被放行（应拦）。
+    """
+    evidence = [_ev("妲己 克制 后羿：后羿血量低、位移差，容易被贴脸")]
+    for answer in ("后羿怕高爆发法师。", "后羿的克星是高爆发法师英雄。"):
+        g = check_answer(answer, evidence, "后羿怕哪些英雄？为什么？")
+        assert not g.ok and g.reason == "class_leak", answer
+
+
+def test_leak_not_traceable_caught_without_reason_word():
+    """R1 边界：片段溯源不到时，问句含不含「为什么」都要拦。"""
+    evidence = [_ev("妲己 克制 后羿：后羿血量低、位移差，容易被贴脸")]
+    g = check_answer("后羿怕高爆发法师。", evidence, "后羿怕什么？")
     assert not g.ok and g.reason == "class_leak"
 
 
@@ -175,8 +197,9 @@ def test_role_description_exempts_class_leak():
 
 
 def test_r3_boundary_real_relation_claim_still_caught():
-    """R3 边界：真正把关系抬成类别的主张（不带「为核心」）仍要拦下。"""
-    g = check_answer("后羿怕高爆发法师。", LEAK_EVIDENCE, "后羿怕什么？")
+    """R3 边界：真正把关系抬成类别的主张（不带「为核心」）且**溯源不到**时仍要拦下。"""
+    evidence = [_ev("妲己 克制 后羿：后羿血量低、位移差，容易被贴脸")]
+    g = check_answer("后羿怕高爆发法师。", evidence, "后羿怕什么？")
     assert not g.ok and g.reason == "class_leak"
 
 

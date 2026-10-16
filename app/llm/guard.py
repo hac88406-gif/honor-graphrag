@@ -23,10 +23,15 @@
   放松后 —— 16 例**拦下 1 例**，该例为真越界（问「后羿怕什么」答「后羿怕高爆发法师」），**FP=0%**。
 
   7 例误报的形态（即下面两条豁免各自挡掉的那批）：
-  R1 **问题在问「原因」时不判 G3**。6 例是「X为什么克制Y」，模型只是把资料的 reason
-     原样抄回来（「因为硬控十分克制刺客的突袭」）——引述原因是**合规行为**，不是类别化外推。
-     代价（如实标注）：问「为什么」时模型**自己编造**类别会漏过。取舍依据是需求方定的原则
-     ——guard 是启发式下限不是安全底线，**误拦（把正常回答降级成机械罗列）代价大于漏拦**。
+  R1 **命中片段能在依据原文里溯源时不判 G3**（引述 reason 属合规行为）。
+     M6 审核前 R1 的粒度是「**问句**含为什么/为何即整个 G3 关闭」——需求方点出这是**原则缺陷**：
+     实测数据里 0 条语料含「后羿怕高爆发法师」，可只要问句带「为什么」，模型自编的这类类别主张
+     就完全不被检查；而「问原因」恰是类别外推的高发场景（「铠被谁克制？为什么？」是最常见问法）。
+     故 M6 审核后按需求方要求**把粒度从「问句」收窄到「命中片段」**：
+     片段能在依据原文找到（模型只是把 reason 原样抄回来）→ 豁免；
+     片段在依据里找不到（模型自己归纳出类别）→ 仍判 G3。
+     代价（如实标注）：若依据本身写了类别式句子，模型照抄会被放过 —— 但那属于「有据」，
+     不在 guard 职责内：guard 查的是「答案是否越界」，不是「依据本身合不合规」。
   R2 **命中片段落在英雄名内时不判 G3**。1 例是「盾山怕元流之子(法师)」——
      `元流之子` 有 法师/坦克/射手/辅助/刺客 五个形态名，职业词是**英雄名的一部分**。
 
@@ -80,9 +85,6 @@ _ROLE_ALT = "|".join(_ROLE_WORDS)
 _RELATION_WORDS = "怕|被克制|克制|压制|克星|天敌|打不过|被压|针对|counter"
 _CLASS_LEAK = re.compile(rf"({_RELATION_WORDS})[^。；！？，、\n]{{0,12}}({_ROLE_ALT})")
 _CLASS_LEAK_HEAD = re.compile(rf"({_ROLE_ALT})[^。；！？，、\n]{{0,6}}(克制|压制|针对|counter)")
-
-# R1：问题在问「原因」时不判 G3（引述 reason 合规）。见模块头「G3 的两条豁免」。
-_REASON_QUESTION = re.compile(r"为什么|为何|原因|缘由|怎么会|咋会|凭什么")
 
 # R3：命中片段实为「以…为核心」的角色定位描述时不判 G3（M6 复核放松，见模块头）。
 # 实测误报例：「东皇太一定位为游走/对抗路，以压制为核心」——「压制」是名词性描述，
@@ -148,11 +150,14 @@ def _span_inside_hero_name(text: str, start: int, end: int) -> bool:
     return False
 
 
-def _first_class_leak(text: str) -> str | None:
-    """返回首个**未被 R2/R3 豁免**的 G3 命中片段；无则 None。
+def _first_class_leak(text: str, corpus: str) -> str | None:
+    """返回首个**未被 R1/R2/R3 豁免**的 G3 命中片段；无则 None。
 
     匹配前只做**括号折叠**（不动其它标点）：模型会把英雄名里的半角括号写成全角，
     不折叠就会漏掉 R2 豁免 —— 实测误报例 02 正是如此。
+
+    `corpus` 是**已折叠**的依据原文（调用方传入，避免这里重复折叠）。R1 的溯源判定与
+    匹配同在折叠后的文本上做，保证「答案片段」与「依据原文」两侧书写形式对齐。
     """
     folded = text.translate(_PUNCT_FOLD)
     for pat in (_CLASS_LEAK, _CLASS_LEAK_HEAD):
@@ -161,6 +166,8 @@ def _first_class_leak(text: str) -> str | None:
                 continue  # R2
             if _ROLE_DESC.search(m.group(0)):
                 continue  # R3
+            if m.group(0) in corpus:
+                continue  # R1：片段能在依据原文里溯源（引述 reason 属合规行为）
             return m.group(0)
     return None
 
@@ -207,13 +214,14 @@ def check_answer(answer: str, evidence: list[Evidence], question: str = "") -> G
         return GuardResult(False, "empty", "生成结果为空")
 
     # ---- G3 类别化外推（先查 G3：它是需求方点名的形态，命中最具信息量） ----
-    if not _REASON_QUESTION.search(question or ""):
-        leak = _first_class_leak(text)
-        if leak:
-            return GuardResult(False, "class_leak", leak)
+    # R1 的溯源判定拿**折叠后**的依据原文比对；G2 仍用原始 corpus（避免折叠改变英雄名匹配口径）。
+    corpus = _evidence_corpus(evidence)
+    leak = _first_class_leak(text, corpus.translate(_PUNCT_FOLD))
+    if leak:
+        return GuardResult(False, "class_leak", leak)
 
     # ---- G2 英雄名越界 ----
-    corpus = _evidence_corpus(evidence) + "\n" + (question or "")
+    corpus += "\n" + (question or "")
     heroes, degraded = _hero_entities(text)
     forms_map = _hero_surface_forms()
     for ent in heroes:
