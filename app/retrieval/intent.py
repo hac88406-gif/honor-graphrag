@@ -3,22 +3,19 @@
 意图枚举**封闭且不可扩展**（4.4 明确「实现方不得私自新增」），故本模块的 `INTENTS`
 就是唯一真源，任何下游分支都只能在这 10 个取值里选。
 
-两条路径（决策见 DECISIONS.md 2026-10-14 M2 条）：
-  - **规则路径（默认）**：确定性关键词分类。意图是封闭枚举、且输入已带实体链接结果（4.3），
-    关键词覆盖足够；确定性 = 可单测、零延迟、离线可跑（M2 验收项全为确定性断言）。
-  - **LLM 路径（可选）**：Ollama 结构化输出（4.11 选型 qwen2.5:3b）。`use_llm=True` 时启用，
-    失败/超时/输出非法一律**回落规则路径**（9.1-3：外部调用必须有超时与异常处理）。
-
-M2 交付报告会把这个取舍单独列出，请需求方确认。
+**路由只走确定性规则路径**（决策见 DECISIONS.md 2026-10-14 M2 条与 2026-10-16 移除条）：
+意图是封闭枚举、且输入已带实体链接结果（4.3），关键词覆盖足够；确定性 = 可单测、零延迟、
+离线可跑（M2 验收项全为确定性断言）。M3 曾预留「意图准确率 < 85% 就切 LLM（Ollama
+结构化输出）」的预案，M6 用同一批真实问句实测后**预案被数据否决**（规则 85.1% vs
+LLM 36.5%，且规则已达阈值），故 `route_llm` 与 Ollama 依赖按需求方裁定整体移除 ——
+一个永远不执行且实测更差的代码路径 = 未测试代码 + 误启用隐患。
 """
 from __future__ import annotations
 
-import json
 import logging
 import re
 from dataclasses import dataclass, field
 
-from app.config import settings
 from app.retrieval.entity_linking import normalize
 from app.schemas.entity import LinkedEntity
 
@@ -44,7 +41,7 @@ class IntentResult:
     intent: str
     slots: dict = field(default_factory=dict)
     need_clarify: bool = False
-    method: str = "rule"          # rule | llm
+    method: str = "rule"          # 恒为 rule（LLM 路径已按 M6 数据裁定移除）
     # 本次问句命中的**全部**意图（按 _RULES 优先级序），intent 取第一个。
     # 需求方 2026-10-15 条件三：多意图命中必须留痕——否则「铠的出装和铭文」只返回 ITEM_BUILD
     # 丢掉 INSCRIPTION 且无任何记录，属静默失败。M6 归因「答案不全」时据此判断是否只取了一个意图。
@@ -152,6 +149,7 @@ def _base_slots(heroes: list[LinkedEntity], roles: list[LinkedEntity]) -> dict:
 
 # ---------------------------------------------------------------- 槽位（路由与继承共用）
 
+
 def slots_for(intent: str, text: str, entities: list[LinkedEntity]) -> dict:
     """按意图算槽位。路由与指代消解继承（4.10 规则 2「只替换实体」）共用同一实现，
     避免两处口径漂移——这是本项目反复踩过的「同一指标多个口径」类问题。
@@ -201,58 +199,8 @@ def route_rules(text: str, entities: list[LinkedEntity]) -> IntentResult:
     return IntentResult("OUT_OF_SCOPE", {}, method="rule")
 
 
-# ---------------------------------------------------------------- LLM 路径
-
-
-_LLM_SYSTEM = (
-    "你是王者荣耀问答系统的意图分类器。只能从下面 10 个意图里选一个，不得新增：\n"
-    + "、".join(INTENTS)
-    + "\n只输出 JSON：{\"intent\": \"<意图>\", \"hero\": \"<主英雄规范名或空>\"}。不要解释。"
-)
-
-
-def route_llm(text: str, entities: list[LinkedEntity]) -> IntentResult | None:
-    """Ollama 结构化输出。失败/超时/输出非法返回 None（由调用方回落规则路径）。"""
-    import httpx
-
-    known = "、".join(e.canonical_name or e.raw for e in entities) or "（无）"
-    payload = {
-        "model": settings.INTENT_MODEL,
-        "prompt": f"已知实体：{known}\n用户问题：{text}",
-        "system": _LLM_SYSTEM,
-        "stream": False,
-        "format": "json",
-        "options": {"temperature": 0},
-    }
-    resp = httpx.post(
-        f"{settings.OLLAMA_BASE_URL}/api/generate", json=payload, timeout=settings.LLM_TIMEOUT
-    )
-    resp.raise_for_status()
-    raw = resp.json().get("response", "")
-    data = json.loads(raw)
-    intent = str(data.get("intent", "")).strip()
-    if intent not in INTENTS:
-        logger.warning("LLM 返回非法意图 %r，回落规则路径", intent)
-        return None
-
-    heroes = [e for e in entities if e.entity_type == "hero"]
-    roles = [e for e in entities if e.entity_type == "role"]
-    slots = _base_slots(heroes, roles)
-    if intent == "MATCHUP":
-        slots = _matchup_slots(normalize(text), heroes)
-    return IntentResult(intent, slots, need_clarify=False, method="llm")
-
-
-def route(text: str, *, use_llm: bool = False) -> IntentResult:
-    """默认走确定性规则路径；use_llm=True 时先试 LLM，任何失败都回落规则。"""
+def route(text: str) -> IntentResult:
+    """唯一路由入口：确定性规则路径（LLM 路径已按 M6 数据裁定移除）。"""
     from app.retrieval.entity_linking import link
 
-    entities = link(text).entities
-    if use_llm:
-        try:
-            llm = route_llm(text, entities)
-            if llm is not None:
-                return llm
-        except Exception as e:  # noqa: BLE001 - LLM 是可选增强，任何异常都不能中断链路
-            logger.warning("LLM 意图路由失败，回落规则路径：%s", e)
-    return route_rules(text, entities)
+    return route_rules(text, link(text).entities)

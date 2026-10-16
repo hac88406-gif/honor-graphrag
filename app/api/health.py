@@ -5,7 +5,6 @@ M0 验收要求该项返回真实结果；每项附带 detail 便于排查（静
 """
 from __future__ import annotations
 
-import httpx
 from fastapi import APIRouter
 
 from app.config import settings
@@ -50,23 +49,26 @@ def _check_chroma() -> dict:
 
 
 def _check_llm() -> dict:
-    """探测 LLM 层：Ollama /api/tags（HTTP），并回显当前 LLM_MODE 与意图模型。"""
+    """探测 LLM 层：云端 chat/completions 的 `/models` 可达性，并回显当前生成模型。
+
+    只探**生成侧**：意图识别不走 LLM（规则路径已达标，route_llm 与 Ollama 依赖已移除）。
+    未配置时明确报「未配置」而不是抛错——配置缺失属预期状态，不应中断 health。
+    """
     try:
-        resp = httpx.get(
-            f"{settings.OLLAMA_BASE_URL}/api/tags",
-            timeout=settings.NEO4J_CONNECT_TIMEOUT,
-        )
-        if resp.status_code != 200:
-            return {"ok": False, "detail": f"ollama http {resp.status_code}"}
-        models = [m.get("name") for m in resp.json().get("models", [])]
-        return {
-            "ok": True,
-            "detail": (
-                f"mode={settings.LLM_MODE}, intent_model={settings.INTENT_MODEL}, "
-                f"ollama_models={models}"
-            ),
-        }
-    except Exception as e:
+        from app.llm.client import LLMUnavailableError, get_cloud_client
+
+        client = get_cloud_client()
+        if client is None:
+            return {
+                "ok": False,
+                "detail": "云端 LLM 未配置（缺 CLOUD_BASE_URL / CLOUD_API_KEY / CLOUD_CHAT_MODEL）",
+            }
+        try:
+            models = client.list_models()
+        except LLMUnavailableError as e:
+            return {"ok": False, "detail": f"{type(e).__name__}: {e}"}
+        return {"ok": True, "detail": f"model={client.model}, cloud_models={models}"}
+    except Exception as e:  # 客户端构造失败也归为不可用，不抛错
         return {"ok": False, "detail": f"{type(e).__name__}: {e}"}
 
 

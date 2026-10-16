@@ -80,7 +80,7 @@ CASES: list[tuple[str, str, str]] = [
 
 
 def _route(question: str) -> str:
-    return route(question, use_llm=False).intent
+    return route(question).intent
 
 
 @pytest.mark.parametrize("question,expected,note", CASES, ids=[f"{c[0]}-{c[1]}" for c in CASES])
@@ -184,7 +184,7 @@ def test_who_counters_kai_ruling() -> None:
     assert _route("谁能针对铠") == "COUNTER_BY"
     assert _route("怎么针对铠") == "MATCHUP"
     # 「谁能针对铠」同时命中两个词表 -> matched_intents 留痕（条件三）
-    r = route("谁能针对铠", use_llm=False)
+    r = route("谁能针对铠")
     assert r.matched_intents[0] == "COUNTER_BY"
     assert "MATCHUP" in r.matched_intents
 
@@ -193,21 +193,21 @@ def test_who_counters_kai_ruling() -> None:
 
 def test_multi_intent_hit_is_traced() -> None:
     """「铠的出装和铭文」命中 ITEM_BUILD + INSCRIPTION，只取一个但必须留痕。"""
-    r = route("铠的出装和铭文", use_llm=False)
+    r = route("铠的出装和铭文")
     assert set(r.matched_intents) == {"INSCRIPTION", "ITEM_BUILD"}
     assert r.intent == r.matched_intents[0]  # 取优先级最高者
     assert r.intent == "INSCRIPTION"
 
 
 def test_single_intent_trace_has_one_entry() -> None:
-    r = route("铠被谁克制", use_llm=False)
+    r = route("铠被谁克制")
     assert r.matched_intents == ["COUNTER_BY"]
 
 
 def test_no_keyword_intent_leaves_trace_empty() -> None:
     """纯实体/越界问句不命中任何词表 -> matched_intents 为空（区分「没命中」与「命中了但没选」）。"""
-    assert route("东皇太一", use_llm=False).matched_intents == []
-    assert route("今天天气怎么样", use_llm=False).matched_intents == []
+    assert route("东皇太一").matched_intents == []
+    assert route("今天天气怎么样").matched_intents == []
 
 
 # ---------------------------------------------------------------- 独立信号一：规格书 8.1 自带的示例问句
