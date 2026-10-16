@@ -1,0 +1,149 @@
+﻿=== M7 最终验收证据（规格书 7 节 M7）　生成时间 2026-10-16 18:10:38 ===
+本文件由三条**真实命令**的输出拼装（非桩数据）：
+  [1] REQUIRE_SERVICES=1 pytest -q                      全量测试
+  [2] scripts/init_graph.py + scripts/init_chroma.py    数据层幂等复跑（确认检索层未破坏原有数据）
+  [3] scripts/run_eval.py --reuse-answers --set all     评测增量跑批（复用固化答案，不重新生成）
+
+【结论摘要】
+- 测试：294 passed / 0 failed / 0 skipped（M6 时为 273 passed；+21 为 M7 新增上传端点用例）
+- 数据层复跑（零漂移）：Neo4j 导入前后计数完全一致 —— Hero 133 / Item 115 / Inscription 93 /
+  COUNTERS 527 / SYNERGIZES 266 / RECOMMENDS_ITEM 1574 / RECOMMENDS_INSCRIPTION 798；
+  Chroma 138 篇 -> 540 chunk、字数 min/median/max = 114/444/580，与 M1b / M2 / M4 记录逐字一致。
+- 评测增量跑批：复用固化答案 147/147、新生成 0 条；各指标与 M6 固化集口径一致
+  （意图 覆盖集 72/73=98.6% / 泛化集 63/74=85.1%；实体 34/34 与 53/53=100%；Recall@5 26/26=100%；
+   拒答漏拒 2/43=4.7%；复合意图 6/147=4.1%；guard 生产路径 1/79）。
+- 注：[3] 跑批会重写 M6 证据文件（加 reused 标记与耗时），已即时恢复为 M6 冻结版本，不改写历史。
+
+--- [1] pytest 全量（REQUIRE_SERVICES=1，2026-10-16 18:08:04） ---
+........................................................................ [ 24%]
+........................................................................ [ 48%]
+........................................................................ [ 73%]
+........................................................................ [ 97%]
+......                                                                   [100%]
+============================== warnings summary ===============================
+tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
+  D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
+    return json.dumps(create_collection_configuration_to_json(config, metadata))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+294 passed, 1 warning in 21.53s
+
+--- [2] 数据层复跑校验（init_graph + init_chroma） ---
+=== M7 数据层复跑校验（init_graph + init_chroma 幂等复跑） 2026-10-16 18:00:29 ===
+[graph] 导入前节点： {'Hero': 133, 'Inscription': 93, 'Item': 115}
+[graph] 导入前关系： {'COUNTERS': 527, 'RECOMMENDS_INSCRIPTION': 798, 'RECOMMENDS_ITEM': 1574, 'SYNERGIZES': 266}
+[graph] 本次写入： {'full_heroes': 133, 'stub_heroes': 0, 'items': 115, 'inscriptions': 93, 'hero_rel_rows': 798, 'item_edge_rows': 1574, 'ins_edge_rows': 798, 'skipped_item_refs': 20, 'skipped_ins_refs': 0}
+[graph] 导入后节点： {'Hero': 133, 'Inscription': 93, 'Item': 115}
+[graph] 导入后关系： {'COUNTERS': 527, 'RECOMMENDS_INSCRIPTION': 798, 'RECOMMENDS_ITEM': 1574, 'SYNERGIZES': 266}
+--- init_chroma ---
+[chroma] 语料 138 篇 -> chunk 540 条
+[chroma] 每篇 chunk 数：{'c1-aguduo-official': 4, 'c1-ailin-official': 3, 'c1-ake-official': 4, 'c1-anqila-official': 3, 'c1-aoyin-official': 6, 'c1-bailishouyue-official': 4, 'c1-bailixuance-official': 4, 'c1-baiqi-official': 3, 'c1-bianque-official': 5, 'c1-buzhihuowu-official': 4, 'c1-caiwenji-official': 4, 'c1-cang-official': 3, 'c1-caocao-official': 5, 'c1-change-official': 4, 'c1-chengyaojin-official': 4, 'c1-chicha-official': 3, 'c1-daji-official': 3, 'c1-damo-official': 5, 'c1-daqiao-official': 5, 'c1-dasiming-official': 6, 'c1-dayu-official': 4, 'c1-dianwei-official': 5, 'c1-diaochan-official': 4, 'c1-direnjie-official': 4, 'c1-dongfangyao-official': 3, 'c1-donghuangtaiyi-official': 5, 'c1-dunshan-official': 4, 'c1-duoliya-official': 4, 'c1-fei-official': 3, 'c1-ganjiangmoye-official': 4, 'c1-gaojianli-official': 4, 'c1-geya-official': 3, 'c1-gongbenwuzang-official': 3, 'c1-gongsunli-official': 3, 'c1-guanyu-official': 4, 'c1-guiguzi-official': 5, 'c1-hainuo-official': 5, 'c1-haiyue-official': 4, 'c1-hanxin-official': 3, 'c1-houyi-official': 3, 'c1-huamulan-official': 4, 'c1-huangzhong-official': 5, 'c1-jialuo-official': 3, 'c1-jiangziya-official': 4, 'c1-jinchan-official': 4, 'c1-jing-official': 4, 'c1-jixiaoman-official': 4, 'c1-jvyoujing-official': 4, 'c1-kai-official': 4, 'c1-kongkonger-official': 4, 'c1-kuangtie-official': 5, 'c1-laixiao-official': 3, 'c1-lan-official': 4, 'c1-lanlingwang-official': 4, 'c1-laofuzi-official': 4, 'c1-lianpo-official': 6, 'c1-libai-official': 6, 'c1-liubang-official': 4, 'c1-liubei-official': 4, 'c1-liushan-official': 4, 'c1-lixin-official': 4, 'c1-liyuanfang-official': 5, 'c1-lubandashi-official': 3, 'c1-lubanqihao-official': 4, 'c1-luna-official': 4, 'c1-luyana-official': 3, 'c1-lvbu-official': 5, 'c1-machao-official': 3, 'c1-makeboluo-official': 3, 'c1-mengqi-official': 4, 'c1-mengtian-official': 4, 'c1-mengya-official': 4, 'c1-milaidi-official': 4, 'c1-mingshiyin-official': 4, 'c1-miyue-official': 5, 'c1-mozi-official': 3, 'c1-nakelulu-official': 4, 'c1-nezha-official': 5, 'c1-niumo-official': 4, 'c1-nvwa-official': 3, 'c1-pangu-official': 3, 'c1-peiqinhu-official': 3, 'c1-sangqi-official': 4, 'c1-shangguanwaner-official': 5, 'c1-shaosiyuan-official': 4, 'c1-shenmengxi-official': 4, 'c1-sikongzhen-official': 4, 'c1-simayi-official': 4, 'c1-sulie-official': 4, 'c1-sunbin-official': 4, 'c1-sunce-official': 4, 'c1-sunquan-official': 3, 'c1-sunshangxiang-official': 4, 'c1-sunwukong-official': 4, 'c1-taiyizhenren-official': 4, 'c1-wangwei-official': 4, 'c1-wangzhaojun-official': 4, 'c1-wuzetian-official': 4, 'c1-xiahoudun-official': 5, 'c1-xialuote-official': 3, 'c1-xiangyu-official': 5, 'c1-xiaoqiao-official': 3, 'c1-xinmoliuer-official': 4, 'c1-xishi-official': 4, 'c1-yadianna-official': 4, 'c1-yalian-official': 4, 'c1-yangjian-official': 6, 'c1-yangyuhuan-official': 4, 'c1-yao-official': 3, 'c1-yase-official': 3, 'c1-ying-official': 5, 'c1-yingzheng-official': 3, 'c1-yixing-official': 5, 'c1-yuange-official': 4, 'c1-yuanliuzhizi_archer-official': 3, 'c1-yuanliuzhizi_assassin-official': 3, 'c1-yuanliuzhizi_magic-official': 4, 'c1-yuanliuzhizi_support-official': 4, 'c1-yuanliuzhizi_tank-official': 5, 'c1-yuji-official': 5, 'c1-yunying-official': 4, 'c1-yunzhongjun-official': 3, 'c1-zhangfei-official': 4, 'c1-zhangliang-official': 4, 'c1-zhaohuaizhen-official': 5, 'c1-zhaoyun-official': 5, 'c1-zhenji-official': 5, 'c1-zhongkui-official': 4, 'c1-zhongwuyan-official': 4, 'c1-zhouyv-official': 4, 'c1-zhuangzhou-official': 4, 'c1-zhubajie-official': 4, 'c1-zhugeliang-official': 5, 'c2-diaochan-laning': 1, 'c2-donghuangtaiyi-roaming': 1, 'c2-houyi-laning': 1, 'c2-lanlingwang-jungle': 1, 'c2-yase-laning': 1}
+[chroma] chunk 字数 min/median/max = 114/444/580
+[chroma] 已删除旧 collection guides（幂等重建）
+[chroma] collection.count() = 540
+[chroma] 抽查 query('貂蝉怎么出装', hero_ids=141) 命中：
+  - c1-diaochan-official#3: 静之靴 → 噬神之书 → 暴烈之甲 → 痛苦面具 → 极寒风暴 → 辉月 - T...
+  - c2-diaochan-laning#0: 貂蝉是一位靠持续位移与被动印记打输出的法刺，上手难度较高。她的核心是二技能缘·心...
+[chroma] 对照：$in 命中 0 条（预期 0），$contains 命中 2 条（预期 >0）
+
+--- [3] run_eval --reuse-answers（增量跑批） ---
+固化答案集：docs\milestones\M6-golden-answers.json（已加载 147 条）  reuse_answers=True
+==============================================================================
+【指标汇总】（规格书 8.2；覆盖集与泛化集分开报）
+==============================================================================
+
+[coverage]
+  意图路由准确率：72/73 = 98.6%
+  实体链接准确率：34/34 = 100.0%（分母=标注了应有实体的 turn）
+  检索 Recall@5 ：26/26 = 100.0%（分母=标注了关键依据的 turn）
+
+  --- coverage 意图错误样例：错误样例全列（1 条）---
+    [R-03#1] '推荐几部好看的电影'
+        期望 intent=OUT_OF_SCOPE / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['558'] names=['影'] （期望 []）
+
+  --- coverage 实体错误样例：错误样例全列（0 条）---
+    （无）
+
+  --- coverage Recall@5 未命中：错误样例全列（0 条）---
+    （无）
+
+[freeform]
+  意图路由准确率：63/74 = 85.1%
+  实体链接准确率：53/53 = 100.0%（分母=标注了应有实体的 turn）
+  检索 Recall@5 ：0/0 = n/a（分母=标注了关键依据的 turn）
+
+  --- freeform 意图错误样例：错误样例全列（11 条）---
+    [F-02#1] '后羿最怕啥英雄'
+        期望 intent=COUNTER_BY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['169'] names=['后羿'] （期望 ['169']）
+    [F-03#1] '我拿谁好打鲁班七号'
+        期望 intent=COUNTER_BY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['112'] names=['鲁班七号'] （期望 ['112']）
+        标注说明：『我拿谁好打 X』= 谁克制 X；关键词表未收『好打』
+    [F-05#1] '哪个英雄能压制兰陵王'
+        期望 intent=COUNTER_BY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['153'] names=['兰陵王'] （期望 ['153']）
+    [F-08#1] '铠能打过谁'
+        期望 intent=COUNTER_OF / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['193'] names=['铠'] （期望 ['193']）
+    [F-10#1] '貂蝉压制哪些英雄'
+        期望 intent=COUNTER_OF / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['141'] names=['貂蝉'] （期望 ['141']）
+    [F-16#1] '后羿配谁'
+        期望 intent=SYNERGY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['169'] names=['后羿'] （期望 ['169']）
+    [F-17#1] '鲁班七号适合和谁一队'
+        期望 intent=SYNERGY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['112'] names=['鲁班七号'] （期望 ['112']）
+    [F-36#1] '兰陵王打野节奏怎么带'
+        期望 intent=GAMEPLAY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['153'] names=['兰陵王', '打野'] （期望 ['153']）
+        标注说明：**预期失败**：『节奏/怎么带』不在关键词表；只有『打野』落在领域词里
+    [F-37#1] '后羿怎么发育'
+        期望 intent=GAMEPLAY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['169'] names=['后羿'] （期望 ['169']）
+        标注说明：**预期失败**：『发育』既不是 GAMEPLAY 词根也不是领域词（只有『发育路』）
+    [F-42#1] '兰陵王怎么抓人'
+        期望 intent=GAMEPLAY / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['153'] names=['兰陵王'] （期望 ['153']）
+        标注说明：**预期失败**：『抓人』不在关键词表也不在领域词里
+    [F-72#1] '推荐部好看的电影'
+        期望 intent=OUT_OF_SCOPE / 实际 intent=ENTITY_UNKNOWN type=clarify matched=[] method=rule
+        实体 ids=['558'] names=['影'] （期望 []）
+
+  --- freeform 实体错误样例：错误样例全列（0 条）---
+    （无）
+
+  --- freeform Recall@5 未命中：错误样例全列（0 条）---
+    （无）
+
+[拒答正确率·双向]
+  该拒未拒：2/43 = 4.7%  （标注应拒答的 turn 里没拒的）
+      [R-03#1] '推荐几部好看的电影' -> type=clarify
+      [F-72#1] '推荐部好看的电影' -> type=clarify
+  不该拒乱拒：1/104 = 1.0%  （标注不该拒的 turn 里被拒的）
+      [F-47#1] '版本答案是什么' -> intent=TIER_META type=reject note=None
+
+[复合意图占比] 命中 ≥2 个意图：6/147 = 4.1%
+      [B-03#1] '貂蝉的铭文怎么搭配' -> ['INSCRIPTION', 'SYNERGY']
+      [T-01#1] '貂蝉对线思路' -> ['GAMEPLAY', 'MATCHUP']
+      [R-29#1] '铭文搭配是什么意思' -> ['INSCRIPTION', 'SYNERGY']
+      [F-07#1] '谁能针对猴子' -> ['COUNTER_BY', 'MATCHUP']
+      [F-31#1] '东皇太一铭文搭配' -> ['INSCRIPTION', 'SYNERGY']
+      [F-34#1] '亚瑟的对线思路' -> ['GAMEPLAY', 'MATCHUP']
+
+[guard 触发率] 走 LLM 生成的 turn 中 guard 拦下：1/79 = 1.3%
+      [M-02#2] '那他怕谁' -> class_leak: '克制亚瑟：没有多段位移的战士'
+
+[/api/chat/sync 端到端耗时·按响应类型]（秒；流式首 token 见 M6-latency）
+      answer           n=68   mean=5.53    p50=3.36    max=19.69
+      clarify          n=27   mean=0.01    p50=0.01    max=0.02
+      low_confidence   n=10   mean=7.12    p50=5.22    max=17.96
+      reject           n=42   mean=0.1     p50=0.02    max=0.26
+
+[降级] 本轮 degraded=True 的 turn：0 条
+
+原始记录已写入：docs\milestones\M6-eval-raw.json（147 个 turn）
+本轮复用固化答案 147/147 条，新生成 0 条
+固化答案集已写入：docs\milestones\M6-golden-answers.json（累计 147 条）
