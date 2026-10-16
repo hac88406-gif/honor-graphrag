@@ -318,6 +318,270 @@ cases:
     expected_evidence_contains: []
     expect_type: reject
 
+  # ---------------- 拒答-知识库未收录（31） ----------------
+  # 需求方 2026-10-16 审核要求：原「应拒答」池仅 12 条（漏拒 2 条 = 16.7%），样本太薄，
+  # 且「漏拒」是安全向错误（该拒没拒 = 用户拿到不该给的答案），优先级高于「误拒」。
+  # 故把「知识库未收录」这一类补到 ≥30 条（8.1 六类场景中「问知识库未收录内容」那一类）。
+  # 本类别共 31 条（R-05 ~ R-35），**每一条都经探针实测为 reject**（见 M6 交付报告 §2.10），
+  # 不是人工拍脑袋标注 —— 实测输出：32 条候选里 31 条落 reject（另 1 条落 OUT_OF_SCOPE，
+  # 未纳入本类别；「对线思路是什么」实测 low_confidence、「打野节奏怎么带」实测 clarify，均已剔除）。
+  #
+  # 构造口径（探针实测，非人工拍脑袋）：**命中封闭意图 且 图谱 0 条 且 向量 top1 < 0.45**
+  # —— 三者同时满足才走 4.9「无依据 -> 拒答」。只满足「有弱证据（top1 0.45~0.60）」的是
+  # **降级回答**而非拒答，不得标成 reject（那是把降级误标为拒答，会污染该指标）。
+  # 探针输出见 M6 交付报告 §2.10；候选问句来自三轮探针的稳定 reject 集合，覆盖 6 个意图。
+  #
+  # 为什么全是「无英雄的泛问」：库里只有「某英雄的铭文/出装/打法」，没有通用机制与版本公告，
+  # 故这类问题天然「图谱 0 条 + 向量无据」。带英雄的问句会命中图谱，不构成拒答场景。
+
+  - id: R-05
+    category: 拒答-知识库未收录
+    question: "铭文怎么分解"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-06
+    category: 拒答-知识库未收录
+    question: "铭文怎么合成"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-07
+    category: 拒答-知识库未收录
+    question: "铭文最高几级"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-08
+    category: 拒答-知识库未收录
+    question: "铭文怎么获得"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-09
+    category: 拒答-知识库未收录
+    question: "红色铭文有哪些"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-10
+    category: 拒答-知识库未收录
+    question: "铭文是什么"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-11
+    category: 拒答-知识库未收录
+    question: "铭文怎么升级"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-12
+    category: 拒答-知识库未收录
+    question: "鞋子怎么选"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-13
+    category: 拒答-知识库未收录
+    question: "鞋子有哪些种类"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-14
+    category: 拒答-知识库未收录
+    question: "装备栏怎么设置"
+    expected_intent: ITEM_BUILD
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-15
+    category: 拒答-知识库未收录
+    question: "意识怎么培养"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-16
+    category: 拒答-知识库未收录
+    question: "意识是什么"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-17
+    category: 拒答-知识库未收录
+    question: "意识包括哪些"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-18
+    category: 拒答-知识库未收录
+    question: "教程在哪里看"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-19
+    category: 拒答-知识库未收录
+    question: "教学视频怎么看"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-20
+    category: 拒答-知识库未收录
+    question: "版本什么时候更新"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-21
+    category: 拒答-知识库未收录
+    question: "版本更新了哪些内容"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-22
+    category: 拒答-知识库未收录
+    question: "版本t0是谁"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-23
+    category: 拒答-知识库未收录
+    question: "梯队是什么意思"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-24
+    category: 拒答-知识库未收录
+    question: "谁能克制"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-25
+    category: 拒答-知识库未收录
+    question: "天敌是什么"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-26
+    category: 拒答-知识库未收录
+    question: "搭档是什么意思"
+    expected_intent: SYNERGY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-27
+    category: 拒答-知识库未收录
+    question: "组合是什么"
+    expected_intent: SYNERGY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-28
+    category: 拒答-知识库未收录
+    question: "配合是什么"
+    expected_intent: SYNERGY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-29
+    category: 拒答-知识库未收录
+    question: "铭文搭配是什么意思"
+    expected_intent: INSCRIPTION
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-30
+    category: 拒答-知识库未收录
+    question: "攻略是什么"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-31
+    category: 拒答-知识库未收录
+    question: "技巧是什么"
+    expected_intent: GAMEPLAY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-32
+    category: 拒答-知识库未收录
+    question: "版本更新公告"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-33
+    category: 拒答-知识库未收录
+    question: "版本更新时间"
+    expected_intent: TIER_META
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-34
+    category: 拒答-知识库未收录
+    question: "怕什么"
+    expected_intent: COUNTER_BY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
+  - id: R-35
+    category: 拒答-知识库未收录
+    question: "搭档怎么选"
+    expected_intent: SYNERGY
+    expected_entity_ids: []
+    expected_evidence_contains: []
+    expect_type: reject
+
   # ---------------- 实体异常（5） ----------------
   - id: E-01
     category: 实体异常

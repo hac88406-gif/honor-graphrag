@@ -49,6 +49,7 @@ from app.memory.checkpointer import open_checkpointer  # noqa: E402
 EVAL_DIR = PROJECT_ROOT / "tests" / "eval"
 OUT_DIR = PROJECT_ROOT / "docs" / "milestones"
 OUT_JSON = OUT_DIR / "M6-eval-raw.json"
+GOLDEN_JSON = OUT_DIR / "M6-golden-answers.json"   # 固化答案集（增量跑批复用，见模块头）
 
 
 def load_cases(name: str) -> list[dict]:
@@ -80,13 +81,23 @@ async def ask(client: httpx.AsyncClient, session_id: str, question: str) -> tupl
     return r.status_code, body, dt
 
 
-async def run_case(client: httpx.AsyncClient, case: dict, *, set_name: str) -> list[dict]:
+async def run_case(
+    client: httpx.AsyncClient, case: dict, *, set_name: str,
+    golden: dict | None = None, reuse: bool = False,
+) -> list[dict]:
     # 每个用例一个独立 session；开跑前先清一次，保证用例之间不串味（跨用例记忆污染）。
     sid = f"m6-{set_name}-{case['id']}"
     await client.delete(f"/api/session/{sid}")
 
     records: list[dict] = []
     for idx, turn in enumerate(turns_of(case), start=1):
+        # 增量跑批：已固化且问句一致 → 复用落盘答案，**不再打模型**（第三层）。
+        cached = (golden or {}).get(f"{set_name}|{case['id']}|{idx}")
+        if reuse and cached and cached.get("question") == turn["question"]:
+            rec = dict(cached)
+            rec["reused"] = True
+            records.append(rec)
+            continue
         status, body, dt = await ask(client, sid, turn["question"])
         dbg = body.get("debug") or {}
         gen = dbg.get("generation") or {}
@@ -125,6 +136,7 @@ async def run_case(client: httpx.AsyncClient, case: dict, *, set_name: str) -> l
             "guard_degraded": bool(dbg.get("guard_degraded")),
             "error": dbg.get("error"),
             "elapsed_s": round(dt, 3),
+            "reused": False,
         })
     return records
 
@@ -240,6 +252,9 @@ def print_errors(title: str, errors: list[dict]) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--set", choices=["coverage", "freeform", "all"], default="all")
+    ap.add_argument("--reuse-answers", action="store_true",
+                    help="复用已固化答案（docs/milestones/M6-golden-answers.json），"
+                         "只对新增用例打模型（离线可验证的改动不得触发重新生成）")
     args = ap.parse_args()
 
     settings.DEBUG = True   # debug 块是评测取中间结果（matched_intents / evidence）的唯一入口
@@ -250,10 +265,22 @@ def main() -> None:
     if args.set in ("freeform", "all"):
         sets.append(("freeform", load_cases("freeform.yaml")))
 
-    asyncio.run(_main(sets))
+    asyncio.run(_main(sets, reuse=args.reuse_answers))
 
 
-async def _main(sets: list[tuple[str, list[dict]]]) -> None:
+async def _main(sets: list[tuple[str, list[dict]]], *, reuse: bool = False) -> None:
+    golden: dict = {}
+    if GOLDEN_JSON.exists():
+        try:
+            golden = (json.loads(GOLDEN_JSON.read_text(encoding="utf-8")) or {}).get("answers") or {}
+        except ValueError:
+            golden = {}
+    print(f"固化答案集：{GOLDEN_JSON.relative_to(PROJECT_ROOT)}"
+          f"（{'已加载 ' + str(len(golden)) + ' 条' if golden else '无'}）"
+          f"  reuse_answers={reuse}")
+    if reuse and not golden:
+        print("  **警告**：--reuse-answers 已开启但固化集为空 → 本轮等同全量生成。")
+
     all_recs: list[dict] = []
     async with open_checkpointer(":memory:") as cp:
         await graph_mod.reset_graph()
@@ -274,7 +301,7 @@ async def _main(sets: list[tuple[str, list[dict]]]) -> None:
                 print(f"【评测集 {set_name}】{len(cases)} 条用例")
                 print("=" * 78)
                 for case in cases:
-                    recs = await run_case(client, case, set_name=set_name)
+                    recs = await run_case(client, case, set_name=set_name, golden=golden, reuse=reuse)
                     all_recs.extend(recs)
                     mark = "OK " if all(r["intent"] == r["expected_intent"] for r in recs) else "ERR"
                     print(f"  {mark} {case['id']:<5} {case.get('question') or case['id']}  "
@@ -359,6 +386,23 @@ async def _main(sets: list[tuple[str, list[dict]]]) -> None:
         {"summary": summary, "records": all_recs}, ensure_ascii=False, indent=2,
     ), encoding="utf-8")
     print(f"\n原始记录已写入：{OUT_JSON.relative_to(PROJECT_ROOT)}（{len(all_recs)} 个 turn）")
+
+    # ---- 固化答案集（第三层）：本轮结果并入，供后续增量跑批复用 ----
+    reused_n = sum(1 for r in all_recs if r.get("reused"))
+    merged = dict(golden)
+    for r in all_recs:
+        merged[f"{r['set']}|{r['case_id']}|{r['turn']}"] = r
+    GOLDEN_JSON.write_text(json.dumps({
+        "updated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "llm_model": settings.CLOUD_CHAT_MODEL,
+        "llm_temperature": settings.LLM_TEMPERATURE,
+        "llm_seed": settings.LLM_SEED,
+        "note": "固化答案集：后续所有判定（guard / 判官 / 人工复核）一律基于本文件；"
+                "离线可验证的改动不得触发重新生成（见 run_eval.py 模块头）。",
+        "answers": merged,
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"本轮复用固化答案 {reused_n}/{len(all_recs)} 条，新生成 {len(all_recs) - reused_n} 条")
+    print(f"固化答案集已写入：{GOLDEN_JSON.relative_to(PROJECT_ROOT)}（累计 {len(merged)} 条）")
 
 
 main()

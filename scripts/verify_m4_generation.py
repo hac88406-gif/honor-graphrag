@@ -7,8 +7,8 @@ r"""M4 验收证据脚本：生成层的真实云端运行输出（可复跑）�
 
 六段证据（对应 M4 验收项 + 需求方 2026-10-15 的三条实测约束）：
 
-  A 环境与依赖状态      —— `/api/health` 三项真实状态；Ollama 不可达的韧性由
-                           `tests/unit/test_ollama_offline.py` 固化（此处只回显状态）
+  A 环境与依赖状态      —— `/api/health` 三项真实状态；意图路径**完全离线**（不触任何
+                           外部模型服务）由 `tests/unit/test_llm_offline_resilience.py` 固化
   B 真实云端生成（非流式）—— `reasoning_content` 与正文**隔离**、`finish_reason` /
                            `completion_tokens`（含思考）口径
   C 真实云端流式         —— reasoning 分片触发一次「正在思考」，**不混入正文**
@@ -16,7 +16,7 @@ r"""M4 验收证据脚本：生成层的真实云端运行输出（可复跑）�
   E 空答案 fail-fast     —— `max_tokens=200` 复现「HTTP 200 + finish_reason=length + content 空」-> 抛错
   F 端到端 `/api/chat/sync`（`GENERATION_MODE=llm`）—— 真实回答 + `debug.generation_info`
 
-用法（Neo4j 在线供 F 段使用；Ollama 不需要）：
+用法（Neo4j 在线供 F 段使用）：
   python scripts/verify_m4_generation.py
 """
 from __future__ import annotations
@@ -98,13 +98,13 @@ def section_a() -> None:
     _rule("【A】环境与依赖状态（/api/health）")
     from app.api.health import _check_chroma, _check_llm, _check_neo4j
 
-    print(f"LLM_MODE={settings.LLM_MODE}  CLOUD_CHAT_MODEL={settings.CLOUD_CHAT_MODEL}  "
+    print(f"CLOUD_CHAT_MODEL={settings.CLOUD_CHAT_MODEL}  "
           f"LLM_MAX_TOKENS={settings.LLM_MAX_TOKENS}  GENERATION_MODE={settings.GENERATION_MODE}")
     for name, fn in (("neo4j", _check_neo4j), ("chroma", _check_chroma), ("llm", _check_llm)):
         st = fn()
         print(f"  {name:<8} ok={st['ok']}  {st['detail']}")
-    print("  注：Ollama 不可达时的链路韧性由 tests/unit/test_ollama_offline.py 固化"
-          "（health 探测只回状态不抛错；意图默认走规则路径，不触 Ollama）。")
+    print("  注：意图识别走确定性规则路径，**不触任何外部模型服务**；该离线韧性由"
+          " tests/unit/test_llm_offline_resilience.py 固化（health 探测只回状态不抛错）。")
 
 
 # ---------------------------------------------------------------- B 非流式
