@@ -5,7 +5,7 @@
   [3] scripts/run_eval.py --reuse-answers --set all     评测增量跑批（复用固化答案，不重新生成）
 
 【结论摘要】
-- 测试：294 passed / 0 failed / 0 skipped（M6 时为 273 passed；+21 为 M7 新增上传端点用例）
+- 测试：294 passed / 0 failed / 0 skipped（M6 时为 273 passed；+21 = M7 新增 20 条上传端点集成用例 + 1 条空列表约束单测）
 - 数据层复跑（零漂移）：Neo4j 导入前后计数完全一致 —— Hero 133 / Item 115 / Inscription 93 /
   COUNTERS 527 / SYNERGIZES 266 / RECOMMENDS_ITEM 1574 / RECOMMENDS_INSCRIPTION 798；
   Chroma 138 篇 -> 540 chunk、字数 min/median/max = 114/444/580，与 M1b / M2 / M4 记录逐字一致。
