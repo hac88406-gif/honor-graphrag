@@ -1,0 +1,39 @@
+====================================================================================================
+首 token 模型对比（同一批真实问句+真实依据）  base=https://api.deepseek.com
+判官模型 = deepseek-v4-pro（判据不随被测模型改变）
+====================================================================================================
+模型                用例        意图          首个思考s      首token s   完整s      completion  reasoning_tok 正文长     有据
+----------------------------------------------------------------------------------------------------
+deepseek-chat     G-01      COUNTER_BY  None       1.043      1.186    21          None          28      True
+deepseek-chat     B-01      ITEM_BUILD  None       1.356      1.868    125         None          178     True
+deepseek-chat     B-03      INSCRIPTION None       0.883      1.194    36          None          51      True
+deepseek-chat     S-01      SYNERGY     None       1.111      1.646    108         None          165     True
+deepseek-chat     T-01      GAMEPLAY    None       0.945      1.26     33          None          46      True
+deepseek-chat     T-07      TIER_META   None       1.233      1.406    10          None          16      True
+deepseek-chat     H-01      MATCHUP     None       1.025      1.295    21          None          34      True
+deepseek-v4-pro   G-01      COUNTER_BY  1.216      2.995      3.175    109         93            18      True
+deepseek-v4-pro   B-01      ITEM_BUILD  1.13       8.46       9.099    679         596           109     True
+deepseek-v4-pro   B-03      INSCRIPTION 0.799      4.576      5.373    253         215           53      True
+deepseek-v4-pro   S-01      SYNERGY     1.273      2.865      2.92     96          81            16      True
+deepseek-v4-pro   T-01      GAMEPLAY    1.82       5.682      5.939    252         228           32      True
+deepseek-v4-pro   T-07      TIER_META   1.231      6.23       6.263    252         248           5       True
+deepseek-v4-pro   H-01      MATCHUP     1.383      4.288      4.301    175         171           5       True
+
+====================================================================================================
+汇总
+====================================================================================================
+[deepseek-chat]
+  首 token（正文）  ：mean=1.09s  min=0.88  max=1.36  n=7
+  首个思考分片      ：  （无 reasoning_content）
+  完整回答          ：mean=1.41s  max=1.87
+  reasoning_tokens  ：mean=0  max=0  （0 表示无思考过程）
+  completion_tokens ：mean=51  max=125
+  答案有据率        ：7/7 = 100.0%（判官失败 0 条剔除）
+[deepseek-v4-pro]
+  首 token（正文）  ：mean=5.01s  min=2.87  max=8.46  n=7
+  首个思考分片      ：1.216  1.13  0.799  1.273  1.82  1.231  1.383
+  完整回答          ：mean=5.30s  max=9.10
+  reasoning_tokens  ：mean=233  max=596  （0 表示无思考过程）
+  completion_tokens ：mean=259  max=679
+  答案有据率        ：7/7 = 100.0%（判官失败 0 条剔除）
+====================================================================================================
