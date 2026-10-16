@@ -1,11 +1,11 @@
 ﻿........................................................................ [ 26%]
-........................................................................ [ 53%]
+........................................................................ [ 52%]
 ........................................................................ [ 79%]
-.......................................................                  [100%]
+.........................................................                [100%]
 ============================== warnings summary ===============================
 tests/unit/test_retrieval_chroma.py::test_version_filter_actual_recall
   D:\javaProgram\honor-graphrag\.venv\Lib\site-packages\chromadb\api\collection_configuration.py:327: DeprecationWarning: legacy embedding function config: 'BgeEmbeddingFunction' object has no attribute 'is_legacy'
     return json.dumps(create_collection_configuration_to_json(config, metadata))
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-271 passed, 1 warning in 21.17s
+273 passed, 1 warning in 18.56s

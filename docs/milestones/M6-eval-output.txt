@@ -1,5 +1,6 @@
-﻿==============================================================================
-【评测集 coverage】38 条用例
+﻿固化答案集：docs\milestones\M6-golden-answers.json（无）  reuse_answers=False
+==============================================================================
+【评测集 coverage】69 条用例
 ==============================================================================
   OK  G-01  铠被谁克制  -> ['COUNTER_BY'] / ['answer']
   OK  G-02  谁能打铠  -> ['COUNTER_BY'] / ['answer']
@@ -8,14 +9,14 @@
   OK  G-05  貂蝉克制谁  -> ['COUNTER_OF'] / ['answer']
   OK  G-06  兰陵王能打谁  -> ['COUNTER_OF'] / ['answer']
 .\.venv\Scripts\python.exe : 
-At line:15 char:1601
-+ ... pgrep\bin'; .\.venv\Scripts\python.exe scripts/run_eval.py --set all  ...
+At line:15 char:1634
++ ... r-graphrag; .\.venv\Scripts\python.exe scripts/run_eval.py --set all  ...
 +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : NotSpecified: (:String) [], RemoteException
     + FullyQualifiedErrorId : NativeCommandError
  
 Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]
-Loading weights: 100%|██████████| 391/391 [00:00<00:00, 27711.61it/s]
+Loading weights: 100%|██████████| 391/391 [00:00<00:00, 24925.49it/s]
   OK  B-01  铠的出装  -> ['ITEM_BUILD'] / ['answer']
   OK  B-02  亚瑟怎么出装  -> ['ITEM_BUILD'] / ['answer']
   OK  B-03  貂蝉的铭文怎么搭配  -> ['INSCRIPTION'] / ['answer']
@@ -43,6 +44,37 @@ Loading weights: 100%|██████████| 391/391 [00:00<00:00, 2771
   OK  R-02  北京到上海多远  -> ['OUT_OF_SCOPE'] / ['reject']
   ERR R-03  推荐几部好看的电影  -> ['ENTITY_UNKNOWN'] / ['clarify']
   OK  R-04  1+1等于几  -> ['OUT_OF_SCOPE'] / ['reject']
+  OK  R-05  铭文怎么分解  -> ['INSCRIPTION'] / ['reject']
+  OK  R-06  铭文怎么合成  -> ['INSCRIPTION'] / ['reject']
+  OK  R-07  铭文最高几级  -> ['INSCRIPTION'] / ['reject']
+  OK  R-08  铭文怎么获得  -> ['INSCRIPTION'] / ['reject']
+  OK  R-09  红色铭文有哪些  -> ['INSCRIPTION'] / ['reject']
+  OK  R-10  铭文是什么  -> ['INSCRIPTION'] / ['reject']
+  OK  R-11  铭文怎么升级  -> ['INSCRIPTION'] / ['reject']
+  OK  R-12  鞋子怎么选  -> ['ITEM_BUILD'] / ['reject']
+  OK  R-13  鞋子有哪些种类  -> ['ITEM_BUILD'] / ['reject']
+  OK  R-14  装备栏怎么设置  -> ['ITEM_BUILD'] / ['reject']
+  OK  R-15  意识怎么培养  -> ['GAMEPLAY'] / ['reject']
+  OK  R-16  意识是什么  -> ['GAMEPLAY'] / ['reject']
+  OK  R-17  意识包括哪些  -> ['GAMEPLAY'] / ['reject']
+  OK  R-18  教程在哪里看  -> ['GAMEPLAY'] / ['reject']
+  OK  R-19  教学视频怎么看  -> ['GAMEPLAY'] / ['reject']
+  OK  R-20  版本什么时候更新  -> ['TIER_META'] / ['reject']
+  OK  R-21  版本更新了哪些内容  -> ['TIER_META'] / ['reject']
+  OK  R-22  版本t0是谁  -> ['TIER_META'] / ['reject']
+  OK  R-23  梯队是什么意思  -> ['TIER_META'] / ['reject']
+  OK  R-24  谁能克制  -> ['COUNTER_BY'] / ['reject']
+  OK  R-25  天敌是什么  -> ['COUNTER_BY'] / ['reject']
+  OK  R-26  搭档是什么意思  -> ['SYNERGY'] / ['reject']
+  OK  R-27  组合是什么  -> ['SYNERGY'] / ['reject']
+  OK  R-28  配合是什么  -> ['SYNERGY'] / ['reject']
+  OK  R-29  铭文搭配是什么意思  -> ['INSCRIPTION'] / ['reject']
+  OK  R-30  攻略是什么  -> ['GAMEPLAY'] / ['reject']
+  OK  R-31  技巧是什么  -> ['GAMEPLAY'] / ['reject']
+  OK  R-32  版本更新公告  -> ['TIER_META'] / ['reject']
+  OK  R-33  版本更新时间  -> ['TIER_META'] / ['reject']
+  OK  R-34  怕什么  -> ['COUNTER_BY'] / ['reject']
+  OK  R-35  搭档怎么选  -> ['SYNERGY'] / ['reject']
   OK  E-01  凯被谁克制  -> ['COUNTER_BY'] / ['answer']
   OK  E-02  兰凌王能打谁  -> ['COUNTER_OF'] / ['answer']
   OK  E-03  猴子怕谁  -> ['COUNTER_BY'] / ['answer']
@@ -131,7 +163,7 @@ Loading weights: 100%|██████████| 391/391 [00:00<00:00, 2771
 ==============================================================================
 
 [coverage]
-  意图路由准确率：41/42 = 97.6%
+  意图路由准确率：72/73 = 98.6%
   实体链接准确率：34/34 = 100.0%（分母=标注了应有实体的 turn）
   检索 Recall@5 ：26/26 = 100.0%（分母=标注了关键依据的 turn）
 
@@ -197,29 +229,31 @@ Loading weights: 100%|██████████| 391/391 [00:00<00:00, 2771
     （无）
 
 [拒答正确率·双向]
-  该拒未拒：2/12 = 16.7%  （标注应拒答的 turn 里没拒的）
+  该拒未拒：2/43 = 4.7%  （标注应拒答的 turn 里没拒的）
       [R-03#1] '推荐几部好看的电影' -> type=clarify
       [F-72#1] '推荐部好看的电影' -> type=clarify
   不该拒乱拒：1/104 = 1.0%  （标注不该拒的 turn 里被拒的）
       [F-47#1] '版本答案是什么' -> intent=TIER_META type=reject note=None
 
-[复合意图占比] 命中 ≥2 个意图：5/116 = 4.3%
+[复合意图占比] 命中 ≥2 个意图：6/147 = 4.1%
       [B-03#1] '貂蝉的铭文怎么搭配' -> ['INSCRIPTION', 'SYNERGY']
       [T-01#1] '貂蝉对线思路' -> ['GAMEPLAY', 'MATCHUP']
+      [R-29#1] '铭文搭配是什么意思' -> ['INSCRIPTION', 'SYNERGY']
       [F-07#1] '谁能针对猴子' -> ['COUNTER_BY', 'MATCHUP']
       [F-31#1] '东皇太一铭文搭配' -> ['INSCRIPTION', 'SYNERGY']
       [F-34#1] '亚瑟的对线思路' -> ['GAMEPLAY', 'MATCHUP']
 
-[guard 触发率] 走 LLM 生成的 turn 中 guard 拦下：2/77 = 2.6%
-      [T-05#1] '东皇太一的玩法' -> class_leak: '压制为核心的游走/对抗路'
-      [F-48#1] '这版本打野强势的有哪些' -> hero_leak: '花木兰'
+[guard 触发率] 走 LLM 生成的 turn 中 guard 拦下：1/79 = 1.3%
+      [M-02#2] '那他怕谁' -> class_leak: '克制亚瑟：没有多段位移的战士'
 
 [/api/chat/sync 端到端耗时·按响应类型]（秒；流式首 token 见 M6-latency）
-      answer           n=68   mean=6.53    p50=3.52    max=33.31
+      answer           n=68   mean=5.53    p50=3.36    max=19.69
       clarify          n=27   mean=0.01    p50=0.01    max=0.02
-      low_confidence   n=10   mean=8.41    p50=6.92    max=22.76
-      reject           n=11   mean=0.03    p50=0.01    max=0.19
+      low_confidence   n=10   mean=7.12    p50=5.22    max=17.96
+      reject           n=42   mean=0.1     p50=0.02    max=0.26
 
 [降级] 本轮 degraded=True 的 turn：0 条
 
-原始记录已写入：docs\milestones\M6-eval-raw.json（116 个 turn）
+原始记录已写入：docs\milestones\M6-eval-raw.json（147 个 turn）
+本轮复用固化答案 0/147 条，新生成 147 条
+固化答案集已写入：docs\milestones\M6-golden-answers.json（累计 147 条）

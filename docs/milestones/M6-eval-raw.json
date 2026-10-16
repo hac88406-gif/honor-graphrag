@@ -1,11 +1,11 @@
 {
   "summary": {
-    "total_turns": 116,
+    "total_turns": 147,
     "sets": {
       "coverage": {
         "intent": {
-          "total": 42,
-          "correct": 41
+          "total": 73,
+          "correct": 72
         },
         "entity": {
           "total": 34,
@@ -52,7 +52,7 @@
       }
     },
     "reject": {
-      "should_reject_total": 12,
+      "should_reject_total": 43,
       "missed": 2,
       "should_not_total": 104,
       "over": 1,
@@ -65,45 +65,48 @@
       ]
     },
     "composite": {
-      "total": 116,
-      "multi": 5,
+      "total": 147,
+      "multi": 6,
       "ids": [
         "B-03#1",
         "T-01#1",
+        "R-29#1",
         "F-07#1",
         "F-31#1",
         "F-34#1"
       ]
     },
     "guard": {
-      "llm_turns": 77,
-      "flagged": 0,
-      "flagged_ids": []
+      "llm_turns": 79,
+      "flagged": 1,
+      "flagged_ids": [
+        "M-02#2"
+      ]
     },
     "latency_sync": {
       "answer": {
         "n": 68,
-        "mean": 6.06,
-        "p50": 3.15,
-        "max": 29.3
+        "mean": 5.53,
+        "p50": 3.36,
+        "max": 19.69
       },
       "low_confidence": {
         "n": 10,
-        "mean": 6.87,
-        "p50": 5.07,
-        "max": 15.12
+        "mean": 7.12,
+        "p50": 5.22,
+        "max": 17.96
       },
       "clarify": {
         "n": 27,
-        "mean": 0.02,
+        "mean": 0.01,
         "p50": 0.01,
-        "max": 0.06
+        "max": 0.02
       },
       "reject": {
-        "n": 11,
-        "mean": 0.03,
-        "p50": 0.01,
-        "max": 0.19
+        "n": 42,
+        "mean": 0.1,
+        "p50": 0.02,
+        "max": 0.26
       }
     },
     "degraded_turns": 0
@@ -128,7 +131,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "公孙离、芈月、蒙恬、诸葛亮克制铠。",
+      "answer": "公孙离、芈月、蒙恬、诸葛亮。",
       "citations": [
         {
           "index": 1,
@@ -239,11 +242,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 104,
-        "reasoning_tokens": 89,
-        "reasoning_chars": 128,
-        "content_chars": 17,
+        "completion_tokens": 146,
+        "reasoning_tokens": 133,
+        "reasoning_chars": 204,
+        "content_chars": 14,
         "fallback": false,
         "streamed": true
       },
@@ -255,7 +260,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.053
+      "elapsed_s": 3.5,
+      "reused": false
     },
     {
       "case_id": "G-02",
@@ -276,7 +282,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "公孙离、芈月、蒙恬、诸葛亮。",
+      "answer": "依据资料，能克制铠的有：公孙离、芈月、蒙恬、诸葛亮。",
       "citations": [
         {
           "index": 1,
@@ -387,11 +393,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 79,
-        "reasoning_tokens": 66,
-        "reasoning_chars": 105,
-        "content_chars": 14,
+        "completion_tokens": 116,
+        "reasoning_tokens": 95,
+        "reasoning_chars": 147,
+        "content_chars": 26,
         "fallback": false,
         "streamed": true
       },
@@ -403,7 +411,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.617
+      "elapsed_s": 2.39,
+      "reused": false
     },
     {
       "case_id": "G-03",
@@ -649,10 +658,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 193,
-        "reasoning_tokens": 149,
-        "reasoning_chars": 222,
+        "completion_tokens": 190,
+        "reasoning_tokens": 146,
+        "reasoning_chars": 201,
         "content_chars": 48,
         "fallback": false,
         "streamed": true
@@ -665,7 +676,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.62
+      "elapsed_s": 3.324,
+      "reused": false
     },
     {
       "case_id": "G-04",
@@ -911,10 +923,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 132,
-        "reasoning_tokens": 87,
-        "reasoning_chars": 125,
+        "completion_tokens": 284,
+        "reasoning_tokens": 239,
+        "reasoning_chars": 342,
         "content_chars": 52,
         "fallback": false,
         "streamed": true
@@ -927,7 +941,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.618
+      "elapsed_s": 4.038,
+      "reused": false
     },
     {
       "case_id": "G-05",
@@ -1173,10 +1188,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 118,
-        "reasoning_tokens": 83,
-        "reasoning_chars": 117,
+        "completion_tokens": 129,
+        "reasoning_tokens": 94,
+        "reasoning_chars": 139,
         "content_chars": 35,
         "fallback": false,
         "streamed": true
@@ -1189,7 +1206,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.663
+      "elapsed_s": 2.928,
+      "reused": false
     },
     {
       "case_id": "G-06",
@@ -1210,7 +1228,7 @@
       "type": "answer",
       "intent": "COUNTER_OF",
       "confidence": 0.85,
-      "answer": "兰陵王克制：伽罗、元歌、周瑜、女娲、妲己、嬴政、孙尚香、孙膑、安琪拉、小乔。",
+      "answer": "兰陵王能打：伽罗、元歌、周瑜、女娲、妲己、嬴政、孙尚香、孙膑、安琪拉、小乔。",
       "citations": [
         {
           "index": 1,
@@ -1435,10 +1453,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 133,
-        "reasoning_tokens": 93,
-        "reasoning_chars": 121,
+        "completion_tokens": 205,
+        "reasoning_tokens": 164,
+        "reasoning_chars": 214,
         "content_chars": 38,
         "fallback": false,
         "streamed": true
@@ -1451,7 +1471,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.657
+      "elapsed_s": 3.396,
+      "reused": false
     },
     {
       "case_id": "B-01",
@@ -1472,7 +1493,7 @@
       "type": "answer",
       "intent": "ITEM_BUILD",
       "confidence": 0.7774519324302673,
-      "answer": "铠的推荐出装有两套：\n\n- 推荐出装一：抵抗之靴 → 暗影战斧 → 极寒风暴 → 宗师之力 → 不死鸟之眼 → 无尽战刃\n- 推荐出装二：抵抗之靴 → 暗影战斧 → 宗师之力 → 无尽战刃 → 强者破军 → 名刀·司命",
+      "answer": "铠的推荐出装有两套：\n\n1. 抵抗之靴 → 暗影战斧 → 极寒风暴 → 宗师之力 → 不死鸟之眼 → 无尽战刃  \n2. 抵抗之靴 → 暗影战斧 → 宗师之力 → 无尽战刃 → 强者破军 → 名刀·司命",
       "citations": [
         {
           "index": 1,
@@ -1759,11 +1780,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 256,
-        "reasoning_tokens": 173,
-        "reasoning_chars": 250,
-        "content_chars": 109,
+        "completion_tokens": 601,
+        "reasoning_tokens": 526,
+        "reasoning_chars": 708,
+        "content_chars": 101,
         "fallback": false,
         "streamed": true
       },
@@ -1775,7 +1798,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 14.071
+      "elapsed_s": 16.81,
+      "reused": false
     },
     {
       "case_id": "B-02",
@@ -1796,7 +1820,7 @@
       "type": "answer",
       "intent": "ITEM_BUILD",
       "confidence": 0.723624050617218,
-      "answer": "亚瑟有两套出装：\n\n1. 全防御出装：抵抗之靴 → 红莲斗篷 → 魔女斗篷 → 反伤刺甲 → 不祥征兆 → 霸者重装  \n   - 定位：团队前排，红莲斗篷加快清线，霸者重装提升续航。\n\n2. 冷却缩减流出装：抵抗之靴 → 暗影战斧 → 冰痕之握 → 反伤刺甲 → 不祥征兆 → 魔女斗篷  \n   - 定位：提供大量冷却缩减，频繁释放技能制造混乱和伤害。",
+      "answer": "亚瑟有两套出装：\n\n1. **全防御前排**  \n   抵抗之靴 → 红莲斗篷 → 魔女斗篷 → 反伤刺甲 → 不祥征兆 → 霸者重装  \n   思路：红莲斗篷加快清线，霸者重装提升续航，作为团队前排吸收伤害。\n\n2. **冷却缩减流**  \n   抵抗之靴 → 暗影战斧 → 冰痕之握 → 反伤刺甲 → 不祥征兆 → 魔女斗篷  \n   思路：提供大量冷却缩减，让亚瑟能频繁释放技能制造混乱和伤害。",
       "citations": [
         {
           "index": 1,
@@ -2083,11 +2107,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 712,
-        "reasoning_tokens": 581,
-        "reasoning_chars": 753,
-        "content_chars": 178,
+        "completion_tokens": 667,
+        "reasoning_tokens": 531,
+        "reasoning_chars": 680,
+        "content_chars": 200,
         "fallback": false,
         "streamed": true
       },
@@ -2099,7 +2125,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 8.664
+      "elapsed_s": 7.424,
+      "reused": false
     },
     {
       "case_id": "B-03",
@@ -2120,7 +2147,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "（本次只回答了「铭文」；您还提到了「搭档搭配」，可以继续追问。）\n貂蝉有两套铭文搭配：\n\n- 第1套：红·梦魇、蓝·怜悯、黄·轮回\n- 第2套：红·圣人、蓝·虚空、黄·轮回",
+      "answer": "（本次只回答了「铭文」；您还提到了「搭档搭配」，可以继续追问。）\n貂蝉的铭文可按以下两套搭配：\n\n1. 第1套：红色梦魇、蓝色怜悯、黄色轮回  \n2. 第2套：红色圣人、蓝色虚空、黄色轮回",
       "citations": [
         {
           "index": 1,
@@ -2264,11 +2291,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 184,
-        "reasoning_tokens": 138,
-        "reasoning_chars": 189,
-        "content_chars": 53,
+        "completion_tokens": 135,
+        "reasoning_tokens": 90,
+        "reasoning_chars": 125,
+        "content_chars": 61,
         "fallback": false,
         "streamed": true
       },
@@ -2280,7 +2309,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.212
+      "elapsed_s": 3.147,
+      "reused": false
     },
     {
       "case_id": "B-04",
@@ -2301,7 +2331,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "后羿铭文有两套：\n\n第1套：红·红月、蓝·鹰眼、黄·隐匿  \n第2套：红·圣人、蓝·虚空、黄·轮回",
+      "answer": "后羿铭文：\n\n- 第1套：红月、鹰眼、隐匿\n- 第2套：圣人、虚空、轮回",
       "citations": [
         {
           "index": 1,
@@ -2444,11 +2474,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
         "completion_tokens": 154,
-        "reasoning_tokens": 113,
-        "reasoning_chars": 160,
-        "content_chars": 49,
+        "reasoning_tokens": 123,
+        "reasoning_chars": 177,
+        "content_chars": 36,
         "fallback": false,
         "streamed": true
       },
@@ -2460,7 +2492,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.134
+      "elapsed_s": 3.351,
+      "reused": false
     },
     {
       "case_id": "S-01",
@@ -2554,10 +2587,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 118,
-        "reasoning_tokens": 103,
-        "reasoning_chars": 150,
+        "completion_tokens": 82,
+        "reasoning_tokens": 67,
+        "reasoning_chars": 101,
         "content_chars": 16,
         "fallback": false,
         "streamed": true
@@ -2570,7 +2605,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.928
+      "elapsed_s": 2.611,
+      "reused": false
     },
     {
       "case_id": "S-02",
@@ -2664,10 +2700,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
         "completion_tokens": 62,
         "reasoning_tokens": 49,
-        "reasoning_chars": 77,
+        "reasoning_chars": 75,
         "content_chars": 16,
         "fallback": false,
         "streamed": true
@@ -2680,7 +2718,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.059
+      "elapsed_s": 2.283,
+      "reused": false
     },
     {
       "case_id": "T-01",
@@ -2702,7 +2741,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.737014651298523,
-      "answer": "（本次只回答了「打法思路」；您还提到了「怎么打」，可以继续追问。）\n资料中仅提到：貂蝉对线期应尽量用技能命中敌人，保持花之印记层数；叠满四层后触发真实伤害与减速。",
+      "answer": "（本次只回答了「打法思路」；您还提到了「怎么打」，可以继续追问。）\n对线期应尽量用技能命中敌人保持花之印记层数，叠满四层触发真实伤害与减速进行消耗；同时注意用二技能位移躲避技能，避免被张良硬控打断节奏，或被花木兰高爆发击杀。",
       "citations": [
         {
           "index": 1,
@@ -2828,11 +2867,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 573,
-        "reasoning_tokens": 537,
-        "reasoning_chars": 798,
-        "content_chars": 47,
+        "completion_tokens": 688,
+        "reasoning_tokens": 634,
+        "reasoning_chars": 955,
+        "content_chars": 78,
         "fallback": false,
         "streamed": true
       },
@@ -2844,7 +2885,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 8.362
+      "elapsed_s": 9.929,
+      "reused": false
     },
     {
       "case_id": "T-02",
@@ -2866,7 +2908,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.6963136196136475,
-      "answer": "【攻略依据】\n- 、55/82.5/110点伤害格挡，每0.5秒对附近的敌人造成50/75/100(+16%额外物理攻击)法术伤害(0.5秒1次，持续8秒)。 再次点击可以提前关闭技能。 ## 最佳搭档（官方原文理由） - 宫本武藏：铠配合宫本小团战战斗力爆\n- → 暗影战斧 → 宗师之力 → 无尽战刃 → 强者破军 → 名刀·司命 - Tips：半肉出装的铠，侵略性不减且生存能力得到提升，暗影战斧和极寒风暴保障前中期续航，宗师之力让铠的强化普攻打出爆发性伤害 - Tips：铠凭借被动在面对落单的敌\n- 会回复350/420/490/560/630/700(+7%额外生命值)生命并减少30%技能冷却，同时增加15/18/21/24/27/30%移速和15/18/21/24/27/30%攻速，持续3秒。 - **极刃风暴**：向指定方向挥砍两",
+      "answer": "铠玩法要点（依据资料）：\n\n- **分路**：打野 / 对抗路，上手难度20。\n- **核心机制**：被动“修罗之魂”让普攻和极刃风暴只命中一个目标时额外造成50%伤害，尽量抓落单。\n- **技能使用**：用“回旋之刃”减速、回血、减冷却；“极刃风暴”可击飞并强化下次普攻；大招“不灭魔躯”提供攻击、生命、移速和伤害格挡，持续8秒。\n- **推荐出装一**：抵抗之靴 → 暗影战斧 → 极寒风暴 → 宗师之力 → 不死鸟之眼 → 无尽战刃。\n- **推荐出装二**：抵抗之靴 → 暗影战斧 → 宗师之力 → 无尽战刃 → 强者破军 → 名刀·司命。\n- **铭文选择**：传承、鹰眼、隐匿；或圣人、虚空、轮回。\n- **打法提示**：半肉出装侵略性不减且生存提升；暗影战斧和极寒风暴保障前中期续航，宗师之力强化普攻爆发；面对落单敌人时伤害大幅提升，全输出可一击必杀。\n- **配合与克制**：适合搭配宫本武藏、花木兰打小团战；可压制鲁班七号、后羿；需注意芈月、诸葛亮。",
       "citations": [
         {
           "index": 1,
@@ -2966,16 +3008,33 @@
       "generation": {
         "mode": "llm",
         "model": "deepseek-v4-pro",
-        "guard": null,
+        "guard": {
+          "ok": true,
+          "reason": "",
+          "detail": "",
+          "degraded": false
+        },
         "guard_degraded": false,
-        "fallback": true,
-        "error": "LLMGenerationError: 生成结果不可用：空答案（finish_reason=length）",
+        "temperature": 0.0,
+        "seed": 42,
+        "finish_reason": "stop",
+        "completion_tokens": 1301,
+        "reasoning_tokens": 994,
+        "reasoning_chars": 1467,
+        "content_chars": 434,
+        "fallback": false,
         "streamed": true
       },
-      "guard": null,
+      "guard": {
+        "ok": true,
+        "reason": "",
+        "detail": "",
+        "degraded": false
+      },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 28.86
+      "elapsed_s": 15.701,
+      "reused": false
     },
     {
       "case_id": "T-03",
@@ -2997,7 +3056,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.7129225730895996,
-      "answer": "兰陵王连招以二技能「秘技·影蚀」为核心：先手匕首标记目标，后续攻击可触发晕眩并回血；常见顺序是先手二技能匕首，再接一技能「秘技·分身」与大招「秘技·暗袭」完成斩杀。中后期也可用二技能配合一技能控制后接大招秒杀。",
+      "answer": "兰陵王连招以二技能为核心：先手用二技能“秘技·影蚀”命中标记目标，再接一技能“秘技·分身”触发晕眩与回血，最后用大招“秘技·暗袭”完成斩杀。中后期也可用二技能配合一技能控制后接大招直接秒杀。",
       "citations": [
         {
           "index": 1,
@@ -3122,11 +3181,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 320,
-        "reasoning_tokens": 241,
-        "reasoning_chars": 375,
-        "content_chars": 105,
+        "completion_tokens": 267,
+        "reasoning_tokens": 194,
+        "reasoning_chars": 288,
+        "content_chars": 95,
         "fallback": false,
         "streamed": true
       },
@@ -3138,7 +3199,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 5.2
+      "elapsed_s": 4.575,
+      "reused": false
     },
     {
       "case_id": "T-04",
@@ -3160,7 +3222,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.7327296733856201,
-      "answer": "后羿依靠普攻持续输出，保持对线期普攻节奏，叠满三层被动进入强化状态射出三支箭矢。一技能强化普攻并附带范围伤害，二技能提供视野与减速，大招是全图眩晕箭，飞行距离越远晕眩越久，可先手开团或远程支援。\n\n后羿缺乏位移、身板脆弱，对线期应保持安全距离并留意刺客动向。对百里守约可在其二技能蓄力时放大招集火；对张良开大控制队友时放箭打断。\n\n搭档可选钟馗（钩子承接大招命中）和牛魔（被动与控制提供保护）。出装以吸血与攻速为主，逐日之弓能让输出位置更安全。",
+      "answer": "后羿的打法以普攻持续输出为主：对线期保持普攻节奏，叠满被动三层后进入强化状态射出三支箭矢；一技能强化普攻并附带范围伤害，二技能提供视野与减速，大招可全图眩晕，飞行距离越远晕眩越久，适合先手开团或远程支援。\n\n由于后羿缺乏位移、身板脆弱，对线期应保持安全距离，留意敌方刺客；要警惕妲己这类高爆发法师一套带走，也要注意李白利用不可选中躲避关键技能。压制百里守约时，可趁其二技能蓄力无法移动时放大招集火；张良开大控制队友时，可立即放箭打断。\n\n搭档上可选择钟馗承接后羿大招命中，或牛魔提供保护。出装以吸血与攻速为主，逐日之弓能让后羿输出位置更安全。",
       "citations": [
         {
           "index": 1,
@@ -3267,11 +3329,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 1440,
-        "reasoning_tokens": 1281,
-        "reasoning_chars": 1929,
-        "content_chars": 222,
+        "completion_tokens": 839,
+        "reasoning_tokens": 647,
+        "reasoning_chars": 982,
+        "content_chars": 271,
         "fallback": false,
         "streamed": true
       },
@@ -3283,7 +3347,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 17.857
+      "elapsed_s": 10.222,
+      "reused": false
     },
     {
       "case_id": "T-05",
@@ -3305,7 +3370,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.6491281986236572,
-      "answer": "东皇太一以**压制**为核心，走游走/对抗路，上手难度中等。\n\n- **持续作战**：被动与一技能会生成黑暗能量体，能量体提供伤害与回复，也决定二技能威力，尽量保持能量体数量。\n- **大招用法**：大招「堕神契约」可压制目标两秒，双方无法操作并承受等量伤害，用于稳定开团或保人；但释放时自身会暴露在集火下，需保持最大生命值优势才安全。\n- **出装思路**：以堆叠生命值为主，保证大招释放时生存。\n  - 推荐出装一：未收录(1722) → 疾步之靴 → 红莲斗篷 → 不死鸟之眼 → 霸者重装 → 不祥征兆\n  - 推荐出装二：未收录(1722) → 疾步之靴 → 红莲斗篷 → 魔女斗篷 → 极寒风暴 → 霸者重装\n- **铭文**：\n  - 搭配一：宿命、虚空、调和\n  - 搭配二：圣人、虚空、轮回\n- **搭档**：马可波罗、阿轲\n- **压制**：露娜、太乙真人\n- **被克制**：蔡文姬、牛魔",
+      "answer": "东皇太一定位游走/对抗路，以压制为核心。玩法上，被动和一技能会生成黑暗能量体，能量体提供伤害与回复，也决定二技能威力，需尽量保持能量体数量。大招可压制目标两秒，双方无法操作并承受等量伤害，适合开团和保护核心；但释放时自身会暴露在集火下，需保持最大生命值优势。\n\n出装铭文：铭文可选“宿命、虚空、调和”或“圣人、虚空、轮回”。出装以堆生命值为主，推荐装备有疾步之靴、红莲斗篷、不死鸟之眼、魔女斗篷、极寒风暴、霸者重装、不祥征兆。疾步之靴便于无闪现时开大，极寒风暴能减少技能真空期。\n\n搭档：马可波罗、阿轲。  \n压制：露娜、太乙真人。  \n被克制：蔡文姬、牛魔。",
       "citations": [
         {
           "index": 1,
@@ -3430,11 +3495,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 666,
-        "reasoning_tokens": 378,
-        "reasoning_chars": 552,
-        "content_chars": 405,
+        "completion_tokens": 1796,
+        "reasoning_tokens": 1589,
+        "reasoning_chars": 2315,
+        "content_chars": 280,
         "fallback": false,
         "streamed": true
       },
@@ -3446,7 +3513,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 8.922
+      "elapsed_s": 19.686,
+      "reused": false
     },
     {
       "case_id": "T-06",
@@ -3467,7 +3535,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.6384660601615906,
-      "answer": "【攻略依据】\n- 但会增加攻击间隔 - **空裂斩**：花木兰冲锋后向指定方向挥砍，对命中的目标造成60/70/80/90/100/110（+40%物理加成）点物理伤害；如果该技能命中目标，可在5秒内发起第二次空裂斩。 - **旋舞之华**：花木兰投掷轻剑，\n- # 花木兰 · 官方数据聚合 - 英雄：花木兰（传说之刃） - 分路：对抗路 - 上手难度：80 ## 技能描述（官方原文） - **长城巡守者**：花木兰使用轻剑普攻和技能伤害会对目标叠加平衡印记(持续5秒，最多5层)，满层对目标造成(+\n- ## 最佳搭档（官方原文理由） - 庄周：庄周：庄周的大招拥有免控效果加免伤，而花木兰也有免伤技能，两个技能双叠加可以保证自己团战存活能力，免控可以保证花木兰可以打出很好的输出（轻松切入敌方后排）。 - 刘邦：刘邦：花木兰是需要深入敌后的战",
+      "answer": "花木兰玩法可参考以下要点：\n\n**技能思路**\n- 轻剑形态：用普攻和技能叠加平衡印记，叠满5层可触发沉默、极限减速和回复。\n- 空裂斩命中后，5秒内可再次释放第二段。\n- 旋舞之华可远程消耗和减速，拾起轻剑会减少5秒冷却。\n- 重剑形态：技能期间获得霸体和40%减伤，普攻额外造成伤害，但会增加攻击间隔。\n- 绽放刀锋可切换重剑，并获得90物理攻击力，持续5秒。\n\n**实战思路**\n- 蹲草抓人：可先手旋舞之华命中，配合普攻打出沉默，再切换重剑打一套伤害。\n- 团战：可配合庄周大招免控免伤，或配合刘邦大招保护，切入后排或打重剑控制。\n- 注意牛魔这类带控制的坦克会限制轻剑发挥；诸葛亮高爆发且灵活，花木兰较难应对。\n\n**铭文**\n- 搭配一：异变、鹰眼、隐匿\n- 搭配二：圣人、虚空、轮回\n\n**出装**\n- 推荐一：影忍之足 → 暗影战斧 → 不祥征兆 → 强者破军 → 魔女斗篷 → 名刀·司命\n- 推荐二：抵抗之靴 → 暗影战斧 → 不祥征兆 → 魔女斗篷 → 碎星锤 → 血魔之怒\n\n**官方Tips**\n- 花木兰霸体不怕控制，可选影忍之足增强坦度。\n- 暗影战斧与名刀·司命提供冷却缩减，便于调整位置追击。\n- 蓄力时容易受到大量伤害，血魔之怒被动触发时可作为释放技能前奏，提升蓄力输出并让血线更安全。",
       "citations": [
         {
           "index": 1,
@@ -3567,16 +3635,33 @@
       "generation": {
         "mode": "llm",
         "model": "deepseek-v4-pro",
-        "guard": null,
+        "guard": {
+          "ok": true,
+          "reason": "",
+          "detail": "",
+          "degraded": false
+        },
         "guard_degraded": false,
-        "fallback": true,
-        "error": "LLMGenerationError: 生成结果不可用：空答案（finish_reason=length）",
+        "temperature": 0.0,
+        "seed": 42,
+        "finish_reason": "stop",
+        "completion_tokens": 1279,
+        "reasoning_tokens": 877,
+        "reasoning_chars": 1256,
+        "content_chars": 561,
+        "fallback": false,
         "streamed": true
       },
-      "guard": null,
+      "guard": {
+        "ok": true,
+        "reason": "",
+        "detail": "",
+        "degraded": false
+      },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 29.299
+      "elapsed_s": 16.205,
+      "reused": false
     },
     {
       "case_id": "T-07",
@@ -3713,10 +3798,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 127,
-        "reasoning_tokens": 123,
-        "reasoning_chars": 195,
+        "completion_tokens": 518,
+        "reasoning_tokens": 514,
+        "reasoning_chars": 808,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -3729,7 +3816,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.238
+      "elapsed_s": 8.298,
+      "reused": false
     },
     {
       "case_id": "T-08",
@@ -3748,7 +3836,7 @@
       "type": "answer",
       "intent": "TIER_META",
       "confidence": 0.6137293577194214,
-      "answer": "资料中仅明确提到：高渐离是“版本最强的AOE爆发输出流法师之一”。其他英雄是否强势，资料不足。",
+      "answer": "资料不足。",
       "citations": [
         {
           "index": 1,
@@ -3866,11 +3954,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 1015,
-        "reasoning_tokens": 985,
-        "reasoning_chars": 1584,
-        "content_chars": 47,
+        "completion_tokens": 842,
+        "reasoning_tokens": 838,
+        "reasoning_chars": 1407,
+        "content_chars": 5,
         "fallback": false,
         "streamed": true
       },
@@ -3882,7 +3972,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 15.382
+      "elapsed_s": 11.499,
+      "reused": false
     },
     {
       "case_id": "H-01",
@@ -4204,10 +4295,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 89,
-        "reasoning_tokens": 85,
-        "reasoning_chars": 146,
+        "completion_tokens": 179,
+        "reasoning_tokens": 175,
+        "reasoning_chars": 287,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -4220,7 +4313,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.739
+      "elapsed_s": 3.587,
+      "reused": false
     },
     {
       "case_id": "H-02",
@@ -4543,10 +4637,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 35,
-        "reasoning_tokens": 31,
-        "reasoning_chars": 54,
+        "completion_tokens": 87,
+        "reasoning_tokens": 83,
+        "reasoning_chars": 127,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -4559,7 +4655,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.205
+      "elapsed_s": 2.502,
+      "reused": false
     },
     {
       "case_id": "H-03",
@@ -4768,10 +4865,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 78,
-        "reasoning_tokens": 74,
-        "reasoning_chars": 110,
+        "completion_tokens": 160,
+        "reasoning_tokens": 156,
+        "reasoning_chars": 232,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -4784,7 +4883,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.097
+      "elapsed_s": 3.397,
+      "reused": false
     },
     {
       "case_id": "H-04",
@@ -4830,7 +4930,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.06
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "H-05",
@@ -4876,7 +4977,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.012,
+      "reused": false
     },
     {
       "case_id": "M-01",
@@ -5006,10 +5108,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 114,
-        "reasoning_tokens": 95,
-        "reasoning_chars": 136,
+        "completion_tokens": 146,
+        "reasoning_tokens": 127,
+        "reasoning_chars": 189,
         "content_chars": 23,
         "fallback": false,
         "streamed": true
@@ -5022,7 +5126,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.363
+      "elapsed_s": 3.034,
+      "reused": false
     },
     {
       "case_id": "M-01",
@@ -5041,7 +5146,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "铠铭文有两套：\n\n第1套铭文：红·传承、蓝·鹰眼、黄·隐匿  \n第2套铭文：红·圣人、蓝·虚空、黄·轮回",
+      "answer": "铠铭文有两套：\n\n第1套：红·传承、蓝·鹰眼、黄·隐匿  \n第2套：红·圣人、蓝·虚空、黄·轮回",
       "citations": [
         {
           "index": 1,
@@ -5184,11 +5289,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 148,
-        "reasoning_tokens": 105,
-        "reasoning_chars": 142,
-        "content_chars": 52,
+        "completion_tokens": 159,
+        "reasoning_tokens": 120,
+        "reasoning_chars": 168,
+        "content_chars": 48,
         "fallback": false,
         "streamed": true
       },
@@ -5200,7 +5307,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.144
+      "elapsed_s": 2.585,
+      "reused": false
     },
     {
       "case_id": "M-02",
@@ -5219,7 +5327,7 @@
       "type": "answer",
       "intent": "ITEM_BUILD",
       "confidence": 0.723624050617218,
-      "answer": "亚瑟推荐出装有两套：\n\n1. 全防御出装：抵抗之靴 → 红莲斗篷 → 魔女斗篷 → 反伤刺甲 → 不祥征兆 → 霸者重装  \n   思路：作为团队前排，为队友争取输出空间；红莲斗篷帮助快速清线，霸者重装提升续航。\n\n2. 冷却缩减流出装：抵抗之靴 → 暗影战斧 → 冰痕之握 → 反伤刺甲 → 不祥征兆 → 魔女斗篷  \n   思路：提供大量冷却缩减，让亚瑟频繁释放技能制造混乱和伤害。",
+      "answer": "亚瑟有两套推荐出装：\n\n1. 全防御出装：抵抗之靴 → 红莲斗篷 → 魔女斗篷 → 反伤刺甲 → 不祥征兆 → 霸者重装  \n2. 冷却缩减流出装：抵抗之靴 → 暗影战斧 → 冰痕之握 → 反伤刺甲 → 不祥征兆 → 魔女斗篷",
       "citations": [
         {
           "index": 1,
@@ -5506,11 +5614,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 511,
-        "reasoning_tokens": 372,
-        "reasoning_chars": 498,
-        "content_chars": 193,
+        "completion_tokens": 686,
+        "reasoning_tokens": 596,
+        "reasoning_chars": 805,
+        "content_chars": 113,
         "fallback": false,
         "streamed": true
       },
@@ -5522,7 +5632,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 7.064
+      "elapsed_s": 8.217,
+      "reused": false
     },
     {
       "case_id": "M-02",
@@ -5541,7 +5652,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.723624050617218,
-      "answer": "亚瑟怕：孙尚香、百里守约、项羽。  \n- 孙尚香很容易风筝亚瑟  \n- 百里守约：没有多段位移的战士不会对百里守约造成太大威胁  \n- 项羽：亚瑟入场后，项羽能将他推开或控制，限制其输出与控制",
+      "answer": "【图谱依据】\n- 孙尚香 克制 亚瑟：孙尚香很容易风筝亚瑟\n- 百里守约 克制 亚瑟：没有多段位移的战士不会对百里守约造成太大的威胁\n- 项羽 克制 亚瑟：亚瑟入场后，项羽能将他推开或控制，限制对友方的输出与控制\n【攻略依据】\n- 亚瑟是上手难度最低的对抗路英雄之一，被动圣光守护提供持续回复，让他在换血与清线上都不吃亏。对线期的核心是二技能誓约之盾的沉默：面对韩信这类高度依赖技能的英雄，一次沉默就能打断整套连招，因此不必急着交出大招，等对方交技能再反打更划算。一技能回\n- 默来保护己方脆弱目标，甚至可以直接使用大招配合队友控制击杀阿轲。 ## 被压制英雄（官方原文理由） - 项羽：亚瑟入场后，项羽能将他推开或控制，限制对友方的输出与控制 - 孙尚香：孙尚香很容易风筝亚瑟 ## 官方铭文与出装说明 - 铭文搭配\n- 。 - **圣剑裁决**：亚瑟举起圣剑跃向敌方英雄，造成其16/20/24%最大生命的法术伤害并会将范围内的敌人击飞0.5秒。同时召唤圣印对范围内敌人造成每秒85/105/125点法术伤害，持续5秒。 ## 最佳搭档（官方原文理由） - 鲁",
       "citations": [
         {
           "index": 1,
@@ -5699,29 +5810,34 @@
         "mode": "llm",
         "model": "deepseek-v4-pro",
         "guard": {
-          "ok": true,
-          "reason": "",
-          "detail": "",
+          "ok": false,
+          "reason": "class_leak",
+          "detail": "克制亚瑟：没有多段位移的战士",
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 480,
-        "reasoning_tokens": 413,
-        "reasoning_chars": 621,
-        "content_chars": 96,
-        "fallback": false,
+        "completion_tokens": 647,
+        "reasoning_tokens": 571,
+        "reasoning_chars": 850,
+        "content_chars": 121,
+        "raw_answer": "亚瑟怕的英雄包括：\n\n- **项羽**：亚瑟入场后，项羽能将他推开或控制，限制对友方的输出与控制。\n- **孙尚香**：孙尚香很容易风筝亚瑟。\n\n此外，资料中也提到 **百里守约** 克制亚瑟：没有多段位移的战士不会对百里守约造成太大的威胁。",
+        "fallback": true,
+        "error": "生成后校验不通过（class_leak）：克制亚瑟：没有多段位移的战士",
         "streamed": true
       },
       "guard": {
-        "ok": true,
-        "reason": "",
-        "detail": "",
+        "ok": false,
+        "reason": "class_leak",
+        "detail": "克制亚瑟：没有多段位移的战士",
         "degraded": false
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 7.615
+      "elapsed_s": 8.509,
+      "reused": false
     },
     {
       "case_id": "M-03",
@@ -5740,7 +5856,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "资料中克制貂蝉（即貂蝉怕）的英雄有：妲己、张良、甄姬、花木兰、蔡文姬、赵怀真、高渐离。",
+      "answer": "根据资料，貂蝉怕：妲己、张良、甄姬、花木兰、蔡文姬、赵怀真、高渐离。",
       "citations": [
         {
           "index": 1,
@@ -5908,11 +6024,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 711,
-        "reasoning_tokens": 671,
-        "reasoning_chars": 974,
-        "content_chars": 43,
+        "completion_tokens": 648,
+        "reasoning_tokens": 615,
+        "reasoning_chars": 876,
+        "content_chars": 34,
         "fallback": false,
         "streamed": true
       },
@@ -5924,7 +6042,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 9.714
+      "elapsed_s": 7.582,
+      "reused": false
     },
     {
       "case_id": "M-03",
@@ -6061,11 +6180,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 711,
-        "reasoning_tokens": 671,
-        "reasoning_chars": 974,
-        "content_chars": 43,
+        "completion_tokens": 648,
+        "reasoning_tokens": 615,
+        "reasoning_chars": 876,
+        "content_chars": 34,
         "fallback": false,
         "streamed": true
       },
@@ -6077,7 +6198,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.016
+      "elapsed_s": 0.015,
+      "reused": false
     },
     {
       "case_id": "M-04",
@@ -6121,7 +6243,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.011,
+      "reused": false
     },
     {
       "case_id": "M-04",
@@ -6289,10 +6412,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 136,
-        "reasoning_tokens": 108,
-        "reasoning_chars": 154,
+        "completion_tokens": 73,
+        "reasoning_tokens": 45,
+        "reasoning_chars": 63,
         "content_chars": 31,
         "fallback": false,
         "streamed": true
@@ -6305,7 +6430,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.981
+      "elapsed_s": 2.259,
+      "reused": false
     },
     {
       "case_id": "R-01",
@@ -6340,7 +6466,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.014
+      "elapsed_s": 0.012,
+      "reused": false
     },
     {
       "case_id": "R-02",
@@ -6375,7 +6502,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.013
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "R-03",
@@ -6417,7 +6545,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.014
+      "elapsed_s": 0.015,
+      "reused": false
     },
     {
       "case_id": "R-04",
@@ -6452,7 +6581,2083 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.011
+      "elapsed_s": 0.011,
+      "reused": false
+    },
+    {
+      "case_id": "R-05",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "铭文怎么分解",
+      "expected_intent": "INSCRIPTION",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "INSCRIPTION",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "INSCRIPTION"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "铭文怎么分解",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.017,
+      "reused": false
+    },
+    {
+      "case_id": "R-06",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "铭文怎么合成",
+      "expected_intent": "INSCRIPTION",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "INSCRIPTION",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "INSCRIPTION"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "铭文怎么合成",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.017,
+      "reused": false
+    },
+    {
+      "case_id": "R-07",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "铭文最高几级",
+      "expected_intent": "INSCRIPTION",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "INSCRIPTION",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "INSCRIPTION"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "铭文最高几级",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.017,
+      "reused": false
+    },
+    {
+      "case_id": "R-08",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "铭文怎么获得",
+      "expected_intent": "INSCRIPTION",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "INSCRIPTION",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "INSCRIPTION"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "铭文怎么获得",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.017,
+      "reused": false
+    },
+    {
+      "case_id": "R-09",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "红色铭文有哪些",
+      "expected_intent": "INSCRIPTION",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "INSCRIPTION",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "INSCRIPTION"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "红色铭文有哪些",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.017,
+      "reused": false
+    },
+    {
+      "case_id": "R-10",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "铭文是什么",
+      "expected_intent": "INSCRIPTION",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "INSCRIPTION",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "INSCRIPTION"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "铭文是什么",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.021,
+      "reused": false
+    },
+    {
+      "case_id": "R-11",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "铭文怎么升级",
+      "expected_intent": "INSCRIPTION",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "INSCRIPTION",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "INSCRIPTION"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "铭文怎么升级",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.263,
+      "reused": false
+    },
+    {
+      "case_id": "R-12",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "鞋子怎么选",
+      "expected_intent": "ITEM_BUILD",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "ITEM_BUILD",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "ITEM_BUILD"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "鞋子怎么选",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": 0.4136396646499634,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "、虚空、轮回\n- 推荐出装一：冷静之靴 → 暗影战斧 → 无尽战刃 → 影刃 → 强者破军 → 贤者的庇护\n- 推荐出装二：急速战靴 → 暗影战斧 → 无尽战刃 → 影刃 → 仁者破晓 → 贤者的庇护\n- Tips：累积高额攻击力为1技能输出提供属性支持，没有自保能力的射手需要一件防御性装备增加容错\n- Tips：常规射手出装，利用攻速转冷却的特点获得高额冷却效果，做到输出无空挡，纯粹的火力压制流派",
+          "relation": null,
+          "score": 0.4136396646499634,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "524"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "的英雄和小兵会被标记，持续5秒。\n孙尚香普攻对被标记的英雄额外造成120/144/168/192/216/240(+36%物理攻击)物理伤害，对被标记的小兵额外造成240(+60%物理攻击)物理伤害。\n- **究极弩炮**：孙尚香蓄力向指定方向发射一枚弩炮，弩炮在触碰敌人或者飞行到最远距离后将发生爆炸，对第一名触碰的敌人造成800/1260/1680（+250%物理加成）点物理伤害，对爆破范围内的敌人造成75%伤害。\n## 最佳搭档（官方原文理由）\n- 庄周：庄周：孙尚香是比较灵活的射手类英雄，但是如果被控制怎么也灵活不起来，所以推荐庄周作为孙尚香的搭档，在携带净化的情况下，无论是单抓还是团战，孙尚香都不在畏惧敌方的控制性技能，轻松打出成吨的输出。\n- 东皇太一：东皇太一：东皇太一的大招可以控制敌方英雄，是应对敌方突进英雄的不二选择，东皇的超强回复能力注定了东皇也是一名合格的坦克，有东皇在前排吸收敌方火力，后排的孙尚香就可以安心输出。\n## 压制英雄（官方原文理由）",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "111"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "荐出装二：追击刀锋 → 抵抗之靴 → 暗影战斧 → 宗师之力 → 强者破军 → 泣血之刃\n- Tips：暗影战斧和追击刀锋提供前期发育速度和前期强度，纯净苍穹补强中期对拼强度，泣血之刃提供续航持续作战\n- Tips：暗影战斧宗师之力提供前期发育速度和爆发能力 破军增加切入后排的穿甲爆发，提高击杀成功率 泣血之刃提供续航，持续作战",
+          "relation": null,
+          "score": 0.3975521922111511,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "549"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "虚无法杖 → 贤者天书 → 辉月\n- 推荐出装二：冷静之靴 → 噬神之书 → 炽热支配 → 博学者之怒 → 虚无法杖 → 辉月\n- Tips：法师常规爆发输出装备，最大化输出能力 同时辉月提供保命手段\n- Tips：法师高容错率出装，容错率较高的同时拉满了冷却缩减，技能真空期较短",
+          "relation": null,
+          "score": 0.3837050199508667,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "138"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "空、轮回\n- 推荐出装一：影忍之足 → 暗影战斧 → 强者破军 → 碎星锤 → 魔女斗篷 → 不祥征兆\n- 推荐出装二：影忍之足 → 巨人之握 → 暗影战斧 → 强者破军 → 贤者的庇护 → 宗师之力\n- Tips：因为蓄力猛击提供的霸体效果，我们可以考虑放弃抵抗之靴选择影忍之足，前期可以优先出到一件陨星，提升伤害的同时加速清线游走频率。中后期转型成为队伍开团点，选择提升双抗强化肉度\n- Tips：蓄力猛击提供霸体效果，所以放弃抵抗之靴选择影忍之足.前期优先出肉打野刀，小规模团战增强坦度，后期补足输出，能抗能打",
+          "relation": null,
+          "score": 0.37722086906433105,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "527"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.216,
+      "reused": false
+    },
+    {
+      "case_id": "R-13",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "鞋子有哪些种类",
+      "expected_intent": "ITEM_BUILD",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "ITEM_BUILD",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "ITEM_BUILD"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "鞋子有哪些种类",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": 0.3719191551208496,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "、虚空、轮回\n- 推荐出装一：冷静之靴 → 暗影战斧 → 无尽战刃 → 影刃 → 强者破军 → 贤者的庇护\n- 推荐出装二：急速战靴 → 暗影战斧 → 无尽战刃 → 影刃 → 仁者破晓 → 贤者的庇护\n- Tips：累积高额攻击力为1技能输出提供属性支持，没有自保能力的射手需要一件防御性装备增加容错\n- Tips：常规射手出装，利用攻速转冷却的特点获得高额冷却效果，做到输出无空挡，纯粹的火力压制流派",
+          "relation": null,
+          "score": 0.3719191551208496,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "524"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "再次释放时，若返回第一段起点附近，则强化第二段，燕返向后跳并斩击更大范围内的敌人，目标每损失2%最大生命就会增加强化燕返1%伤害，并且每命中一个敌方单位即可减少【细雪】1秒冷却时间(非英雄单位减半)。\n- **居合**：橘右京快速拔刀，对路径上的敌人造成580/696/812/928/1044/1160(+190%物理攻击)物理伤害，路径末端的敌人晕眩0.75秒。\n- **细雪**：橘右京连续拔刀四次，每次命中造成130/180/230(+55%物理攻击)物理伤害，每次命中敌方英雄时，回复300/450/600(+4.5%额外生命值)点生命(命中非英雄单位效果减半)。\n## 最佳搭档（官方原文理由）\n- 赵云：赵云：两个人都是能抗能打的英雄，有位移，有爆发，有控制，有吸血，技能cd短。配合抓人，无论战士还是射手，互相配合一套技能都可以轻松带走对手。\n- 杨戬：杨戬：杨戬打野或者橘右京打野都可以，是经典的上野组合，利用两个人技能的配合去游走gank，高爆发加控制很多英雄都难以阻挡，高强度的恢复能力也会让敌方英雄不得不牺牲经济提前做制裁类装备限制2人组的能力。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "163"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "流之子向指定位置跃击，造成400/600/800(+70%额外物理攻击)(+8%额外生命值)物理伤害和0.75秒击退，跃击的中心会额外造成50%伤害。\n可消耗5层“流”释放技能，使本次技能不进入冷却。\n## 最佳搭档（官方原文理由）\n- 鬼谷子：鬼谷子的加速和隐身能够让元流之子-坦克快速且出其不意地接近敌方并打出连环控制\n- 孙膑：孙膑的爆发加速能够让元流之子-坦克快速地接近敌方并打出连环控制\n## 压制英雄（官方原文理由）\n- 吕布：拥有更高生命值与防御的元流之子可以在面对吕布时轻松获得线权，对抗时打出的连环控制也可以让吕布无法及时释放保命技能\n- 狂铁：元流之子-坦克拥有不错的恢复能力，相较于狂铁更胜一筹\n## 被压制英雄（官方原文理由）\n- 芈月：元流之子-坦克的输出能力一般，对线拥有高续航的英雄很难将其击杀\n- 公孙离：公孙离拥有较多的位移，需要近身作战的元流之子很容易被其拉扯\n## 官方铭文与出装说明\n- 铭文搭配一：宿命、调和、虚空\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：冷静之靴 → 怒龙剑盾 → 红莲斗篷 → 血魔之怒 → 霸者重装 → 不死鸟之眼",
+          "relation": null,
+          "score": 0.3421750068664551,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "581"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "英雄造成自身5%最大生命值的撞击伤害\n收回链刃:快速点击二段收回链刃，链刃将范围内敌人拉回并造成相同范围物理伤害和击飞效果\n拉向链刃时可控制轮盘方向选择以直线或弧线位移\n## 最佳搭档（官方原文理由）\n- 鲁班七号：鲁班七号：鲁班七号搭配辅助走下路，一级点一技能之后的二段控住非常容易控住敌人，配合带红buff的鲁班七号可以给对面上单很大压力甚至拿下人头，后期同样如此，配合鲁班七号抓人非常方便。\n- 李白：李白：夏侯惇在团战之中可以制造很大的混乱，配合一三技能的控制可以打乱敌人阵型并拖延时间给李白刷大招的机会。\n## 压制英雄（官方原文理由）\n- 鲁班七号：鲁班七号：夏侯惇虽然是个坦克，但是全肉的夏侯惇依然有着不俗是伤害，而且二技能之后有着真实伤害，大招位移可进可退，可攻可守，面对鲁班七号这种脆脆皮短腿英雄有着很大优势。\n- 钟无艳：钟无艳：钟无艳虽然有控制有位移，但是如果打到后期装备成型，钟无艳将完全不是夏侯惇的对手。钟无艳控制有着时间限制且输出不足，而夏侯惇有真实伤害和被动回血，较有优势。\n## 被压制英雄（官方原文理由）\n- 孙尚香：孙尚香可以通过位移轻松躲过夏侯惇的技能",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "126"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 元流之子(刺客) · 官方数据聚合\n- 英雄：元流之子(刺客)（守望之诺）\n- 分路：打野\n- 上手难度：70\n## 技能描述（官方原文）\n- **万物为流**：元流之子在泉水中可以将“流”引入体内淬炼自身，获得移速并强化以下四种属性之一： 生机:额外获得最大生命 穿心:额外获得法术穿透 迅疾:额外获得移动速度 凝神:额外获得冷却缩减 可消耗1层“流”使用强化普攻，对攻击区域中间的敌人额外造成法术伤害\n- **汇流为一**：元流之子汇集“流”对附近敌人造成物理伤害和击退(无控制效果)并获得回复和5层“流”，同时减少【爪舞流痕】和【断生双狩】50%技能冷却时间 附近的友方英雄和小兵提供额外回复(最大100%)和“流”(最大9层)\n- **爪舞流痕**：元流之子向指定方向位移，如果终点附近有敌人，获得回复(对非英雄单位减半)并连续穿梭攻击： 前两次穿梭对范围内敌人造成物理伤害 最后一击造成物理伤害并略微吸引敌人 2秒内连续释放会依次改变技能效果： 【绝影】：最后一击伤害提升50% 【封喉】：最后一击伤害提升50%并附带目标已损生命值物理伤害 可消耗4层“流”使用额外的【爪舞流痕】",
+          "relation": null,
+          "score": 0.34050822257995605,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "583"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.224,
+      "reused": false
+    },
+    {
+      "case_id": "R-14",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "装备栏怎么设置",
+      "expected_intent": "ITEM_BUILD",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "ITEM_BUILD",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "ITEM_BUILD"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "装备栏怎么设置",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": 0.43361896276474,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "离范围后仍持续3秒)，非战斗状态下靠近墙体或处于装置区域会额外获得伪装效果\n视野装置每35/34/33/32/31/30秒可准备1个(最多3个)\n装置被敌方英雄占领后失效，多个敌方英雄占领时将加速失效\n- **狂风之息**：朝指定方向狙击，对命中目标造成750/900/1050/1200/1350/1500(+240%额外物理攻击)物理伤害并附带目标8%最大生命的物理伤害，同时减少其90%移速，持续0.5秒。\n瞄准需要2秒时间，瞄准未完成时子弹有可能产生偏移，技能子弹最多储存3颗，每次普攻命中减少2.5%充能时间。\n【狂风之息】：当攻速达到40/80/120/160%时，瞄准所需时间降低0.25/0.5/0.75/1秒，并降低收枪时间。\n- **逃脱**：向后跳跃并向指定方向射击，造成700/1050/1400(+160%物理攻击)物理伤害并减少其15/22.5/30%移速，持续2秒，落地增加45/67.5/90移速，持续2秒，与狂风之息共用子弹数量，释放消耗1颗。\n普攻或技能攻击会立即失去加速效果。\n被动：提升30普攻射程。\n## 最佳搭档（官方原文理由）",
+          "relation": null,
+          "score": 0.43361896276474,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "196"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "的英雄和小兵会被标记，持续5秒。\n孙尚香普攻对被标记的英雄额外造成120/144/168/192/216/240(+36%物理攻击)物理伤害，对被标记的小兵额外造成240(+60%物理攻击)物理伤害。\n- **究极弩炮**：孙尚香蓄力向指定方向发射一枚弩炮，弩炮在触碰敌人或者飞行到最远距离后将发生爆炸，对第一名触碰的敌人造成800/1260/1680（+250%物理加成）点物理伤害，对爆破范围内的敌人造成75%伤害。\n## 最佳搭档（官方原文理由）\n- 庄周：庄周：孙尚香是比较灵活的射手类英雄，但是如果被控制怎么也灵活不起来，所以推荐庄周作为孙尚香的搭档，在携带净化的情况下，无论是单抓还是团战，孙尚香都不在畏惧敌方的控制性技能，轻松打出成吨的输出。\n- 东皇太一：东皇太一：东皇太一的大招可以控制敌方英雄，是应对敌方突进英雄的不二选择，东皇的超强回复能力注定了东皇也是一名合格的坦克，有东皇在前排吸收敌方火力，后排的孙尚香就可以安心输出。\n## 压制英雄（官方原文理由）",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "111"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "追人爆发，都可以让鲁班还未反应过来就失去团战能力或者被秒掉，相比较其他adc，刘备在面对鲁班时可以发挥出最大的压制能力\n## 被压制英雄（官方原文理由）\n- 孙尚香：孙尚香的高射程优势能很好的风筝刘备\n- 项羽：刘备在切入后排时可使用项羽将其推开作为保护\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、夺萃\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：追击刀锋 → 急速战靴 → 暗影战斧 → 末世 → 宗师之力 → 仁者破晓\n- 推荐出装二：追击刀锋 → 急速战靴 → 暗影战斧 → 闪电匕首 → 泣血之刃 → 强者破军\n- Tips：刘备射程较近，暗影战斧能够提供一定的基础血量让其靠近敌人后，不至于被立即打入较为危险的血线，宗师之力能够让刘备的爆发力更上一层楼\n- Tips：闪电匕首提供了额外移动速度加成，让刘备靠近敌人时更加快速，破军带来的斩杀效果让其面对后排时，能够打出毁灭性的伤害",
+          "relation": null,
+          "score": 0.4287489652633667,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "170"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "足 → 暗影战斧 → 强者破军 → 名刀·司命 → 碎星锤\n- Tips：暗影战斧是李信的核心装备，在此之后的装备选择就需要判断需要使用哪种形态作为主力并根据局势选择全输出打伤害或者半肉装进行突破单带\n- Tips：当李信去打野时，在前中期可以选择暗形态清野，并在随后添置攻击向装备为打团时的光明形态累积足够高的攻击力",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "507"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 刘备 · 官方数据聚合\n- 英雄：刘备（仁德义枪）\n- 分路：打野\n- 上手难度：40\n## 技能描述（官方原文）\n- **强化霰弹**：刘备霰弹枪有四颗弹丸，中间的两颗弹丸会对敌人造成(50%物理攻击)物理伤害，外侧的两颗弹丸会对敌人造成(30%物理攻击)物理伤害。每颗弹丸命中敌方英雄，会增加1层战斗本能，每层增加5~10点物理穿透，持续6秒，最多叠加12层。\n弹丸可穿透非英雄单位，每次射击只有中间的2颗弹丸能够暴击并触发装备效果。建筑不受额外弹丸影响。\n- **双相射击**：刘备获得40%移速加成(持续1.5秒)并强化下次普攻\n近距离：下次普攻为两连射，每颗弹丸造成60/72/84/96/108/120（+25%物理攻击）物理伤害\n远距离：发射一颗爆裂弹(期间自身退后)，对首个目标额外造成290/348/406/464/522/580(+95%额外Ad)物理伤害并对其身后扇形区域内目标造成50%伤害",
+          "relation": null,
+          "score": 0.42142486572265625,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "170"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.249,
+      "reused": false
+    },
+    {
+      "case_id": "R-15",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "意识怎么培养",
+      "expected_intent": "GAMEPLAY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "GAMEPLAY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "GAMEPLAY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "意识怎么培养",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.40344351530075073,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "害的同时回复120~240(+3%额外生命值)点生命。\n使用靠劲会在短暂蓄力后造成100(+125%物理攻击)(+3%目标已损生命值)物理伤害。\n每一击消耗1精力，每0.7秒回复1精力，可积存4精力。\n- **拨云见明**：怀真提起真气，出拳成风，风卷裹挟敌人一起移动并造成275/330/385/440/495/550(+80%额外物理攻击)物理伤害，同时改变敌人朝向。稍后发出冲拳，对路径造成175/210/245/280/315/350(+55%额外物理攻击)物理伤害。",
+          "relation": null,
+          "score": 0.40344351530075073,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "544"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "的英雄和小兵会被标记，持续5秒。\n孙尚香普攻对被标记的英雄额外造成120/144/168/192/216/240(+36%物理攻击)物理伤害，对被标记的小兵额外造成240(+60%物理攻击)物理伤害。\n- **究极弩炮**：孙尚香蓄力向指定方向发射一枚弩炮，弩炮在触碰敌人或者飞行到最远距离后将发生爆炸，对第一名触碰的敌人造成800/1260/1680（+250%物理加成）点物理伤害，对爆破范围内的敌人造成75%伤害。\n## 最佳搭档（官方原文理由）\n- 庄周：庄周：孙尚香是比较灵活的射手类英雄，但是如果被控制怎么也灵活不起来，所以推荐庄周作为孙尚香的搭档，在携带净化的情况下，无论是单抓还是团战，孙尚香都不在畏惧敌方的控制性技能，轻松打出成吨的输出。\n- 东皇太一：东皇太一：东皇太一的大招可以控制敌方英雄，是应对敌方突进英雄的不二选择，东皇的超强回复能力注定了东皇也是一名合格的坦克，有东皇在前排吸收敌方火力，后排的孙尚香就可以安心输出。\n## 压制英雄（官方原文理由）",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "111"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 达摩 · 官方数据聚合\n- 英雄：达摩（拳僧）\n- 分路：对抗路\n- 上手难度：50\n## 技能描述（官方原文）\n- **真言·心经**：达摩释放技能获得真言护体，增加32~64点物理防御和法术防御，持续5秒，最多叠加3层。\n达摩释放一、三技能后获得1次强化普攻(若命中目标再额外获得1次)，强普额外造成28~56(+30%额外物理攻击)物理伤害，并对目标造成15~30%减速效果，持续2秒。\n- **真言·无相**：达摩冲刺挥出冲拳，对路径上的敌人造成180/216/252/288/324/360(+100%额外物理攻击)物理伤害并击飞目标0.5秒。\n每10/9.6/9.2/8.8/8.4/8秒可准备1次【真言·无相】，最多可以储备2次。\n大招成功将敌人击退至墙体后，8秒内下一次【真言·无相】变成向指定方向飞踢，并附带目标15%已损生命值的物理伤害。",
+          "relation": null,
+          "score": 0.3990904688835144,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "134"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 老夫子 · 官方数据聚合\n- 英雄：老夫子（万古长明）\n- 分路：对抗路\n- 上手难度：30\n## 技能描述（官方原文）\n- **师道尊严**：老夫子普攻命中会增加1点训诫值，最多叠加5点，叠满后会获得强化自身效果，持续5秒。\n强化：增加60~88点移速和25~50%攻速，普攻附带90~180(+28%额外物理攻击)真实伤害，每次攻击能够减少1秒【圣人训诫】和【举一反三】的冷却。\n- **圣人训诫**：老夫子挥动戒尺，将命中的敌人拉拽到自己身前，造成320/384/448/512/576/640(+100%额外物理攻击)物理伤害并减少其25/30/35/40/45/50%移速，持续1.5/1.7/1.9/2.1/2.3/2.5秒。\n- **举一反三**：老夫子增加25/28/31/34/37/40%移速并且减少45/49/53/57/61/65%受到的伤害(持续2秒)期间若受到其他英雄的普攻时会对其反弹伤害(附带法球效果，每个敌人1次）并造成15/18/21/24/27/30%减速效果(持续2秒)\n老夫子每次普攻有25%几率打出额外普攻(50%伤害)",
+          "relation": null,
+          "score": 0.39506757259368896,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "139"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 赵怀真 · 官方数据聚合\n- 英雄：赵怀真（自在之心）\n- 分路：打野 / 对抗路 / 游走\n- 上手难度：50\n## 技能描述（官方原文）\n- **气随心动**：怀真依次打出掌、拳、肘、靠之劲四种普攻。\n掌劲起手，造成一次40~120(+50%物理攻击)物理伤害，对非英雄单位造成1.5倍伤害。满精力时此招位移距离提升。满精力时怀真将突进至敌人身边。\n拳劲快速击打造成2次伤害，第一击造成40~120(+50%物理攻击)物理伤害，第二击造成20~60(+25%物理攻击)物理伤害并回复60~120(+1.5%额外生命值)点生命。\n肘劲造成80~240(+100%物理攻击)物理伤害的同时回复120~240(+3%额外生命值)点生命。\n使用靠劲会在短暂蓄力后造成100(+125%物理攻击)(+3%目标已损生命值)物理伤害。\n每一击消耗1精力，每0.7秒回复1精力，可积存4精力。",
+          "relation": null,
+          "score": 0.3943858742713928,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "544"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.25,
+      "reused": false
+    },
+    {
+      "case_id": "R-16",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "意识是什么",
+      "expected_intent": "GAMEPLAY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "GAMEPLAY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "GAMEPLAY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "意识是什么",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.32791996002197266,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "，回复效果增加50%，最多增加100%。灵体继承大司命30%的物理攻击，只会普攻，但拥有更高的移速和攻速。\n## 最佳搭档（官方原文理由）\n- 金蝉：金蝉紧箍的限制能力可以帮助大司命获得更好的输出环境\n- 孙膑：孙膑的二技能能为大司命提供更强的游走支援能力，并且可以增强大司命的拉扯能力，避免敌人位移后快速挣脱魂链，同时孙膑大招开团的沉默效果可以有效帮助大司命大招进场，打出敌方灵体帮助作战\n## 压制英雄（官方原文理由）\n- 不知火舞：大司命凝聚出的灵体可以打出不知火舞的强化普攻，对敌方单位产生范围控制效果\n- 哪吒：大司命凝聚出的灵体可以继承哪吒普攻的重伤效果\n## 被压制英雄（官方原文理由）\n- 盘古：盘古的缴械效果可以有效限制依靠普攻输出的大司命\n- 刘备：刘备具有高爆发的能力，使得需要近距离输出的大司命很难拥有较好的输出环境\n## 官方铭文与出装说明\n- 铭文搭配一：异变、狩猎、鹰眼\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：追击刀锋 → 抵抗之靴 → 末世 → 贪婪之噬 → 暗影战斧 → 纯净苍穹",
+          "relation": null,
+          "score": 0.32791996002197266,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "517"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "兰陵王是典型的隐身刺客打野。一技能秘技·极意让他在朝敌方英雄移动时获得移速加成，配合三技能秘技·隐匿可以长时间潜行，绕后与抓单是他最舒服的节奏。二技能秘技·影蚀的匕首是连招核心：命中后会标记目标，后续攻击触发晕眩并回血，因此常见的顺序是先手匕首、再接一技能分身与大招暗袭完成斩杀。\n兰陵王在前期几乎统治无位移英雄，鲁班七号这类没有自保手段的脆皮是他最大的猎物；面对李白这类初期伤害不足的刺客，他还能进野区抢资源、压制对方发育。短板是怕硬控：张良的硬控、项羽的控制与推人都能在兰陵王切入后直接掐断输出，切入前务必确认对方控制技能是否已经交掉。\n搭档思路上，官方推荐宫本武藏与诸葛亮：前者提供留人控制、提高连招容错率，后者远程收割残血，中野联动收益很高。出装以暗影战斧为核心，兼顾突袭能力与生存。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "153"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "造成25%伤害。\n释放技能后，盘古立即进入能量臂状态。技能释放过程获得霸体效果。\n1技能跃起期间使用3技能可以立即劈出裂隙。\n## 最佳搭档（官方原文理由）\n- 鬼谷子：将敌人聚拢后快速打出aoe爆发\n- 弈星：将敌人圈起来后，盘古可以通过拳头形态进行持续的aoe输出\n## 压制英雄（官方原文理由）\n- 马超：被缴械和减速使得马超的机动性大幅降低，很难逃走\n- 百里玄策：输出过于依赖普攻，同时自身又较脆，容易被盘古缴械后迅速击杀\n## 被压制英雄（官方原文理由）\n- 蒙犽：不依赖普攻，爆发高\n- 刘备：刘备大招能移除缴械效果，同时贴脸输出容易被高爆发迅速击杀\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、狩猎\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：巨人之握 → 抵抗之靴 → 暗影战斧 → 闪电匕首 → 血魔之怒 → 不祥征兆\n- 推荐出装二：贪婪之噬 → 抵抗之靴 → 暗影战斧 → 宗师之力 → 暴烈之甲 → 强者破军\n- Tips：法球流，肉装提升生存，攻速结合被动百分比伤害进行输出\n- Tips：暴力输出装，容错率很低",
+          "relation": null,
+          "score": 0.31530332565307617,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "529"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "的英雄，而东皇太一就是这样一个非常合适的英雄。由于东皇太一大招的的特性，意味着只要有法师切入，一定会被控制住，而虞姬的高爆发伤害，几乎肯定能击杀来切入的脆皮法师，更能让虞姬在团战中更加肆无忌惮的输出。\n- 妲己：妲己：二者都是高爆发英雄，几乎没有任何脆皮刺客能在两者的一套存活，而且两者都有指向性的控制技能，如果两个人同时行动，在后期几乎是见一个秒一个，就算是坦克，在两人技能的轮番轰炸之下也极容易被击杀，可以说一旦碰到这两个组合，就千万不要让游戏拖到后期。\n## 压制英雄（官方原文理由）\n- 马可波罗：马可波罗：马可波罗的一技能不能穿过小兵或者敌方英雄，而虞姬可以，所以无论是对线消耗，还是清兵线能力，都是虞姬更胜一筹。而且由于虞姬的二技能免受物理伤害，大招的指向性更是能让马可的灵活无处可施。高爆发的虞姬也意味着一套下来能让马可波罗被瞬间击杀。\n- 韩信：韩信：韩信是个高机动性英雄，但是面对高爆发加技能指向性加免疫物理伤害的虞姬，被天然克制。虞姬三技能能很好的压制韩信的位移，因为即使韩信位移走了，一旦被锁定，也很有可能会被击杀。\n## 被压制英雄（官方原文理由）",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "174"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 达摩 · 官方数据聚合\n- 英雄：达摩（拳僧）\n- 分路：对抗路\n- 上手难度：50\n## 技能描述（官方原文）\n- **真言·心经**：达摩释放技能获得真言护体，增加32~64点物理防御和法术防御，持续5秒，最多叠加3层。\n达摩释放一、三技能后获得1次强化普攻(若命中目标再额外获得1次)，强普额外造成28~56(+30%额外物理攻击)物理伤害，并对目标造成15~30%减速效果，持续2秒。\n- **真言·无相**：达摩冲刺挥出冲拳，对路径上的敌人造成180/216/252/288/324/360(+100%额外物理攻击)物理伤害并击飞目标0.5秒。\n每10/9.6/9.2/8.8/8.4/8秒可准备1次【真言·无相】，最多可以储备2次。\n大招成功将敌人击退至墙体后，8秒内下一次【真言·无相】变成向指定方向飞踢，并附带目标15%已损生命值的物理伤害。",
+          "relation": null,
+          "score": 0.315146803855896,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "134"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.233,
+      "reused": false
+    },
+    {
+      "case_id": "R-17",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "意识包括哪些",
+      "expected_intent": "GAMEPLAY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "GAMEPLAY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "GAMEPLAY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "意识包括哪些",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.3870350122451782,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "害的同时回复120~240(+3%额外生命值)点生命。\n使用靠劲会在短暂蓄力后造成100(+125%物理攻击)(+3%目标已损生命值)物理伤害。\n每一击消耗1精力，每0.7秒回复1精力，可积存4精力。\n- **拨云见明**：怀真提起真气，出拳成风，风卷裹挟敌人一起移动并造成275/330/385/440/495/550(+80%额外物理攻击)物理伤害，同时改变敌人朝向。稍后发出冲拳，对路径造成175/210/245/280/315/350(+55%额外物理攻击)物理伤害。",
+          "relation": null,
+          "score": 0.3870350122451782,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "544"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "额伤害，但需要进场输出，却是被干将莫邪克制\n## 被压制英雄（官方原文理由）\n- 兰陵王：干将莫邪没有技能可以抵抗兰陵王的秒杀能力\n- 花木兰：当被花木兰近身后，是大部分法师的噩梦，当然也包括干将莫邪\n## 官方铭文与出装说明\n- 铭文搭配一：梦魇、怜悯、轮回\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：圣杯 → 冷静之靴 → 回响之杖 → 凝冰之息 → 博学者之怒 → 虚无法杖\n- 推荐出装二：痛苦面具 → 冷静之靴 → 回响之杖 → 虚无法杖 → 博学者之怒 → 贤者天书\n- Tips：爆发周期较短，回复能力较高，可以频繁使用技能消耗，由于爆发周期较短，多次爆发后，可以逼迫对方露出破绽\n- Tips：每一次命中都会造成高额伤害，每次释放技能都是对于对方的威慑，只需一次命中就会迫使对方回撤或直接造成死亡",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "182"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "324/360(+55%额外物理攻击)物理伤害并获得50%加速(1秒)，同时每命中一个目标获得140/168/196/224/252/280(+2%额外生命值)生命恢复(从第二个目标开始衰减至1/4)\n- **移形**：镜本体与镜像冲向彼此的位置。每10秒储存一次【移形】，最多储存4次。\n场上没有镜像存在时使用【开锋】和【裂空】会产生镜像(持续2秒)与镜一起行动(镜像会复制本体除了大招外的技能和普攻)\n- **见影**：镜朝前飞出并将路径上的敌人拉到镜像空间中心定身(1秒)并张开镜像空间(持续10秒)使本体和镜像会从镜面两侧飞出\n镜在镜像空间内获得70/105/140(+0.9%额外生命值)生命回复(1/2秒1次)和10%/15%/20%减伤如果对敌人造成伤害【移形】会获得一次充能\n镜像场成型后，在场的边缘会生成8个镜子碎片，期间本体或镜像给敌人造成伤害时，最近的碎片会飞向敌人并造成30/45/60(+2%目标额外生命值)物理伤害\n当镜像空间销毁后，未触发的碎片会随机锁定敌方单位（英雄优先）\n## 最佳搭档（官方原文理由）",
+          "relation": null,
+          "score": 0.36926233768463135,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "531"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "外造成75/90/105/120/135/150(+12%法术攻击)法术伤害。\n飞剑技能共享使用次数上限，每6~5秒(随技能等级缩减)回复一次使用次数。\n同一道剑气被多次激发时，后续伤害衰减至50%。\n- **剑来**：立刻提供飞剑技能两次使用次数，并唤出更多的剑来强化下次飞剑技能。\n被动：增加15%视野范围，并增加一次【雌雄双剑】使用上限，每一股飞剑命中敌人减少【剑来】1秒冷却时间。\n## 最佳搭档（官方原文理由）\n- 庄周：干将莫邪的自保能力较差，需要队友能提供一定帮助\n- 钟无艳：钟无艳：钟无艳有着不俗的控制能力，所以他和干将莫邪搭配时就能很大程度上保证干将莫邪的技能命中率，同时钟无艳也能很好的保护干将莫邪。\n## 压制英雄（官方原文理由）\n- 黄忠：黄忠大招需要在固定位置释放，干将莫邪也需要对方不做移动，好打出毁灭性伤害\n- 高渐离：高渐离正好与干将莫邪相反，虽然拥有高额伤害，但需要进场输出，却是被干将莫邪克制\n## 被压制英雄（官方原文理由）\n- 兰陵王：干将莫邪没有技能可以抵抗兰陵王的秒杀能力\n- 花木兰：当被花木兰近身后，是大部分法师的噩梦，当然也包括干将莫邪",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "182"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 老夫子 · 官方数据聚合\n- 英雄：老夫子（万古长明）\n- 分路：对抗路\n- 上手难度：30\n## 技能描述（官方原文）\n- **师道尊严**：老夫子普攻命中会增加1点训诫值，最多叠加5点，叠满后会获得强化自身效果，持续5秒。\n强化：增加60~88点移速和25~50%攻速，普攻附带90~180(+28%额外物理攻击)真实伤害，每次攻击能够减少1秒【圣人训诫】和【举一反三】的冷却。\n- **圣人训诫**：老夫子挥动戒尺，将命中的敌人拉拽到自己身前，造成320/384/448/512/576/640(+100%额外物理攻击)物理伤害并减少其25/30/35/40/45/50%移速，持续1.5/1.7/1.9/2.1/2.3/2.5秒。\n- **举一反三**：老夫子增加25/28/31/34/37/40%移速并且减少45/49/53/57/61/65%受到的伤害(持续2秒)期间若受到其他英雄的普攻时会对其反弹伤害(附带法球效果，每个敌人1次）并造成15/18/21/24/27/30%减速效果(持续2秒)\n老夫子每次普攻有25%几率打出额外普攻(50%伤害)",
+          "relation": null,
+          "score": 0.36105406284332275,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "139"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.217,
+      "reused": false
+    },
+    {
+      "case_id": "R-18",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "教程在哪里看",
+      "expected_intent": "GAMEPLAY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "GAMEPLAY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "GAMEPLAY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "教程在哪里看",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.33016788959503174,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "筝程咬金\n## 官方铭文与出装说明\n- 铭文搭配一：异变、均衡、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：抵抗之靴 → 红莲斗篷 → 不死鸟之眼 → 极寒风暴 → 反伤刺甲 → 暗影战斧\n- 推荐出装二：抵抗之靴 → 极寒风暴 → 不死鸟之眼 → 暗影战斧 → 闪电匕首 → 名刀·司命\n- Tips：程咬金需要能够准确判断自身血量是否安全，而大幅提升自身最大生命值属性能够让容错范围大大加强，并且凭借被动增加的攻击力一样能够打出足够威胁敌方的伤害\n- Tips：极寒风暴带来的冷却缩减能让程咬金技能空窗期缩短并且低血量的短兵相接时会频繁的触发极寒的伤害减速效果",
+          "relation": null,
+          "score": 0.33016788959503174,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "144"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "穹 → 暴烈之甲 → 名刀·司命\n- Tips：出色的耗线能力配上暗影之斧让狂铁可以作为线霸强势支配一条兵线，并且在后期配合一些半肉装，狂铁能在最终反击中恢复大量血量进而绝地反击，并可以打出较高的爆发\n- Tips：出色的耗线能力配上暗影之斧让狂铁可以作为线霸强势支配一条兵线，并且在后期配合名刀的特性，狂铁能在最终反击中恢复大量血量进而绝地反击",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "503"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "/30%移速，持续2秒，落地增加45/67.5/90移速，持续2秒，与狂风之息共用子弹数量，释放消耗1颗。\n普攻或技能攻击会立即失去加速效果。\n被动：提升30普攻射程。\n## 最佳搭档（官方原文理由）\n- 廉颇：拥有霸体的廉颇随时能够扰乱对手突进节奏，为百里守约创造安全的输出环境\n- 牛魔：百里守约可以与牛魔的控制技能打出致命的先手连招\n## 压制英雄（官方原文理由）\n- 典韦：没有多段位移的战士不会对百里守约造成太大的威胁\n- 亚瑟：没有多段位移的战士不会对百里守约造成太大的威胁\n## 被压制英雄（官方原文理由）\n- 宫本武藏：大招的强突进会逼迫百里守约狙击位置\n- 妲己：中后期妲己的强控和爆发足够秒杀百里守约\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：暗影战斧 → 急速战靴 → 泣血之刃 → 仁者破晓 → 强者破军 → 名刀·司命\n- 推荐出装二：急速战靴 → 末世 → 暗影战斧 → 强者破军 → 仁者破晓 → 名刀·司命\n- Tips：守约的狙击次数受到冷却缩减属性的影响",
+          "relation": null,
+          "score": 0.3192182779312134,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "196"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "技能为敌人施加减速效果，这样更能帮助典韦留住敌人。在进行团战时，典韦直接开启大招配合反伤甲吸收伤害的同时对敌方造成成吨伤害，庄周同步开启大招免疫控制以及提高伤害减免效果，可以为典韦提供以少打多的环境。\n- 孙膑：孙膑：典韦与孙膑的配合主要体现在中后期的团战中，典韦一般是半肉承担伤害时对敌方核心输出造成伤害的英雄，自身经常会被集火斩杀，孙膑的2技能可以为典韦恢复生命，大招控制和沉默也可以在关键时刻为典韦争取逃生和输出环境，1技能延迟爆炸伤害和减速也能在小规模团战中发挥至关重要的作用。\n## 压制英雄（官方原文理由）\n- 马可波罗：马可波罗：马可波罗的攻击频率比较高，不仅仅体现在普攻，1技能9段伤害和2技能后的普攻都会被典韦大招以及反甲反弹，在中后期经常会出现一技能或者大招打完典韦自己半血的现象，针对马可波罗用典韦有奇效。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "129"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 百里守约 · 官方数据聚合\n- 英雄：百里守约（静谧之眼）\n- 分路：发育路\n- 上手难度：70\n## 技能描述（官方原文）\n- **瞄准**：百里守约无攻击行为1.5秒后，会快速获得伏击效果，最多叠加5层，拥有伏击效果时提升百里守约20%物理穿透并造成额外70~140(+15%额外物理攻击)物理伤害；每次普攻命中敌方英雄消耗1层伏击，技能命中敌方英雄消耗5层伏击效果。\n【瞄准】：每增加1%的暴击率，会提升4点狂风之息和2点逃脱的伤害。\n- **静谧之眼**：百里守约布置(最多3个)视野探测装置(600/680/760/840/920/1000范围，持续300秒)，靠近墙体或处于装置区域无攻击行为(1.5秒)会获得40/48/56/64/72/80移速和15/18/21/24/27/30%攻速(攻速效果在攻击或脱离范围后仍持续3秒)，非战斗状态下靠近墙体或处于装置区域会额外获得伪装效果\n视野装置每35/34/33/32/31/30秒可准备1个(最多3个)\n装置被敌方英雄占领后失效，多个敌方英雄占领时将加速失效",
+          "relation": null,
+          "score": 0.3179343342781067,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "196"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.219,
+      "reused": false
+    },
+    {
+      "case_id": "R-19",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "教学视频怎么看",
+      "expected_intent": "GAMEPLAY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "GAMEPLAY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "GAMEPLAY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "教学视频怎么看",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.3138679265975952,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "期间本体或镜像给敌人造成伤害时，最近的碎片会飞向敌人并造成30/45/60(+2%目标额外生命值)物理伤害\n当镜像空间销毁后，未触发的碎片会随机锁定敌方单位（英雄优先）\n## 最佳搭档（官方原文理由）\n- 鬼谷子：镜的爆发会是一个小范围的伤害组合，当对手被鬼谷子拉在一起时可以打出巨量的伤害\n- 瑶：镜作为刺客，自身在突进时也会面临着威胁，瑶提供的辅助能力可以帮助镜更加轻松安全的作战\n## 压制英雄（官方原文理由）\n- 伽罗：镜快速的接近能力，让远程站桩射手很难反抗\n- 西施：西施的技能命中难度较高，而灵活的镜可以使用技能从容的躲避\n## 被压制英雄（官方原文理由）\n- 项羽：克制镜最好的办法就是将其推出大招范围，同时项羽的硬度也能保证自身的安全\n- 王昭君：王昭君反手的大招，让镜在释放大招后无法继续在范围内继续活动被迫离开\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：追击刀锋 → 抵抗之靴 → 暗影战斧 → 名刀·司命 → 碎星锤 → 强者破军",
+          "relation": null,
+          "score": 0.3138679265975952,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "531"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "的英雄和小兵会被标记，持续5秒。\n孙尚香普攻对被标记的英雄额外造成120/144/168/192/216/240(+36%物理攻击)物理伤害，对被标记的小兵额外造成240(+60%物理攻击)物理伤害。\n- **究极弩炮**：孙尚香蓄力向指定方向发射一枚弩炮，弩炮在触碰敌人或者飞行到最远距离后将发生爆炸，对第一名触碰的敌人造成800/1260/1680（+250%物理加成）点物理伤害，对爆破范围内的敌人造成75%伤害。\n## 最佳搭档（官方原文理由）\n- 庄周：庄周：孙尚香是比较灵活的射手类英雄，但是如果被控制怎么也灵活不起来，所以推荐庄周作为孙尚香的搭档，在携带净化的情况下，无论是单抓还是团战，孙尚香都不在畏惧敌方的控制性技能，轻松打出成吨的输出。\n- 东皇太一：东皇太一：东皇太一的大招可以控制敌方英雄，是应对敌方突进英雄的不二选择，东皇的超强回复能力注定了东皇也是一名合格的坦克，有东皇在前排吸收敌方火力，后排的孙尚香就可以安心输出。\n## 压制英雄（官方原文理由）",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "111"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 老夫子 · 官方数据聚合\n- 英雄：老夫子（万古长明）\n- 分路：对抗路\n- 上手难度：30\n## 技能描述（官方原文）\n- **师道尊严**：老夫子普攻命中会增加1点训诫值，最多叠加5点，叠满后会获得强化自身效果，持续5秒。\n强化：增加60~88点移速和25~50%攻速，普攻附带90~180(+28%额外物理攻击)真实伤害，每次攻击能够减少1秒【圣人训诫】和【举一反三】的冷却。\n- **圣人训诫**：老夫子挥动戒尺，将命中的敌人拉拽到自己身前，造成320/384/448/512/576/640(+100%额外物理攻击)物理伤害并减少其25/30/35/40/45/50%移速，持续1.5/1.7/1.9/2.1/2.3/2.5秒。\n- **举一反三**：老夫子增加25/28/31/34/37/40%移速并且减少45/49/53/57/61/65%受到的伤害(持续2秒)期间若受到其他英雄的普攻时会对其反弹伤害(附带法球效果，每个敌人1次）并造成15/18/21/24/27/30%减速效果(持续2秒)\n老夫子每次普攻有25%几率打出额外普攻(50%伤害)",
+          "relation": null,
+          "score": 0.2993506193161011,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "139"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 百里守约 · 官方数据聚合\n- 英雄：百里守约（静谧之眼）\n- 分路：发育路\n- 上手难度：70\n## 技能描述（官方原文）\n- **瞄准**：百里守约无攻击行为1.5秒后，会快速获得伏击效果，最多叠加5层，拥有伏击效果时提升百里守约20%物理穿透并造成额外70~140(+15%额外物理攻击)物理伤害；每次普攻命中敌方英雄消耗1层伏击，技能命中敌方英雄消耗5层伏击效果。\n【瞄准】：每增加1%的暴击率，会提升4点狂风之息和2点逃脱的伤害。\n- **静谧之眼**：百里守约布置(最多3个)视野探测装置(600/680/760/840/920/1000范围，持续300秒)，靠近墙体或处于装置区域无攻击行为(1.5秒)会获得40/48/56/64/72/80移速和15/18/21/24/27/30%攻速(攻速效果在攻击或脱离范围后仍持续3秒)，非战斗状态下靠近墙体或处于装置区域会额外获得伪装效果\n视野装置每35/34/33/32/31/30秒可准备1个(最多3个)\n装置被敌方英雄占领后失效，多个敌方英雄占领时将加速失效",
+          "relation": null,
+          "score": 0.2986271381378174,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "196"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "摇，提高其命中率，对敌方造成很大的消耗，在我方劣势守塔时，虞姬的一技能配合火舞的二技能能很快的清理兵线，从而保护我方建筑物。同样，在我方优势进攻时也可以达到推进的目的。\n## 压制英雄（官方原文理由）\n- 关羽：关羽：关羽比较依赖被动的冲锋，不知火舞的每个技能包括被动都能打断其冲锋状态，失去被动冲锋的关羽几乎和超级兵一样，所以不知火舞是天克关羽的。\n- 高渐离：高渐离：不知火舞与高渐离对线，前期可以用扇子无限消耗手短的高渐离。即使4级之后高渐离有一套爆发伤害，不知火的位移也可以完全避过，并且可以在高渐离没有大招的时候轻松秒掉高渐离。\n## 被压制英雄（官方原文理由）\n- 韩信：刺客的爆发输出很容易击杀不知火舞\n- 花木兰：花木兰的超高爆发输出能力能快速击杀走位不慎的不知火舞\n## 官方铭文与出装说明\n- 铭文搭配一：梦魇、怜悯、轮回\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：噬神之书 → 抵抗之靴 → 回响之杖 → 痛苦面具 → 博学者之怒 → 虚无法杖\n- 推荐出装二：冷静之靴 → 噬神之书 → 回响之杖 → 博学者之怒 → 辉月 → 虚无法杖",
+          "relation": null,
+          "score": 0.2948249578475952,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "157"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.221,
+      "reused": false
+    },
+    {
+      "case_id": "R-20",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "版本什么时候更新",
+      "expected_intent": "TIER_META",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "TIER_META",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "TIER_META"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "版本什么时候更新",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.4099377393722534,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "原文理由）\n- 瑶：瑶可以跟上宫本的高机动性并增强其生存能力。同时瑶的1技能可以弥补宫本小技能缺少硬控的缺陷\n- 刘邦：宫本需要在人群中进行持续作战，但他自身的生存能力并不强，刘邦可以帮他弥补这一短板\n## 压制英雄（官方原文理由）\n- 曹操：宫本的大招可以针对恢复型英雄，曹操面对他最大的长板被无限缩小\n- 马超：强化普攻的持续追击和减速会让马超非常难受\n## 被压制英雄（官方原文理由）\n- 金蝉：宫本大招的前摇时间较久，金蝉可以通过自己的1技能进行快速限制使宫本无法突进到敌人脸上\n- 牛魔：宫本需要持续的作战通过不断刷新护盾来提供生存能力，牛魔频繁的控制会让宫本非常难受\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：贪婪之噬 → 抵抗之靴 → 暗影战斧 → 宗师之力 → 反伤刺甲 → 泣血之刃\n- 推荐出装二：抵抗之靴 → 暗影战斧 → 冰痕之握 → 强者破军 → 魔女斗篷 → 名刀·司命\n- Tips：打野出装\n- Tips：对抗路出装",
+          "relation": null,
+          "score": 0.4099377393722534,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "130"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "0.5秒为范围内血量最低的友方英雄回复90/135/180(+45%法术攻击)点生命，持续5秒，同时为其增加200/300/400(+30%法术攻击)点物理和法术防御。\n## 最佳搭档（官方原文理由）\n- 高渐离：高渐离：高渐离作为版本最强的AOE爆发输出流法师之一，开启大招免伤配合蔡文姬的大招加血加双抗能在团战中起到一个2打5的作用，蔡文姬二技能的稳定控制也能配合高渐离打出更好的输出环境。\n- 狄仁杰：狄仁杰：狄仁杰站桩近距离输出是相当强势的，二技能的解控使狄仁杰在团战中不会出现被控制直接秒掉的情况，蔡文姬的回血和二技能的眩晕以及大招的加双抗，能使狄仁杰在面对敌方刺客的针对时有更好的输出环境。\n## 压制英雄（官方原文理由）\n- 貂蝉：貂蝉：貂蝉是持续输出英雄，蔡文姬二技能追踪的连续两下控制很容易让貂蝉放空一个技能或者一个技能放不出来而自乱阵脚，1技能配合大招的恢复能力也能保护队友轻松逃生或反杀。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "184"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "被其拉扯\n## 官方铭文与出装说明\n- 铭文搭配一：宿命、调和、虚空\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：冷静之靴 → 怒龙剑盾 → 红莲斗篷 → 血魔之怒 → 霸者重装 → 不死鸟之眼\n- 推荐出装二：近卫·形昭 → 冷静之靴 → 红莲斗篷 → 冰霜冲击 → 永夜守护 → 霸者重装\n- Tips：兼备生存、输出和冷却缩减\n- Tips：控强化制留人能力",
+          "relation": null,
+          "score": 0.3866111636161804,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "581"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "5.4秒，对范围内的敌人每0.5秒造成140/210/280(+40%物理攻击)物理伤害并减少25/37.5/50%移速。\n内圈会受到双倍的刃伤，刃伤也可叠加暗印层数。\n## 最佳搭档（官方原文理由）\n- 白起：白起：作为目前版本唯一有嘲讽技能的英雄，白起的控制和坦克效果极强，李元芳的一技能飞镖拥有AOE爆炸效果，如果敌方英雄聚在一起，很容易打出较高的爆炸伤害，元芳的大招也有比较强的AOE伤害，白起如果2技能配合大招同时嘲讽控制敌方多名英雄，李元芳1技能接大招可以轻松打出爆炸伤害。\n- 墨子：墨子：李元芳到了后期，他的输出和射程相对其他射手会差一些，拥有高额伤害和远程poke控制能力的墨子可以为李元芳补足短板，墨子的大招同时控制多人也可以配合李元芳完成爆炸输出。\n## 压制英雄（官方原文理由）\n- 兰陵王：兰陵王：兰陵王的核心玩法是隐身后先手秒杀敌方核心输出点，有李元芳的被动在可以轻松探测到敌方兰陵王的位置和动态，强大的反隐效果可以让兰陵王失去gank己方核心输出位的机会，躲避好兰陵王的2技能后站撸也可以轻松击杀兰陵王。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "173"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "射手英雄\n## 官方铭文与出装说明\n- 铭文搭配一：异变、虚空、调和\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：影忍之足 → 红莲斗篷 → 不死鸟之眼 → 霸者重装 → 极寒风暴 → 魔女斗篷\n- 推荐出装二：影忍之足 → 红莲斗篷 → 不死鸟之眼 → 极寒风暴 → 暗影战斧 → 闪电匕首\n- Tips：猪八戒擅长缠斗，全坦克装备的猪八戒可以让与敌人的战斗时间拉的足够长，进而利用自身恢复优势击败对手\n- Tips：当队友足够肉时，猪八戒可以分担一部分输出的责任，暗影战斧和极寒风暴让猪八戒在团战中足够灵活，闪电匕首也能保证足够的输出让敌人无法忽视猪八戒的钉耙",
+          "relation": null,
+          "score": 0.37484657764434814,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "511"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.201,
+      "reused": false
+    },
+    {
+      "case_id": "R-21",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "版本更新了哪些内容",
+      "expected_intent": "TIER_META",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "TIER_META",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "TIER_META"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "版本更新了哪些内容",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.42147600650787354,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "原文理由）\n- 瑶：瑶可以跟上宫本的高机动性并增强其生存能力。同时瑶的1技能可以弥补宫本小技能缺少硬控的缺陷\n- 刘邦：宫本需要在人群中进行持续作战，但他自身的生存能力并不强，刘邦可以帮他弥补这一短板\n## 压制英雄（官方原文理由）\n- 曹操：宫本的大招可以针对恢复型英雄，曹操面对他最大的长板被无限缩小\n- 马超：强化普攻的持续追击和减速会让马超非常难受\n## 被压制英雄（官方原文理由）\n- 金蝉：宫本大招的前摇时间较久，金蝉可以通过自己的1技能进行快速限制使宫本无法突进到敌人脸上\n- 牛魔：宫本需要持续的作战通过不断刷新护盾来提供生存能力，牛魔频繁的控制会让宫本非常难受\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：贪婪之噬 → 抵抗之靴 → 暗影战斧 → 宗师之力 → 反伤刺甲 → 泣血之刃\n- 推荐出装二：抵抗之靴 → 暗影战斧 → 冰痕之握 → 强者破军 → 魔女斗篷 → 名刀·司命\n- Tips：打野出装\n- Tips：对抗路出装",
+          "relation": null,
+          "score": 0.42147600650787354,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "130"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "5.4秒，对范围内的敌人每0.5秒造成140/210/280(+40%物理攻击)物理伤害并减少25/37.5/50%移速。\n内圈会受到双倍的刃伤，刃伤也可叠加暗印层数。\n## 最佳搭档（官方原文理由）\n- 白起：白起：作为目前版本唯一有嘲讽技能的英雄，白起的控制和坦克效果极强，李元芳的一技能飞镖拥有AOE爆炸效果，如果敌方英雄聚在一起，很容易打出较高的爆炸伤害，元芳的大招也有比较强的AOE伤害，白起如果2技能配合大招同时嘲讽控制敌方多名英雄，李元芳1技能接大招可以轻松打出爆炸伤害。\n- 墨子：墨子：李元芳到了后期，他的输出和射程相对其他射手会差一些，拥有高额伤害和远程poke控制能力的墨子可以为李元芳补足短板，墨子的大招同时控制多人也可以配合李元芳完成爆炸输出。\n## 压制英雄（官方原文理由）\n- 兰陵王：兰陵王：兰陵王的核心玩法是隐身后先手秒杀敌方核心输出点，有李元芳的被动在可以轻松探测到敌方兰陵王的位置和动态，强大的反隐效果可以让兰陵王失去gank己方核心输出位的机会，躲避好兰陵王的2技能后站撸也可以轻松击杀兰陵王。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "173"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "升至400/480/560/640/720/800(+135%额外物理攻击)物理伤害，回复提升至150/180/210/240/270/300(+2.25%额外生命值)点生命值和附带的3%已损生命值。\n- **强袭风暴**：向前冲锋对路径上的敌人造成270/324/378/432/486/540(+90%额外物理攻击)物理伤害。并强化下次普攻造成成180/216/252/288/324/360(+60%额外物理攻击+100%物理攻击)物理伤害和25/30/35/40/45/50%减速效果持续2秒。\n充能强化：在释放强化普攻时若能量&gt; 30，造成270/324/378/432/486/540(+90%额外物理攻击+150%物理攻击)物理伤和击飞(持续1秒)及落地后25/30/35/40/45/50%减速(持续1秒)",
+          "relation": null,
+          "score": 0.40335315465927124,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "503"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "禅的控制技能比较多，在用一技能配合二技能时不光可以开团，也可以干扰防御塔无法攻击，高渐离可以直接大招进场，释放出高额的爆发输出击杀对方英雄，是正面开团和越塔强杀的利器。\n## 压制英雄（官方原文理由）\n- 阿轲：阿轲：当前版本的阿轲多是刺客玩法，出装偏向输出摆法型，攻击力高的同时身板也很脆，当阿轲隐身突进结束，将会面对刘禅2秒左右的控制，在这两秒的时间内刘禅可以配合队友对阿轲进行毁灭性打击。即使阿轲隐身寻找机会切入己方核心输出位，刘禅也可以站在己方输出位利用1技能和2技能的连控轻松保护己方输出。\n- 鲁班七号：鲁班：刘禅可以利用技能控制效果轻松打断鲁班扫射，鲁班的被动效果承担了鲁班大部分的输出，每次鲁班在扫射被动时，刘禅都可以用1技能配合2技能轮次打断，使鲁班输出最低化，而且鲁班的技能CD比刘禅长，鲁班在被刘禅这样的坦克贴脸时，很难打出有效伤害，合理的使用技能甚至可以轻松把鲁班击杀。\n## 被压制英雄（官方原文理由）\n- 韩信：刘禅很害怕孤军作战，所以单独遇到输出型刺客会被一顿暴打\n- 貂蝉：由于灵活的貂蝉附带真实伤害，使得刘禅的控制技能不容易控制到貂蝉\n## 官方铭文与出装说明",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "114"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "提供稳定的控制效果，帮助姜子牙技能命中，提升姜子牙的支援游走能力。\n- 澜：姜子牙可以为澜赐封神力，配合澜的刷钱能力使得等级提升更快，让澜切入时伤害更高，承伤能力更强。\n## 压制英雄（官方原文理由）\n- 后羿：后羿较为笨重，容易被姜子牙一套技能控制和击败\n- 妲己：妲己的施法距离较短，容易被姜子牙先手控制\n## 被压制英雄（官方原文理由）\n- 娜可露露：娜可露露的切入能力极强，姜子牙容易被接近和击败。\n- 干将莫邪：干将莫邪的施法距离更长，姜子牙容易被其消耗和击败\n## 官方铭文与出装说明\n- 铭文搭配一：梦魇、献祭、轮回\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：痛苦面具 → 秘法之靴 → 回响之杖 → 博学者之怒 → 虚无法杖 → 贤者天书\n- 推荐出装二：疾步之靴 → 痛苦面具 → 回响之杖 → 博学者之怒 → 辉月 → 虚无法杖\n- Tips：冷却更多，容错率和技能命中率更高\n- Tips：极致的爆炸输出",
+          "relation": null,
+          "score": 0.4017239809036255,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "148"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.216,
+      "reused": false
+    },
+    {
+      "case_id": "R-22",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "版本t0是谁",
+      "expected_intent": "TIER_META",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "TIER_META",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "TIER_META"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "版本t0是谁",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.4080658555030823,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "# 苏烈 · 官方数据聚合\n- 英雄：苏烈（不屈铁壁）\n- 分路：游走 / 对抗路\n- 上手难度：50\n## 技能描述（官方原文）\n- **不屈铁壁**：苏烈濒死时回复3000/6000(+60%生命值)生命值回复，期间不可操作并降低自身20%~10%物理防御和法术防御（持续4秒）同时生成3盏烽火台，队友碰触可点亮烽火台使对方获得600/1200(+12%生命值)生命值回复(冷却120秒)\n不可操作状态结束时苏烈重生并对范围敌人造成400/800(+125%物理攻击)法术伤害和30%/60%减速(2秒)同时获得10~20%物理攻击、攻击频率、移速、物理防御和法术防御提升(持续5秒)\n烽火台全部被点亮可以提前结束不可操作状态\n【不屈再起】进入峡谷后60秒生效\n- **烽烟踏破**：苏烈强化接下来的三次普攻(持续2.5秒)，每次攻击造成115/138/161/184/207/230(+36%物理攻击)物理伤害同时获得85/102/119/136/153/170（+1.8%生命值）生命回复，第三次额外造成击飞0.75秒\n每次强化普攻会延长下次强化普攻持续时间1.5秒",
+          "relation": null,
+          "score": 0.4080658555030823,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "194"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "0.5秒为范围内血量最低的友方英雄回复90/135/180(+45%法术攻击)点生命，持续5秒，同时为其增加200/300/400(+30%法术攻击)点物理和法术防御。\n## 最佳搭档（官方原文理由）\n- 高渐离：高渐离：高渐离作为版本最强的AOE爆发输出流法师之一，开启大招免伤配合蔡文姬的大招加血加双抗能在团战中起到一个2打5的作用，蔡文姬二技能的稳定控制也能配合高渐离打出更好的输出环境。\n- 狄仁杰：狄仁杰：狄仁杰站桩近距离输出是相当强势的，二技能的解控使狄仁杰在团战中不会出现被控制直接秒掉的情况，蔡文姬的回血和二技能的眩晕以及大招的加双抗，能使狄仁杰在面对敌方刺客的针对时有更好的输出环境。\n## 压制英雄（官方原文理由）\n- 貂蝉：貂蝉：貂蝉是持续输出英雄，蔡文姬二技能追踪的连续两下控制很容易让貂蝉放空一个技能或者一个技能放不出来而自乱阵脚，1技能配合大招的恢复能力也能保护队友轻松逃生或反杀。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "184"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 蒙犽 · 官方数据聚合\n- 英雄：蒙犽（烈炮小子）\n- 分路：发育路\n- 上手难度：40\n## 技能描述（官方原文）\n- **炽热浑天**：蒙犽普攻和技能命中时获得炽怒，满炽怒时使用普攻或狂轰火线会消耗所有能量，获得100点爆发加速(持续1.5秒)，加速期间每0.25秒回复80~160+1.2%额外生命并向附近目标发射5枚飞弹，造成100~200+32%物理伤害，命中同一目标后续伤害衰减至25%\n蒙犽每次普通攻击会减少狂轰火线2.5%冷却时间\n- **狂轰火线**：蒙犽使用“浑天”持续扫射(按压施法，最多4.5秒)，每颗子弹造成(35/42/49/56/63/70+30%物理攻击)物理伤害(每3颗子弹视为1次普攻行为)，扫射过程可暂停并使用其他技能，自身获得50点 减速\n子弹具备贯穿效果，对后续敌人造成的伤害衰减至50%\n每2%攻击速度提升1%技能施放速度\n扫射对防御塔造成50%伤害效果",
+          "relation": null,
+          "score": 0.4049549698829651,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "524"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "禅的控制技能比较多，在用一技能配合二技能时不光可以开团，也可以干扰防御塔无法攻击，高渐离可以直接大招进场，释放出高额的爆发输出击杀对方英雄，是正面开团和越塔强杀的利器。\n## 压制英雄（官方原文理由）\n- 阿轲：阿轲：当前版本的阿轲多是刺客玩法，出装偏向输出摆法型，攻击力高的同时身板也很脆，当阿轲隐身突进结束，将会面对刘禅2秒左右的控制，在这两秒的时间内刘禅可以配合队友对阿轲进行毁灭性打击。即使阿轲隐身寻找机会切入己方核心输出位，刘禅也可以站在己方输出位利用1技能和2技能的连控轻松保护己方输出。\n- 鲁班七号：鲁班：刘禅可以利用技能控制效果轻松打断鲁班扫射，鲁班的被动效果承担了鲁班大部分的输出，每次鲁班在扫射被动时，刘禅都可以用1技能配合2技能轮次打断，使鲁班输出最低化，而且鲁班的技能CD比刘禅长，鲁班在被刘禅这样的坦克贴脸时，很难打出有效伤害，合理的使用技能甚至可以轻松把鲁班击杀。\n## 被压制英雄（官方原文理由）\n- 韩信：刘禅很害怕孤军作战，所以单独遇到输出型刺客会被一顿暴打\n- 貂蝉：由于灵活的貂蝉附带真实伤害，使得刘禅的控制技能不容易控制到貂蝉\n## 官方铭文与出装说明",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "114"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 戈娅 · 官方数据聚合\n- 英雄：戈娅（沙海飞舟）\n- 分路：发育路\n- 上手难度：50\n## 技能描述（官方原文）\n- **漂移疾射**：戈娅驾驶沙舟作战，可在移动中攻击，但沙舟惯性很大，有额外的起步加速和刹车减速时间。长按普攻可以使沙舟进入预备加速模式，最多蓄力三级，松手后沙舟根据蓄力级数极速起步(冷却20~16秒，随等级减少，起步速度受移速和等级影响)。\n轻点一次普攻会用手弩快速连续射击3次，并使沙舟刹车进入漂移状态，每次造成3~6(+22%物理攻击)物理伤害。连续射击6次后会追加一次强力射击，造成55~110(+100%物理攻击)物理伤害，同时沙舟会加速起步。\n戈娅 初始获得20%~40%攻速(随等级成长)，但额外攻速收益降低1/3 ；每3发箭矢视为1次普攻行为。\n- **弹射起步**：戈娅让沙舟爆发加速，加速期间若使用普攻并转向，会根据漂移方向朝最近敌人溅射黑砂，造成270/324/378/432/486/540(+60%物理攻击)物理伤害和30/36/42/48/54/60%减速，持续0.5秒。\n戈娅移动速度越快，爆发加速越多；黑砂对非英雄目标额外造成50%伤害。",
+          "relation": null,
+          "score": 0.40187060832977295,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "548"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.211,
+      "reused": false
+    },
+    {
+      "case_id": "R-23",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "梯队是什么意思",
+      "expected_intent": "TIER_META",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "TIER_META",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "TIER_META"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "梯队是什么意思",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.358769953250885,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "弩箭视为1次普攻行为)同时获得20/30/40移速提升(再次使用获得浮空)\n可消耗5层“流”使用额外的【万箭齐发】\n## 最佳搭档（官方原文理由）\n- 空空儿：利用空空儿的分身更多集流，提升技能组收益\n- 朵莉亚：朵莉亚的大招刷新在元流射手的身上，可以获得更多的流，提升攻击频率\n## 压制英雄（官方原文理由）\n- 鲁班七号：二技能可以在对拼的同时躲过鲁班七号的各式攻击，且大招可以持续压制缺少位移的鲁班七号\n- 后羿：面对后裔时可以更主动地出击，利用二技能位移或大招连放的浮空效果规避后裔的大招反扑\n## 被压制英雄（官方原文理由）\n- 盾山：盾山可以抵挡掉元流射手的所有弹道\n- 澜：元射的二技能位移需要锁定目标，面对澜的迅猛切入难以及时挣脱\n## 官方铭文与出装说明\n- 铭文搭配一：祸源、鹰眼、狩猎\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：抵抗之靴 → 影刃 → 无尽战刃 → 逐日之弓 → 仁者破晓 → 泣血之刃\n- 推荐出装二：影忍之足 → 闪电匕首 → 末世 → 影刃 → 暴烈之甲 → 逐风\n- Tips：无坚不摧，侧重伤害\n- Tips：攻守兼备，百样玲珑",
+          "relation": null,
+          "score": 0.358769953250885,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "584"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "兰陵王是典型的隐身刺客打野。一技能秘技·极意让他在朝敌方英雄移动时获得移速加成，配合三技能秘技·隐匿可以长时间潜行，绕后与抓单是他最舒服的节奏。二技能秘技·影蚀的匕首是连招核心：命中后会标记目标，后续攻击触发晕眩并回血，因此常见的顺序是先手匕首、再接一技能分身与大招暗袭完成斩杀。\n兰陵王在前期几乎统治无位移英雄，鲁班七号这类没有自保手段的脆皮是他最大的猎物；面对李白这类初期伤害不足的刺客，他还能进野区抢资源、压制对方发育。短板是怕硬控：张良的硬控、项羽的控制与推人都能在兰陵王切入后直接掐断输出，切入前务必确认对方控制技能是否已经交掉。\n搭档思路上，官方推荐宫本武藏与诸葛亮：前者提供留人控制、提高连招容错率，后者远程收割残血，中野联动收益很高。出装以暗影战斧为核心，兼顾突袭能力与生存。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "153"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "击杀\n- 李白：李白可以限制敌人移动，让其无法躲避机械仆从的攻击，又能补足米莱狄爆发伤害不足的弱点\n## 压制英雄（官方原文理由）\n- 韩信：米莱狄优秀的推进能力比韩信更加容易推到防御塔迫使其无法分带\n- 露娜：米莱狄指定控制技能能够有效控制集火露娜将其击杀\n## 被压制英雄（官方原文理由）\n- 苏烈：苏烈释放大招时，敌人越多，站位越密集，伤害越高。 可以专门用来克制米莱狄的机械大军\n- 花木兰：米莱狄逃脱能力较差，大招有飞行轨迹，一旦被花木兰霸体抵消掉控制，就会被花木兰近身击杀\n## 官方铭文与出装说明\n- 铭文搭配一：梦魇、献祭、轮回\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：冷静之靴 → 回响之杖 → 痛苦面具 → 博学者之怒 → 虚无法杖 → 贤者天书\n- 推荐出装二：冷静之靴 → 回响之杖 → 痛苦面具 → 博学者之怒 → 凝冰之息 → 贤者天书\n- Tips：冷静缩减属性能让米莱狄持续推进兵线和拆除建筑，同时米莱狄的属性会受到法术攻击影响，堆砌法术攻击同时还可以强化机器人属性\n- Tips：米莱狄的1技能射程超远，造成的减速效果会有利于机器人贴近其进行输出",
+          "relation": null,
+          "score": 0.3420121669769287,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "504"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "的英雄，而东皇太一就是这样一个非常合适的英雄。由于东皇太一大招的的特性，意味着只要有法师切入，一定会被控制住，而虞姬的高爆发伤害，几乎肯定能击杀来切入的脆皮法师，更能让虞姬在团战中更加肆无忌惮的输出。\n- 妲己：妲己：二者都是高爆发英雄，几乎没有任何脆皮刺客能在两者的一套存活，而且两者都有指向性的控制技能，如果两个人同时行动，在后期几乎是见一个秒一个，就算是坦克，在两人技能的轮番轰炸之下也极容易被击杀，可以说一旦碰到这两个组合，就千万不要让游戏拖到后期。\n## 压制英雄（官方原文理由）\n- 马可波罗：马可波罗：马可波罗的一技能不能穿过小兵或者敌方英雄，而虞姬可以，所以无论是对线消耗，还是清兵线能力，都是虞姬更胜一筹。而且由于虞姬的二技能免受物理伤害，大招的指向性更是能让马可的灵活无处可施。高爆发的虞姬也意味着一套下来能让马可波罗被瞬间击杀。\n- 韩信：韩信：韩信是个高机动性英雄，但是面对高爆发加技能指向性加免疫物理伤害的虞姬，被天然克制。虞姬三技能能很好的压制韩信的位移，因为即使韩信位移走了，一旦被锁定，也很有可能会被击杀。\n## 被压制英雄（官方原文理由）",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "174"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "值，潜伏值满进行一次跳跃并获取一次被动强化普攻\n苍每次普攻会指引当前无目标的狼魂协同攻击\n## 最佳搭档（官方原文理由）\n- 桑启：桑启提供草丛并且可以回复能力，能够提升苍的输出能力以及更容易触发被动\n- 朵莉亚：朵莉亚的大招刷新在苍的身上，可为苍多提供一次大招狼群\n## 压制英雄（官方原文理由）\n- 刘备：狼群可以挡住刘备的突进，更易拉扯\n- 百里守约：百里守约清兵慢，苍的狼会让百里守约清兵更加痛苦\n## 被压制英雄（官方原文理由）\n- 姜子牙：苍的召唤物狼被姜子牙击杀可让姜子牙快速升级\n- 不知火舞：高爆发英雄能快速解决苍\n## 官方铭文与出装说明\n- 铭文搭配一：宿命、鹰眼、狩猎\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：急速战靴 → 影刃 → 无尽战刃 → 仁者破晓 → 逐日之弓 → 泣血之刃\n- 推荐出装二：贪婪之噬 → 急速战靴 → 无尽战刃 → 影刃 → 宗师之力 → 仁者破晓\n- Tips：最大化输出能力\n- Tips：强化普攻输出和生存能力",
+          "relation": null,
+          "score": 0.3394588232040405,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "177"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.21,
+      "reused": false
+    },
+    {
+      "case_id": "R-24",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "谁能克制",
+      "expected_intent": "COUNTER_BY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "COUNTER_BY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "COUNTER_BY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "谁能克制",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.019,
+      "reused": false
+    },
+    {
+      "case_id": "R-25",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "天敌是什么",
+      "expected_intent": "COUNTER_BY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "COUNTER_BY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "COUNTER_BY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "天敌是什么",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.02,
+      "reused": false
+    },
+    {
+      "case_id": "R-26",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "搭档是什么意思",
+      "expected_intent": "SYNERGY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "SYNERGY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "SYNERGY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "搭档是什么意思",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.021,
+      "reused": false
+    },
+    {
+      "case_id": "R-27",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "组合是什么",
+      "expected_intent": "SYNERGY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "SYNERGY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "SYNERGY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "组合是什么",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.03,
+      "reused": false
+    },
+    {
+      "case_id": "R-28",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "配合是什么",
+      "expected_intent": "SYNERGY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "SYNERGY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "SYNERGY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "配合是什么",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.031,
+      "reused": false
+    },
+    {
+      "case_id": "R-29",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "铭文搭配是什么意思",
+      "expected_intent": "INSCRIPTION",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "INSCRIPTION",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "INSCRIPTION",
+        "SYNERGY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "铭文搭配是什么意思",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.021,
+      "reused": false
+    },
+    {
+      "case_id": "R-30",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "攻略是什么",
+      "expected_intent": "GAMEPLAY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "GAMEPLAY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "GAMEPLAY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "攻略是什么",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.4443342685699463,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "被其拉扯\n## 官方铭文与出装说明\n- 铭文搭配一：宿命、调和、虚空\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：冷静之靴 → 怒龙剑盾 → 红莲斗篷 → 血魔之怒 → 霸者重装 → 不死鸟之眼\n- 推荐出装二：近卫·形昭 → 冷静之靴 → 红莲斗篷 → 冰霜冲击 → 永夜守护 → 霸者重装\n- Tips：兼备生存、输出和冷却缩减\n- Tips：控强化制留人能力",
+          "relation": null,
+          "score": 0.4443342685699463,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "581"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "兰陵王是典型的隐身刺客打野。一技能秘技·极意让他在朝敌方英雄移动时获得移速加成，配合三技能秘技·隐匿可以长时间潜行，绕后与抓单是他最舒服的节奏。二技能秘技·影蚀的匕首是连招核心：命中后会标记目标，后续攻击触发晕眩并回血，因此常见的顺序是先手匕首、再接一技能分身与大招暗袭完成斩杀。\n兰陵王在前期几乎统治无位移英雄，鲁班七号这类没有自保手段的脆皮是他最大的猎物；面对李白这类初期伤害不足的刺客，他还能进野区抢资源、压制对方发育。短板是怕硬控：张良的硬控、项羽的控制与推人都能在兰陵王切入后直接掐断输出，切入前务必确认对方控制技能是否已经交掉。\n搭档思路上，官方推荐宫本武藏与诸葛亮：前者提供留人控制、提高连招容错率，后者远程收割残血，中野联动收益很高。出装以暗影战斧为核心，兼顾突袭能力与生存。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "153"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "化普攻击中沙暴中的敌人会引起爆炸，对沙暴范围内敌人造成8%已损生命值伤害。\n## 最佳搭档（官方原文理由）\n- 孙膑：提供加速和生存能力\n- 瑶：提供生存能力和控制能力\n## 压制英雄（官方原文理由）\n- 马可波罗：马可波罗瞬间爆发输出不足，且1技能较难命中\n- 钟无艳：钟无艳的位移能力较弱，除蹲草外难以接近戈娅\n## 被压制英雄（官方原文理由）\n- 张良：点控压制，可以轻松控制住戈娅\n- 澜：强爆发强突进，易击败戈娅\n## 官方铭文与出装说明\n- 铭文搭配一：祸源、狩猎、鹰眼\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：急速战靴 → 影刃 → 无尽战刃 → 仁者破晓 → 泣血之刃 → 逐日之弓\n- 推荐出装二：急速战靴 → 影刃 → 无尽战刃 → 仁者破晓 → 泣血之刃 → 暴烈之甲\n- Tips：攻速暴击流\n- Tips：移动射击流",
+          "relation": null,
+          "score": 0.439090371131897,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "548"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "的英雄，而东皇太一就是这样一个非常合适的英雄。由于东皇太一大招的的特性，意味着只要有法师切入，一定会被控制住，而虞姬的高爆发伤害，几乎肯定能击杀来切入的脆皮法师，更能让虞姬在团战中更加肆无忌惮的输出。\n- 妲己：妲己：二者都是高爆发英雄，几乎没有任何脆皮刺客能在两者的一套存活，而且两者都有指向性的控制技能，如果两个人同时行动，在后期几乎是见一个秒一个，就算是坦克，在两人技能的轮番轰炸之下也极容易被击杀，可以说一旦碰到这两个组合，就千万不要让游戏拖到后期。\n## 压制英雄（官方原文理由）\n- 马可波罗：马可波罗：马可波罗的一技能不能穿过小兵或者敌方英雄，而虞姬可以，所以无论是对线消耗，还是清兵线能力，都是虞姬更胜一筹。而且由于虞姬的二技能免受物理伤害，大招的指向性更是能让马可的灵活无处可施。高爆发的虞姬也意味着一套下来能让马可波罗被瞬间击杀。\n- 韩信：韩信：韩信是个高机动性英雄，但是面对高爆发加技能指向性加免疫物理伤害的虞姬，被天然克制。虞姬三技能能很好的压制韩信的位移，因为即使韩信位移走了，一旦被锁定，也很有可能会被击杀。\n## 被压制英雄（官方原文理由）",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "174"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "：当哪吒和孙策两个乱战高手一起开团时，敌方很难同时防备他们并被他们两带入混战节奏\n- 牛魔：当孙策带头冲锋之后，牛魔适时的追加控制，不仅提高孙策技能命中率，还能提高生存\n## 压制英雄（官方原文理由）\n- 程咬金：程咬金非常强势，但是同样拥有不弱的消耗能力的孙策，还可以支援队友，击溃对面防线\n- 王昭君：当孙策凭借霸体大招强行靠近时王昭君很难反制\n## 被压制英雄（官方原文理由）\n- 大乔：孙策有强势的支援能力但是没大乔快，大乔能够将被孙策强行控住的英雄传送回城保全其性命\n- 项羽：项羽拥有强大的反手能力，就算孙策利用大招突进开团，项羽的技能打出满额伤害和控制\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：抵抗之靴 → 暗影战斧 → 宗师之力 → 强者破军 → 名刀·司命 → 魔女斗篷\n- 推荐出装二：抵抗之靴 → 暗影战斧 → 强者破军 → 极寒风暴 → 魔女斗篷 → 血魔之怒\n- Tips：孙策可以通过2技能重置普攻，把握好节奏可以连续触发宗师之力的被动效果持续的输出高额伤害",
+          "relation": null,
+          "score": 0.4357391595840454,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "510"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.192,
+      "reused": false
+    },
+    {
+      "case_id": "R-31",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "技巧是什么",
+      "expected_intent": "GAMEPLAY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "GAMEPLAY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "GAMEPLAY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "技巧是什么",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.40891575813293457,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "# 西施 · 官方数据聚合\n- 英雄：西施（幻纱之灵）\n- 分路：中路\n- 上手难度：60\n## 技能描述（官方原文）\n- **少女的把戏**：西施的技能伤害会随着自身与敌人间的距离增加而强化，距离每增加100，伤害增加5%，最多提升40%。\n- **纱缚之印**：西施将法器扔向指定位置，对区域内的敌人造成120/144/168/192/216/240(+24%法术攻击)法术伤害并朝法器的位置聚拢，同时纱会缠绕在一名敌人英雄身上，5秒内再次点【纱缚之印】，纱会牵引敌人移动一段距离，法器的控制效果会打断目标施法。\n如果敌人距离西施过远，则不会受到影响。【纱缚之印】可以对非英雄单位造成双倍伤害。",
+          "relation": null,
+          "score": 0.40891575813293457,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "523"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "）\n- 庄周：庄周可以让百里玄策团战时更加安全\n- 高渐离：高渐离可以在团战中压低对方血线，以便百里玄策进场收割\n## 压制英雄（官方原文理由）\n- 鲁班七号：没有位移技能的射手被勾中几乎可以宣布死亡\n- 安琪拉：安琪拉技能需要预判，而百里玄策灵活的狩猎技巧导致很难命中\n## 被压制英雄（官方原文理由）\n- 东皇太一：强力控制对于百里玄策来说是十分致命的威胁，几乎不敢先手入场\n- 诸葛亮：灵活的英雄可以轻松避免钩镰命中，而没有命中钩镰的玄策无法开启收割节奏\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：追击刀锋 → 急速战靴 → 泣血之刃 → 暗影战斧 → 宗师之力 → 闪电匕首\n- 推荐出装二：追击刀锋 → 急速战靴 → 暗影战斧 → 泣血之刃 → 宗师之力 → 名刀·司命\n- Tips：闪电匕首会让玄策的收割的节奏更加高效\n- Tips：玄策持有暗影战斧后，可以保持极快的游走节奏，随时保持对线上的威慑力",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "195"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "拢，同时纱会缠绕在一名敌人英雄身上，5秒内再次点【纱缚之印】，纱会牵引敌人移动一段距离，法器的控制效果会打断目标施法。\n如果敌人距离西施过远，则不会受到影响。【纱缚之印】可以对非英雄单位造成双倍伤害。\n- **幻纱之灵**：西施抛出能量球，遇到野怪则会停下，爆炸前每0.5秒会攻击附近的敌人，造成150/180/210/240/270/300(+50%法术攻击)法术伤害，除首次命中外，持续多次命中同个目标则伤害衰减为25%。首次命中减少敌人15/18/21/24/27/30%移速，持续1.5秒。\n2秒后能量球爆炸造成150/180/210/240/270/300(+33%法术攻击)法术伤害，处于爆炸中心的敌人受到双倍的伤害。能量球会朝着被【纱缚之印】缠绕的目标移动。\n- **心无旁骛**：西施强化自身，获得视野提升，持续8秒，并刷新【幻纱之灵】的冷却。强化期间【纱缚之印】命中后可以连续控制敌人移动两次，同时【幻纱之灵】的冷却减半。大招开启时西施增加50%移速，持续0.5秒。 再次点击可以提前关闭技能。\n## 最佳搭档（官方原文理由）",
+          "relation": null,
+          "score": 0.39766478538513184,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "523"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "，可为影多提供一次复活机会\n- 牛魔：影自身控制能力薄弱，牛魔的双抗与控制效果可为影提供更多的击杀机会\n## 压制英雄（官方原文理由）\n- 后羿：影面对没有位移的英雄时，二技能有较高概率实现输出最大化\n- 妲己：影的二技能在受到部分控制时不会被中断，面对主要以控制后打输出的英雄时可利用该技巧对敌方造成威胁\n## 被压制英雄（官方原文理由）\n- 铠：铠的格挡效果可抵消影造成的大量伤害\n- 貂蝉：影的二技能会为本身锁定朝向，面对较为灵活的貂蝉时影很难触碰到目标\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：冷静之靴 → 暗影战斧 → 宗师之力 → 纯净苍穹 → 泣血之刃 → 暴烈之甲\n- 推荐出装二：贪婪之噬 → 急速战靴 → 暗影战斧 → 宗师之力 → 纯净苍穹 → 泣血之刃\n- Tips：半肉效果可提升较大容错率，前排消耗的同时保证能够释放出大招\n- Tips：强化普攻输出和生存能力",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "558"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "*篆法·疾势**：朝指定方向挥出一记笔墨对触碰的敌人造成200/240/280/320/360/400(+40%法术攻击)法术伤害，达到最远距离时笔墨爆炸散开，造成200(+40%法术攻击)法术伤害。\n- **飞白·藏锋**：上官婉儿选择一个点，以自己位置为终点书写，落笔瞬间对敌人造成150/180/210/240/270/300(+20%法术攻击)法术伤害，书写过程对触碰的敌人造成300/360/420/480/540/600(+40%法术攻击)法术伤害和25/30/35/40/45/50%减速持续2秒。\n每12/11/10/9/8/7秒储存一次笔势，最多可储备2次，技能受减冷却影响。",
+          "relation": null,
+          "score": 0.3956650495529175,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "513"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.198,
+      "reused": false
+    },
+    {
+      "case_id": "R-32",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "版本更新公告",
+      "expected_intent": "TIER_META",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "TIER_META",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "TIER_META"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "版本更新公告",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.35496604442596436,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "原文理由）\n- 瑶：瑶可以跟上宫本的高机动性并增强其生存能力。同时瑶的1技能可以弥补宫本小技能缺少硬控的缺陷\n- 刘邦：宫本需要在人群中进行持续作战，但他自身的生存能力并不强，刘邦可以帮他弥补这一短板\n## 压制英雄（官方原文理由）\n- 曹操：宫本的大招可以针对恢复型英雄，曹操面对他最大的长板被无限缩小\n- 马超：强化普攻的持续追击和减速会让马超非常难受\n## 被压制英雄（官方原文理由）\n- 金蝉：宫本大招的前摇时间较久，金蝉可以通过自己的1技能进行快速限制使宫本无法突进到敌人脸上\n- 牛魔：宫本需要持续的作战通过不断刷新护盾来提供生存能力，牛魔频繁的控制会让宫本非常难受\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：贪婪之噬 → 抵抗之靴 → 暗影战斧 → 宗师之力 → 反伤刺甲 → 泣血之刃\n- 推荐出装二：抵抗之靴 → 暗影战斧 → 冰痕之握 → 强者破军 → 魔女斗篷 → 名刀·司命\n- Tips：打野出装\n- Tips：对抗路出装",
+          "relation": null,
+          "score": 0.35496604442596436,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "130"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "0.5秒为范围内血量最低的友方英雄回复90/135/180(+45%法术攻击)点生命，持续5秒，同时为其增加200/300/400(+30%法术攻击)点物理和法术防御。\n## 最佳搭档（官方原文理由）\n- 高渐离：高渐离：高渐离作为版本最强的AOE爆发输出流法师之一，开启大招免伤配合蔡文姬的大招加血加双抗能在团战中起到一个2打5的作用，蔡文姬二技能的稳定控制也能配合高渐离打出更好的输出环境。\n- 狄仁杰：狄仁杰：狄仁杰站桩近距离输出是相当强势的，二技能的解控使狄仁杰在团战中不会出现被控制直接秒掉的情况，蔡文姬的回血和二技能的眩晕以及大招的加双抗，能使狄仁杰在面对敌方刺客的针对时有更好的输出环境。\n## 压制英雄（官方原文理由）\n- 貂蝉：貂蝉：貂蝉是持续输出英雄，蔡文姬二技能追踪的连续两下控制很容易让貂蝉放空一个技能或者一个技能放不出来而自乱阵脚，1技能配合大招的恢复能力也能保护队友轻松逃生或反杀。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "184"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "升至400/480/560/640/720/800(+135%额外物理攻击)物理伤害，回复提升至150/180/210/240/270/300(+2.25%额外生命值)点生命值和附带的3%已损生命值。\n- **强袭风暴**：向前冲锋对路径上的敌人造成270/324/378/432/486/540(+90%额外物理攻击)物理伤害。并强化下次普攻造成成180/216/252/288/324/360(+60%额外物理攻击+100%物理攻击)物理伤害和25/30/35/40/45/50%减速效果持续2秒。\n充能强化：在释放强化普攻时若能量&gt; 30，造成270/324/378/432/486/540(+90%额外物理攻击+150%物理攻击)物理伤和击飞(持续1秒)及落地后25/30/35/40/45/50%减速(持续1秒)",
+          "relation": null,
+          "score": 0.3301587700843811,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "503"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "5.4秒，对范围内的敌人每0.5秒造成140/210/280(+40%物理攻击)物理伤害并减少25/37.5/50%移速。\n内圈会受到双倍的刃伤，刃伤也可叠加暗印层数。\n## 最佳搭档（官方原文理由）\n- 白起：白起：作为目前版本唯一有嘲讽技能的英雄，白起的控制和坦克效果极强，李元芳的一技能飞镖拥有AOE爆炸效果，如果敌方英雄聚在一起，很容易打出较高的爆炸伤害，元芳的大招也有比较强的AOE伤害，白起如果2技能配合大招同时嘲讽控制敌方多名英雄，李元芳1技能接大招可以轻松打出爆炸伤害。\n- 墨子：墨子：李元芳到了后期，他的输出和射程相对其他射手会差一些，拥有高额伤害和远程poke控制能力的墨子可以为李元芳补足短板，墨子的大招同时控制多人也可以配合李元芳完成爆炸输出。\n## 压制英雄（官方原文理由）\n- 兰陵王：兰陵王：兰陵王的核心玩法是隐身后先手秒杀敌方核心输出点，有李元芳的被动在可以轻松探测到敌方兰陵王的位置和动态，强大的反隐效果可以让兰陵王失去gank己方核心输出位的机会，躲避好兰陵王的2技能后站撸也可以轻松击杀兰陵王。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "173"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "# 海月 · 官方数据聚合\n- 英雄：海月（永夜之心）\n- 分路：中路\n- 上手难度：30\n## 技能描述（官方原文）\n- **别月**：海月身后有三个月盘，释放【瞬华】、【 流光】时会消耗一个月盘，全部消耗后【瞬华】、 【流光】会进入完整的技能冷却，同时获得次强化普攻， 额外产生3颗法球，每颗法球造 成25~50(+6%法术攻击)法术伤害。【瞬华】、【 流光】命中目标后会给目标叠加一层印记，再 次命中后会触发不同的效果。\n- **瞬华**：海月向前释放一道月光， 造成350/420/490/560/630/700(+75%法术攻击)法术伤害。如果触发印记，对目标额外造成70/84/98/112/126/140(+14%法术攻击)真实伤害。\n海月在幻境中释放一技能命中墙体反弹，对敌方造成1/3伤害，若命中自己获得200/240/280/320/360/400(+3%额外生命)回复\n海月在幻境中释放一技能超出技能距离后造成1/3伤害",
+          "relation": null,
+          "score": 0.3276413679122925,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "521"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.212,
+      "reused": false
+    },
+    {
+      "case_id": "R-33",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "版本更新时间",
+      "expected_intent": "TIER_META",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "TIER_META",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "TIER_META"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "版本更新时间",
+      "slots": {},
+      "degraded": false,
+      "graph_available": null,
+      "top_score": 0.41649436950683594,
+      "evidence_count": 5,
+      "evidence": [
+        {
+          "kind": "vector",
+          "content": "原文理由）\n- 瑶：瑶可以跟上宫本的高机动性并增强其生存能力。同时瑶的1技能可以弥补宫本小技能缺少硬控的缺陷\n- 刘邦：宫本需要在人群中进行持续作战，但他自身的生存能力并不强，刘邦可以帮他弥补这一短板\n## 压制英雄（官方原文理由）\n- 曹操：宫本的大招可以针对恢复型英雄，曹操面对他最大的长板被无限缩小\n- 马超：强化普攻的持续追击和减速会让马超非常难受\n## 被压制英雄（官方原文理由）\n- 金蝉：宫本大招的前摇时间较久，金蝉可以通过自己的1技能进行快速限制使宫本无法突进到敌人脸上\n- 牛魔：宫本需要持续的作战通过不断刷新护盾来提供生存能力，牛魔频繁的控制会让宫本非常难受\n## 官方铭文与出装说明\n- 铭文搭配一：异变、鹰眼、隐匿\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：贪婪之噬 → 抵抗之靴 → 暗影战斧 → 宗师之力 → 反伤刺甲 → 泣血之刃\n- 推荐出装二：抵抗之靴 → 暗影战斧 → 冰痕之握 → 强者破军 → 魔女斗篷 → 名刀·司命\n- Tips：打野出装\n- Tips：对抗路出装",
+          "relation": null,
+          "score": 0.41649436950683594,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "130"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "禅的控制技能比较多，在用一技能配合二技能时不光可以开团，也可以干扰防御塔无法攻击，高渐离可以直接大招进场，释放出高额的爆发输出击杀对方英雄，是正面开团和越塔强杀的利器。\n## 压制英雄（官方原文理由）\n- 阿轲：阿轲：当前版本的阿轲多是刺客玩法，出装偏向输出摆法型，攻击力高的同时身板也很脆，当阿轲隐身突进结束，将会面对刘禅2秒左右的控制，在这两秒的时间内刘禅可以配合队友对阿轲进行毁灭性打击。即使阿轲隐身寻找机会切入己方核心输出位，刘禅也可以站在己方输出位利用1技能和2技能的连控轻松保护己方输出。\n- 鲁班七号：鲁班：刘禅可以利用技能控制效果轻松打断鲁班扫射，鲁班的被动效果承担了鲁班大部分的输出，每次鲁班在扫射被动时，刘禅都可以用1技能配合2技能轮次打断，使鲁班输出最低化，而且鲁班的技能CD比刘禅长，鲁班在被刘禅这样的坦克贴脸时，很难打出有效伤害，合理的使用技能甚至可以轻松把鲁班击杀。\n## 被压制英雄（官方原文理由）\n- 韩信：刘禅很害怕孤军作战，所以单独遇到输出型刺客会被一顿暴打\n- 貂蝉：由于灵活的貂蝉附带真实伤害，使得刘禅的控制技能不容易控制到貂蝉\n## 官方铭文与出装说明",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "114"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "提供稳定的控制效果，帮助姜子牙技能命中，提升姜子牙的支援游走能力。\n- 澜：姜子牙可以为澜赐封神力，配合澜的刷钱能力使得等级提升更快，让澜切入时伤害更高，承伤能力更强。\n## 压制英雄（官方原文理由）\n- 后羿：后羿较为笨重，容易被姜子牙一套技能控制和击败\n- 妲己：妲己的施法距离较短，容易被姜子牙先手控制\n## 被压制英雄（官方原文理由）\n- 娜可露露：娜可露露的切入能力极强，姜子牙容易被接近和击败。\n- 干将莫邪：干将莫邪的施法距离更长，姜子牙容易被其消耗和击败\n## 官方铭文与出装说明\n- 铭文搭配一：梦魇、献祭、轮回\n- 铭文搭配二：圣人、虚空、轮回\n- 推荐出装一：痛苦面具 → 秘法之靴 → 回响之杖 → 博学者之怒 → 虚无法杖 → 贤者天书\n- 推荐出装二：疾步之靴 → 痛苦面具 → 回响之杖 → 博学者之怒 → 辉月 → 虚无法杖\n- Tips：冷却更多，容错率和技能命中率更高\n- Tips：极致的爆炸输出",
+          "relation": null,
+          "score": 0.3890862464904785,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "148"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "0.5秒为范围内血量最低的友方英雄回复90/135/180(+45%法术攻击)点生命，持续5秒，同时为其增加200/300/400(+30%法术攻击)点物理和法术防御。\n## 最佳搭档（官方原文理由）\n- 高渐离：高渐离：高渐离作为版本最强的AOE爆发输出流法师之一，开启大招免伤配合蔡文姬的大招加血加双抗能在团战中起到一个2打5的作用，蔡文姬二技能的稳定控制也能配合高渐离打出更好的输出环境。\n- 狄仁杰：狄仁杰：狄仁杰站桩近距离输出是相当强势的，二技能的解控使狄仁杰在团战中不会出现被控制直接秒掉的情况，蔡文姬的回血和二技能的眩晕以及大招的加双抗，能使狄仁杰在面对敌方刺客的针对时有更好的输出环境。\n## 压制英雄（官方原文理由）\n- 貂蝉：貂蝉：貂蝉是持续输出英雄，蔡文姬二技能追踪的连续两下控制很容易让貂蝉放空一个技能或者一个技能放不出来而自乱阵脚，1技能配合大招的恢复能力也能保护队友轻松逃生或反杀。",
+          "relation": null,
+          "score": null,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "184"
+          ]
+        },
+        {
+          "kind": "vector",
+          "content": "害并显形3秒。或为友方英雄回复50(+10%法术攻击)(+1.5%额外生命)点生命。\n该技能可充能3次，充能时间为12/11.5/11/10.5/10/9.5秒。轻触时，桑启将飞往当前身上连线的草丛。\n- **萤火微光**：桑启在指定位置召唤【光之草丛】，6秒内可以释放，飞至被召唤的草丛并获得1层【萤火之力】。\n【光之草丛】：光之草丛被召唤出来1秒后，每隔1秒将向周围最多5名英雄发射萤火虫，每颗萤火虫造成100(+20%法术攻击)(+3%额外生命)法术伤害或治疗友方英雄50(+10%法术攻击)(+1.5%额外生命)点生命。敌方单位进入光之草丛会暴露视野。光之草丛在快消失时不产生萤火虫。光之草丛持续9/12/15秒。光之草丛消失后，将转化为普通草丛留存30秒。\n## 最佳搭档（官方原文理由）\n- 后羿：持续给射手提供治疗\n- 伽罗：持续给射手提供治疗\n## 压制英雄（官方原文理由）\n- 百里守约：持续治疗减少POKE带来的伤害\n- 沈梦溪：持续治疗减少POKE带来的伤害\n## 被压制英雄（官方原文理由）\n- 哪吒：减回复\n- 孙尚香：高爆发回复困难\n## 官方铭文与出装说明",
+          "relation": null,
+          "score": 0.3863721489906311,
+          "source": "official",
+          "patch": "2026-10",
+          "hero_ids": [
+            "534"
+          ]
+        }
+      ],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.229,
+      "reused": false
+    },
+    {
+      "case_id": "R-34",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "怕什么",
+      "expected_intent": "COUNTER_BY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "COUNTER_BY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "COUNTER_BY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "怕什么",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.018,
+      "reused": false
+    },
+    {
+      "case_id": "R-35",
+      "set": "coverage",
+      "category": "拒答-知识库未收录",
+      "turn": 1,
+      "question": "搭档怎么选",
+      "expected_intent": "SYNERGY",
+      "expected_entity_ids": [],
+      "expected_evidence_contains": [],
+      "expect_type": "reject",
+      "note": null,
+      "http_status": 200,
+      "type": "reject",
+      "intent": "SYNERGY",
+      "confidence": 0.0,
+      "answer": "知识库中没有收录与该问题相关的内容，暂时无法给出有依据的回答。可以换一个英雄或换一种问法（如「貂蝉的铭文搭配」）再试。",
+      "citations": [],
+      "entity_ids": [],
+      "entity_names": [],
+      "matched_intents": [
+        "SYNERGY"
+      ],
+      "intent_method": "rule",
+      "coref_resolved": null,
+      "resolved_question": "搭档怎么选",
+      "slots": {},
+      "degraded": false,
+      "graph_available": true,
+      "top_score": null,
+      "evidence_count": 0,
+      "evidence": [],
+      "generation": {},
+      "guard": null,
+      "guard_degraded": false,
+      "error": null,
+      "elapsed_s": 0.019,
+      "reused": false
     },
     {
       "case_id": "E-01",
@@ -6584,10 +8789,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 137,
-        "reasoning_tokens": 121,
-        "reasoning_chars": 172,
+        "completion_tokens": 114,
+        "reasoning_tokens": 98,
+        "reasoning_chars": 145,
         "content_chars": 18,
         "fallback": false,
         "streamed": true
@@ -6600,7 +8807,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.239
+      "elapsed_s": 2.202,
+      "reused": false
     },
     {
       "case_id": "E-02",
@@ -6846,10 +9054,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 250,
-        "reasoning_tokens": 209,
-        "reasoning_chars": 271,
+        "completion_tokens": 227,
+        "reasoning_tokens": 186,
+        "reasoning_chars": 237,
         "content_chars": 38,
         "fallback": false,
         "streamed": true
@@ -6862,7 +9072,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 4.302
+      "elapsed_s": 3.497,
+      "reused": false
     },
     {
       "case_id": "E-03",
@@ -6883,7 +9094,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "猴子（孙悟空）怕：曜、橘右京、狂铁、芈月、苏烈、裴擒虎、项羽。",
+      "answer": "孙悟空怕：曜、橘右京、狂铁、芈月、苏烈、裴擒虎、项羽。",
       "citations": [
         {
           "index": 1,
@@ -7051,11 +9262,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 180,
-        "reasoning_tokens": 151,
-        "reasoning_chars": 224,
-        "content_chars": 31,
+        "completion_tokens": 201,
+        "reasoning_tokens": 175,
+        "reasoning_chars": 247,
+        "content_chars": 27,
         "fallback": false,
         "streamed": true
       },
@@ -7067,7 +9280,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.195
+      "elapsed_s": 3.649,
+      "reused": false
     },
     {
       "case_id": "E-04",
@@ -7106,7 +9320,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.013
+      "elapsed_s": 0.024,
+      "reused": false
     },
     {
       "case_id": "E-05",
@@ -7141,7 +9356,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.02
+      "elapsed_s": 0.018,
+      "reused": false
     },
     {
       "case_id": "F-01",
@@ -7160,7 +9376,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "根据资料，克制铠的英雄有：公孙离、芈月、蒙恬、诸葛亮。",
+      "answer": "根据资料，能打得过铠的英雄有：\n\n- 公孙离\n- 芈月\n- 蒙恬\n- 诸葛亮",
       "citations": [
         {
           "index": 1,
@@ -7271,11 +9487,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 128,
-        "reasoning_tokens": 107,
-        "reasoning_chars": 165,
-        "content_chars": 27,
+        "completion_tokens": 114,
+        "reasoning_tokens": 84,
+        "reasoning_chars": 134,
+        "content_chars": 38,
         "fallback": false,
         "streamed": true
       },
@@ -7287,7 +9505,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.145
+      "elapsed_s": 2.602,
+      "reused": false
     },
     {
       "case_id": "F-02",
@@ -7331,7 +9550,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-03",
@@ -7375,7 +9595,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.013
+      "elapsed_s": 0.012,
+      "reused": false
     },
     {
       "case_id": "F-04",
@@ -7394,7 +9615,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "貂蝉的天敌（克制貂蝉）有：妲己、张良、甄姬、花木兰、蔡文姬、赵怀真、高渐离。",
+      "answer": "貂蝉的天敌有：妲己、张良、甄姬、花木兰、蔡文姬、赵怀真、高渐离。",
       "citations": [
         {
           "index": 1,
@@ -7562,11 +9783,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 122,
-        "reasoning_tokens": 85,
-        "reasoning_chars": 122,
-        "content_chars": 38,
+        "completion_tokens": 105,
+        "reasoning_tokens": 73,
+        "reasoning_chars": 102,
+        "content_chars": 32,
         "fallback": false,
         "streamed": true
       },
@@ -7578,7 +9801,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.782
+      "elapsed_s": 2.315,
+      "reused": false
     },
     {
       "case_id": "F-05",
@@ -7622,7 +9846,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-06",
@@ -7641,7 +9866,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "花木兰怕：庄周、牛魔、诸葛亮。",
+      "answer": "花木兰怕庄周、牛魔、诸葛亮。",
       "citations": [
         {
           "index": 1,
@@ -7733,11 +9958,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 101,
-        "reasoning_tokens": 88,
-        "reasoning_chars": 135,
-        "content_chars": 15,
+        "completion_tokens": 73,
+        "reasoning_tokens": 61,
+        "reasoning_chars": 95,
+        "content_chars": 14,
         "fallback": false,
         "streamed": true
       },
@@ -7749,7 +9976,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.859
+      "elapsed_s": 2.144,
+      "reused": false
     },
     {
       "case_id": "F-07",
@@ -7768,7 +9996,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "（本次只回答了「被谁克制」；您还提到了「怎么打」，可以继续追问。）\n资料中克制孙悟空（猴子）的英雄有：曜、橘右京、狂铁、芈月、苏烈、裴擒虎、项羽。",
+      "answer": "（本次只回答了「被谁克制」；您还提到了「怎么打」，可以继续追问。）\n曜、橘右京、狂铁、芈月、苏烈、裴擒虎、项羽。",
       "citations": [
         {
           "index": 1,
@@ -7937,11 +10165,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 136,
-        "reasoning_tokens": 103,
-        "reasoning_chars": 162,
-        "content_chars": 39,
+        "completion_tokens": 145,
+        "reasoning_tokens": 122,
+        "reasoning_chars": 180,
+        "content_chars": 22,
         "fallback": false,
         "streamed": true
       },
@@ -7953,7 +10183,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.051
+      "elapsed_s": 3.039,
+      "reused": false
     },
     {
       "case_id": "F-08",
@@ -7997,7 +10228,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.019
+      "elapsed_s": 0.015,
+      "reused": false
     },
     {
       "case_id": "F-09",
@@ -8241,10 +10473,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 105,
-        "reasoning_tokens": 65,
-        "reasoning_chars": 79,
+        "completion_tokens": 135,
+        "reasoning_tokens": 95,
+        "reasoning_chars": 127,
         "content_chars": 38,
         "fallback": false,
         "streamed": true
@@ -8257,7 +10491,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.46
+      "elapsed_s": 2.719,
+      "reused": false
     },
     {
       "case_id": "F-10",
@@ -8301,7 +10536,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.013
+      "elapsed_s": 0.016,
+      "reused": false
     },
     {
       "case_id": "F-11",
@@ -8320,7 +10556,7 @@
       "type": "answer",
       "intent": "COUNTER_OF",
       "confidence": 0.75,
-      "answer": "根据资料，孙悟空克制妲己、马可波罗。",
+      "answer": "孙悟空打得过妲己、马可波罗。",
       "citations": [
         {
           "index": 1,
@@ -8393,11 +10629,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 78,
-        "reasoning_tokens": 64,
-        "reasoning_chars": 102,
-        "content_chars": 18,
+        "completion_tokens": 98,
+        "reasoning_tokens": 86,
+        "reasoning_chars": 134,
+        "content_chars": 14,
         "fallback": false,
         "streamed": true
       },
@@ -8409,7 +10647,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 1.913
+      "elapsed_s": 2.371,
+      "reused": false
     },
     {
       "case_id": "F-12",
@@ -8653,10 +10892,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 129,
-        "reasoning_tokens": 88,
-        "reasoning_chars": 127,
+        "completion_tokens": 123,
+        "reasoning_tokens": 82,
+        "reasoning_chars": 114,
         "content_chars": 44,
         "fallback": false,
         "streamed": true
@@ -8669,7 +10910,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.49
+      "elapsed_s": 2.538,
+      "reused": false
     },
     {
       "case_id": "F-13",
@@ -8688,7 +10930,7 @@
       "type": "answer",
       "intent": "COUNTER_OF",
       "confidence": 0.85,
-      "answer": "后羿克制：廉颇、张良、百里守约、艾琳。",
+      "answer": "后羿能欺负：廉颇、张良、百里守约、艾琳。",
       "citations": [
         {
           "index": 1,
@@ -8799,11 +11041,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 109,
-        "reasoning_tokens": 91,
-        "reasoning_chars": 133,
-        "content_chars": 19,
+        "completion_tokens": 117,
+        "reasoning_tokens": 98,
+        "reasoning_chars": 152,
+        "content_chars": 20,
         "fallback": false,
         "streamed": true
       },
@@ -8815,7 +11059,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.622
+      "elapsed_s": 3.0,
+      "reused": false
     },
     {
       "case_id": "F-14",
@@ -8834,7 +11079,7 @@
       "type": "answer",
       "intent": "COUNTER_BY",
       "confidence": 0.85,
-      "answer": "可选：妲己、张良、甄姬、花木兰、蔡文姬、赵怀真、高渐离。",
+      "answer": "根据资料，克制貂蝉的英雄有：妲己、张良、甄姬、花木兰、蔡文姬、赵怀真、高渐离。",
       "citations": [
         {
           "index": 1,
@@ -9002,11 +11247,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 241,
-        "reasoning_tokens": 213,
-        "reasoning_chars": 317,
-        "content_chars": 28,
+        "completion_tokens": 499,
+        "reasoning_tokens": 464,
+        "reasoning_chars": 702,
+        "content_chars": 39,
         "fallback": false,
         "streamed": true
       },
@@ -9018,7 +11265,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 4.296
+      "elapsed_s": 7.289,
+      "reused": false
     },
     {
       "case_id": "F-15",
@@ -9037,7 +11285,7 @@
       "type": "answer",
       "intent": "SYNERGY",
       "confidence": 0.75,
-      "answer": "铠跟宫本武藏、花木兰配合比较猛。",
+      "answer": "铠跟宫本武藏、花木兰配合比较猛，小团战战斗力爆表。",
       "citations": [
         {
           "index": 1,
@@ -9110,11 +11358,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 112,
-        "reasoning_tokens": 98,
-        "reasoning_chars": 144,
-        "content_chars": 16,
+        "completion_tokens": 122,
+        "reasoning_tokens": 101,
+        "reasoning_chars": 148,
+        "content_chars": 25,
         "fallback": false,
         "streamed": true
       },
@@ -9126,7 +11376,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.54
+      "elapsed_s": 2.59,
+      "reused": false
     },
     {
       "case_id": "F-16",
@@ -9170,7 +11421,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.014
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-17",
@@ -9214,7 +11466,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.016
+      "elapsed_s": 0.012,
+      "reused": false
     },
     {
       "case_id": "F-18",
@@ -9233,7 +11486,7 @@
       "type": "answer",
       "intent": "SYNERGY",
       "confidence": 0.75,
-      "answer": "貂蝉开黑可搭庄周、白起。",
+      "answer": "根据资料，貂蝉开黑推荐搭配：庄周、白起。",
       "citations": [
         {
           "index": 1,
@@ -9306,11 +11559,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 75,
-        "reasoning_tokens": 62,
-        "reasoning_chars": 92,
-        "content_chars": 12,
+        "completion_tokens": 134,
+        "reasoning_tokens": 117,
+        "reasoning_chars": 179,
+        "content_chars": 20,
         "fallback": false,
         "streamed": true
       },
@@ -9322,7 +11577,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 1.957
+      "elapsed_s": 2.659,
+      "reused": false
     },
     {
       "case_id": "F-19",
@@ -9341,7 +11597,7 @@
       "type": "answer",
       "intent": "SYNERGY",
       "confidence": 0.75,
-      "answer": "东皇太一与阿轲、马可波罗是官方推荐搭档，一起玩强。",
+      "answer": "东皇太一和阿轲、马可波罗一起玩强。",
       "citations": [
         {
           "index": 1,
@@ -9414,11 +11670,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 129,
-        "reasoning_tokens": 107,
-        "reasoning_chars": 161,
-        "content_chars": 25,
+        "completion_tokens": 89,
+        "reasoning_tokens": 73,
+        "reasoning_chars": 100,
+        "content_chars": 17,
         "fallback": false,
         "streamed": true
       },
@@ -9430,7 +11688,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.159
+      "elapsed_s": 2.237,
+      "reused": false
     },
     {
       "case_id": "F-20",
@@ -9449,7 +11708,7 @@
       "type": "answer",
       "intent": "SYNERGY",
       "confidence": 0.75,
-      "answer": "刘邦、瑶",
+      "answer": "宫本武藏的组合英雄有：刘邦、瑶。",
       "citations": [
         {
           "index": 1,
@@ -9522,11 +11781,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 83,
-        "reasoning_tokens": 79,
-        "reasoning_chars": 125,
-        "content_chars": 4,
+        "completion_tokens": 62,
+        "reasoning_tokens": 49,
+        "reasoning_chars": 73,
+        "content_chars": 16,
         "fallback": false,
         "streamed": true
       },
@@ -9538,7 +11799,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.513
+      "elapsed_s": 1.957,
+      "reused": false
     },
     {
       "case_id": "F-21",
@@ -9557,7 +11819,7 @@
       "type": "answer",
       "intent": "ITEM_BUILD",
       "confidence": 0.7359446287155151,
-      "answer": "推荐出装一（半肉）：抵抗之靴 → 暗影战斧 → 极寒风暴 → 宗师之力 → 不死鸟之眼 → 无尽战刃  \n推荐出装二（全输出）：抵抗之靴 → 暗影战斧 → 宗师之力 → 无尽战刃 → 强者破军 → 名刀·司命",
+      "answer": "资料中官方推荐出装有两套：\n\n1. 半肉出装：抵抗之靴 → 暗影战斧 → 极寒风暴 → 宗师之力 → 不死鸟之眼 → 无尽战刃  \n   特点：侵略性不减且生存能力提升，暗影战斧和极寒风暴保障前中期续航，宗师之力让强化普攻打出爆发性伤害。\n\n2. 全输出出装：抵抗之靴 → 暗影战斧 → 宗师之力 → 无尽战刃 → 强者破军 → 名刀·司命  \n   特点：全输出装备加成下，可以做到一击必杀。",
       "citations": [
         {
           "index": 1,
@@ -9844,11 +12106,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 277,
-        "reasoning_tokens": 200,
-        "reasoning_chars": 291,
-        "content_chars": 104,
+        "completion_tokens": 600,
+        "reasoning_tokens": 463,
+        "reasoning_chars": 680,
+        "content_chars": 197,
         "fallback": false,
         "streamed": true
       },
@@ -9860,7 +12124,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 4.545
+      "elapsed_s": 7.055,
+      "reused": false
     },
     {
       "case_id": "F-22",
@@ -10166,10 +12431,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 92,
-        "reasoning_tokens": 80,
-        "reasoning_chars": 110,
+        "completion_tokens": 83,
+        "reasoning_tokens": 71,
+        "reasoning_chars": 96,
         "content_chars": 16,
         "fallback": false,
         "streamed": true
@@ -10182,7 +12449,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.746
+      "elapsed_s": 2.321,
+      "reused": false
     },
     {
       "case_id": "F-23",
@@ -10201,7 +12469,7 @@
       "type": "answer",
       "intent": "ITEM_BUILD",
       "confidence": 0.6706900596618652,
-      "answer": "貂蝉六神装有两套：\n\n1. 冷静之靴 → 噬神之书 → 痛苦面具 → 极寒风暴 → 不死鸟之眼 → 博学者之怒  \n2. 冷静之靴 → 噬神之书 → 暴烈之甲 → 痛苦面具 → 极寒风暴 → 辉月",
+      "answer": "貂蝉六神装有两套推荐：\n\n1. 冷静之靴 → 噬神之书 → 痛苦面具 → 极寒风暴 → 不死鸟之眼 → 博学者之怒  \n2. 冷静之靴 → 噬神之书 → 暴烈之甲 → 痛苦面具 → 极寒风暴 → 辉月",
       "citations": [
         {
           "index": 1,
@@ -10506,11 +12774,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 406,
-        "reasoning_tokens": 332,
-        "reasoning_chars": 436,
-        "content_chars": 98,
+        "completion_tokens": 303,
+        "reasoning_tokens": 228,
+        "reasoning_chars": 317,
+        "content_chars": 100,
         "fallback": false,
         "streamed": true
       },
@@ -10522,7 +12792,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 4.971
+      "elapsed_s": 4.293,
+      "reused": false
     },
     {
       "case_id": "F-24",
@@ -10828,10 +13099,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 66,
-        "reasoning_tokens": 61,
-        "reasoning_chars": 89,
+        "completion_tokens": 70,
+        "reasoning_tokens": 65,
+        "reasoning_chars": 100,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -10844,7 +13117,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 1.909
+      "elapsed_s": 2.647,
+      "reused": false
     },
     {
       "case_id": "F-25",
@@ -10863,7 +13137,7 @@
       "type": "answer",
       "intent": "ITEM_BUILD",
       "confidence": 0.7127828001976013,
-      "answer": "资料中的推荐出装如下：\n\n- 推荐出装一：未收录(1722) → 疾步之靴 → 红莲斗篷 → 不死鸟之眼 → 霸者重装 → 不祥征兆\n- 推荐出装二：未收录(1722) → 疾步之靴 → 红莲斗篷 → 魔女斗篷 → 极寒风暴 → 霸者重装\n\n出装思路：以堆叠生命值为主，保证大招释放时自身安全；疾步之靴能在没有闪现时创造大招机会，极寒风暴可减少技能真空期。",
+      "answer": "东皇太一官方推荐出装有两套：\n\n- 推荐出装一：未收录(1722) → 疾步之靴 → 红莲斗篷 → 不死鸟之眼 → 霸者重装 → 不祥征兆\n- 推荐出装二：未收录(1722) → 疾步之靴 → 红莲斗篷 → 魔女斗篷 → 极寒风暴 → 霸者重装",
       "citations": [
         {
           "index": 1,
@@ -11168,11 +13442,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 550,
-        "reasoning_tokens": 417,
-        "reasoning_chars": 627,
-        "content_chars": 178,
+        "completion_tokens": 406,
+        "reasoning_tokens": 309,
+        "reasoning_chars": 455,
+        "content_chars": 122,
         "fallback": false,
         "streamed": true
       },
@@ -11184,7 +13460,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 7.696
+      "elapsed_s": 5.923,
+      "reused": false
     },
     {
       "case_id": "F-26",
@@ -11490,10 +13767,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 728,
-        "reasoning_tokens": 724,
-        "reasoning_chars": 1117,
+        "completion_tokens": 356,
+        "reasoning_tokens": 352,
+        "reasoning_chars": 536,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -11506,7 +13785,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 11.554
+      "elapsed_s": 6.328,
+      "reused": false
     },
     {
       "case_id": "F-27",
@@ -11525,7 +13805,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "铠有两套铭文：\n\n- 第1套：红·传承、蓝·鹰眼、黄·隐匿\n- 第2套：红·圣人、蓝·虚空、黄·轮回",
+      "answer": "铠可带两套铭文：\n\n- 第1套：红·传承、蓝·鹰眼、黄·隐匿\n- 第2套：红·圣人、蓝·虚空、黄·轮回",
       "citations": [
         {
           "index": 1,
@@ -11668,11 +13948,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 242,
-        "reasoning_tokens": 199,
-        "reasoning_chars": 281,
-        "content_chars": 50,
+        "completion_tokens": 193,
+        "reasoning_tokens": 148,
+        "reasoning_chars": 203,
+        "content_chars": 51,
         "fallback": false,
         "streamed": true
       },
@@ -11684,7 +13966,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 4.377
+      "elapsed_s": 3.377,
+      "reused": false
     },
     {
       "case_id": "F-28",
@@ -11703,7 +13986,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "亚瑟有两套铭文搭配：\n\n第1套：红·宿命、蓝·虚空、黄·调和  \n第2套：红·圣人、蓝·虚空、黄·轮回",
+      "answer": "亚瑟铭文有两套搭配：\n\n- 第1套：红色宿命、蓝色虚空、黄色调和\n- 第2套：红色圣人、蓝色虚空、黄色轮回",
       "citations": [
         {
           "index": 1,
@@ -11846,11 +14129,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 167,
-        "reasoning_tokens": 126,
-        "reasoning_chars": 177,
-        "content_chars": 51,
+        "completion_tokens": 193,
+        "reasoning_tokens": 154,
+        "reasoning_chars": 224,
+        "content_chars": 53,
         "fallback": false,
         "streamed": true
       },
@@ -11862,7 +14147,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.845
+      "elapsed_s": 3.255,
+      "reused": false
     },
     {
       "case_id": "F-29",
@@ -11881,7 +14167,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "貂蝉铭文推荐：\n\n第1套：红·梦魇、蓝·怜悯、黄·轮回  \n第2套：红·圣人、蓝·虚空、黄·轮回",
+      "answer": "貂蝉的铭文推荐：\n\n第1套：红·梦魇、蓝·怜悯、黄·轮回  \n第2套：红·圣人、蓝·虚空、黄·轮回",
       "citations": [
         {
           "index": 1,
@@ -12024,11 +14310,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 140,
-        "reasoning_tokens": 100,
-        "reasoning_chars": 139,
-        "content_chars": 48,
+        "completion_tokens": 170,
+        "reasoning_tokens": 129,
+        "reasoning_chars": 184,
+        "content_chars": 49,
         "fallback": false,
         "streamed": true
       },
@@ -12040,7 +14328,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.925
+      "elapsed_s": 3.21,
+      "reused": false
     },
     {
       "case_id": "F-30",
@@ -12059,7 +14348,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "资料中列出后羿两套铭文：\n\n- 第1套：红月（红）、鹰眼（蓝）、隐匿（黄）\n- 第2套：圣人（红）、虚空（蓝）、轮回（黄）\n\n资料未说明哪套更好。",
+      "answer": "资料中给出了后羿的两套铭文，但未说明哪套更好：\n\n- 第1套：红月、鹰眼、隐匿\n- 第2套：圣人、虚空、轮回",
       "citations": [
         {
           "index": 1,
@@ -12202,11 +14491,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 369,
-        "reasoning_tokens": 313,
-        "reasoning_chars": 461,
-        "content_chars": 73,
+        "completion_tokens": 398,
+        "reasoning_tokens": 355,
+        "reasoning_chars": 509,
+        "content_chars": 54,
         "fallback": false,
         "streamed": true
       },
@@ -12218,7 +14509,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 5.563
+      "elapsed_s": 5.155,
+      "reused": false
     },
     {
       "case_id": "F-31",
@@ -12237,7 +14529,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "（本次只回答了「铭文」；您还提到了「搭档搭配」，可以继续追问。）\n东皇太一铭文搭配如下：\n\n第1套：红·宿命、蓝·虚空、黄·调和  \n第2套：红·圣人、蓝·虚空、黄·轮回",
+      "answer": "（本次只回答了「铭文」；您还提到了「搭档搭配」，可以继续追问。）\n东皇太一铭文搭配：\n\n- 第1套：红·宿命、蓝·虚空、黄·调和\n- 第2套：红·圣人、蓝·虚空、黄·轮回",
       "citations": [
         {
           "index": 1,
@@ -12381,10 +14673,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 141,
-        "reasoning_tokens": 99,
-        "reasoning_chars": 139,
+        "completion_tokens": 129,
+        "reasoning_tokens": 84,
+        "reasoning_chars": 125,
         "content_chars": 52,
         "fallback": false,
         "streamed": true
@@ -12397,7 +14691,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.003
+      "elapsed_s": 2.684,
+      "reused": false
     },
     {
       "case_id": "F-32",
@@ -12416,7 +14711,7 @@
       "type": "answer",
       "intent": "INSCRIPTION",
       "confidence": 0.85,
-      "answer": "兰陵王有两套铭文：\n\n- 第1套：红·异变、蓝·鹰眼、黄·隐匿\n- 第2套：红·圣人、蓝·虚空、黄·轮回",
+      "answer": "兰陵王铭文有两套：\n\n第1套：红异变、蓝鹰眼、黄隐匿  \n第2套：红圣人、蓝虚空、黄轮回",
       "citations": [
         {
           "index": 1,
@@ -12559,11 +14854,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 198,
-        "reasoning_tokens": 152,
-        "reasoning_chars": 199,
-        "content_chars": 52,
+        "completion_tokens": 215,
+        "reasoning_tokens": 179,
+        "reasoning_chars": 241,
+        "content_chars": 44,
         "fallback": false,
         "streamed": true
       },
@@ -12575,7 +14872,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.573
+      "elapsed_s": 3.269,
+      "reused": false
     },
     {
       "case_id": "F-33",
@@ -12594,7 +14892,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.6704005599021912,
-      "answer": "玩好铠可参考以下要点：\n\n- **铭文**：用「传承、鹰眼、隐匿」或「圣人、虚空、轮回」。\n- **出装**：\n  - 半肉：抵抗之靴 → 暗影战斧 → 极寒风暴 → 宗师之力 → 不死鸟之眼 → 无尽战刃\n  - 全输出：抵抗之靴 → 暗影战斧 → 宗师之力 → 无尽战刃 → 强者破军 → 名刀·司命\n- **打法**：利用被动「修罗之魂」只命中一个目标额外造成50%伤害，优先抓落单；「回旋之刃」命中后可回复生命、减冷却并加移速攻速；「极刃风暴」第二次挥砍可击飞并强化普攻冲锋；「不灭魔躯」提供格挡与持续法伤。\n- **克制关系**：压制鲁班七号、后羿等无位移射手；小团战可配宫本武藏、花木兰；注意芈月、诸葛亮等长手法师风筝。",
+      "answer": "铠要玩得厉害，可参考以下资料内的打法：\n\n**分路**：打野 / 对抗路\n\n**铭文选择**  \n- 传承、鹰眼、隐匿  \n- 圣人、虚空、轮回\n\n**出装选择**  \n- 半肉出装：抵抗之靴 → 暗影战斧 → 极寒风暴 → 宗师之力 → 不死鸟之眼 → 无尽战刃  \n- 全输出出装：抵抗之靴 → 暗影战斧 → 宗师之力 → 无尽战刃 → 强者破军 → 名刀·司命\n\n**打法要点**  \n- 利用被动「修罗之魂」：普攻和极刃风暴只命中一个目标时额外造成50%伤害，适合抓落单。  \n- 回旋之刃命中后可回血、减少30%技能冷却，并增加移速和攻速。  \n- 极刃风暴第二次挥砍会击飞敌人，并强化下次普攻冲锋。  \n- 大招「不灭魔躯」可强化攻击力、最大生命、移速、伤害格挡，并持续对附近敌人造成法术伤害，持续8秒。\n\n**配合与克制**  \n- 小团战可配合：宫本武藏、花木兰。  \n- 压制：鲁班七号、后羿（没位移的射手）。  \n- 注意被压制：芈月、诸葛亮，容易被风筝。",
       "citations": [
         {
           "index": 1,
@@ -12701,11 +14999,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 1086,
-        "reasoning_tokens": 852,
-        "reasoning_chars": 1227,
-        "content_chars": 316,
+        "completion_tokens": 1233,
+        "reasoning_tokens": 925,
+        "reasoning_chars": 1351,
+        "content_chars": 438,
         "fallback": false,
         "streamed": true
       },
@@ -12717,7 +15017,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 15.777
+      "elapsed_s": 15.774,
+      "reused": false
     },
     {
       "case_id": "F-34",
@@ -12736,7 +15037,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.7562757730484009,
-      "answer": "（本次只回答了「打法思路」；您还提到了「怎么打」，可以继续追问。）\n亚瑟对线期可利用被动圣光守护持续回复，换血和清线都不吃亏。核心是二技能誓约之盾的沉默：面对韩信这类高度依赖技能的英雄，一次沉默就能打断整套连招，不必急着交出大招，等对方交技能再反打更划算。一技能回旋打击用来持续消耗与清线，大招圣剑裁决的击飞兼具开团与收割作用，常用于配合队友越塔。\n\n遇到孙尚香这类会风筝他的射手会被反复消耗，遇到项羽这类强控英雄容易被推开、打断输出节奏，此时应避免孤身深追，依托己方阵容打正面。",
+      "answer": "（本次只回答了「打法思路」；您还提到了「怎么打」，可以继续追问。）\n亚瑟对线期的核心是二技能誓约之盾的沉默：面对韩信这类高度依赖技能的英雄，一次沉默就能打断整套连招，因此不必急着交出大招，等对方交技能再反打更划算。一技能回旋打击用来持续消耗与清线。被动圣光守护提供持续回复，让他在换血与清线上都不吃亏。大招圣剑裁决的击飞兼具开团与收割作用，常用于配合队友越塔。",
       "citations": [
         {
           "index": 1,
@@ -12844,11 +15145,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 636,
-        "reasoning_tokens": 499,
-        "reasoning_chars": 736,
-        "content_chars": 206,
+        "completion_tokens": 698,
+        "reasoning_tokens": 599,
+        "reasoning_chars": 880,
+        "content_chars": 146,
         "fallback": false,
         "streamed": true
       },
@@ -12860,7 +15163,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 8.821
+      "elapsed_s": 8.643,
+      "reused": false
     },
     {
       "case_id": "F-35",
@@ -12879,7 +15183,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.6630309224128723,
-      "answer": "资料不足。",
+      "answer": "资料未明确给出貂蝉的具体连招顺序。可参考的要点是：开启大招「绽·风华」后，在法阵内使用「落·红雨」「缘·心结」可获得额外冷却缩减；「缘·心结」命中敌人会缩短冷却；被动「语·花印」叠满4层触发真实伤害与减速。具体连招顺序资料不足。",
       "citations": [
         {
           "index": 1,
@@ -13004,11 +15308,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 176,
-        "reasoning_tokens": 172,
-        "reasoning_chars": 283,
-        "content_chars": 5,
+        "completion_tokens": 866,
+        "reasoning_tokens": 782,
+        "reasoning_chars": 1218,
+        "content_chars": 114,
         "fallback": false,
         "streamed": true
       },
@@ -13020,7 +15326,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 4.056
+      "elapsed_s": 11.207,
+      "reused": false
     },
     {
       "case_id": "F-36",
@@ -13066,7 +15373,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.013
+      "elapsed_s": 0.016,
+      "reused": false
     },
     {
       "case_id": "F-37",
@@ -13110,7 +15418,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-38",
@@ -13129,7 +15438,7 @@
       "type": "low_confidence",
       "intent": "GAMEPLAY",
       "confidence": 0.596437931060791,
-      "answer": "以下内容依据较少，仅供参考。\n花木兰上手难度为80，偏难。",
+      "answer": "以下内容依据较少，仅供参考。\n花木兰上手难度：80。",
       "citations": [
         {
           "index": 1,
@@ -13236,11 +15545,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 252,
-        "reasoning_tokens": 241,
-        "reasoning_chars": 381,
-        "content_chars": 14,
+        "completion_tokens": 74,
+        "reasoning_tokens": 66,
+        "reasoning_chars": 115,
+        "content_chars": 11,
         "fallback": false,
         "streamed": true
       },
@@ -13252,7 +15563,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 4.768
+      "elapsed_s": 2.63,
+      "reused": false
     },
     {
       "case_id": "F-39",
@@ -13271,7 +15583,7 @@
       "type": "low_confidence",
       "intent": "GAMEPLAY",
       "confidence": 0.5493060350418091,
-      "answer": "以下内容依据较少，仅供参考。\n资料中未单独列出“东皇太一的意识”条目，但可归纳以下要点：\n\n- 保持自身最大生命值优势，才能保证释放大招时的安全。\n- 保持黑暗能量体数量，这是持续作战的关键。\n- 大招用于稳定开团或保人：敌方刺客突进己方核心输出时开大压制，可配合马可波罗、阿轲秒杀。\n- 面对露娜时，可寻找时机强开，即使自己牺牲，能换掉露娜也是大赚；有东皇太一时露娜难有先手机会。\n- 面对太乙真人时，用大招压制可使其无法释放大招。\n- 注意被克制情况：蔡文姬短时强力回复会让你大招“伤敌500自损1000”；牛魔容易在东皇开大后反打控制多人。",
+      "answer": "以下内容依据较少，仅供参考。\n资料中与东皇太一意识相关的内容如下：\n\n- 保持自身最大生命值优势，释放大招时更安全。\n- 保持黑暗能量体数量，是持续作战和二技能威力的关键。\n- 没有闪现时，可借助疾步之靴创造开大机会；极寒风暴可减少技能真空期。\n- 大招是稳定开团与保人手段，但释放后自身会暴露在集火下，需注意蔡文姬强回复和牛魔反打。\n- 团战可针对露娜、太乙真人；配合马可波罗保护核心输出，或配合阿轲完成收割。",
       "citations": [
         {
           "index": 1,
@@ -13396,11 +15708,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 914,
-        "reasoning_tokens": 734,
-        "reasoning_chars": 1138,
-        "content_chars": 258,
+        "completion_tokens": 1455,
+        "reasoning_tokens": 1319,
+        "reasoning_chars": 2153,
+        "content_chars": 191,
         "fallback": false,
         "streamed": true
       },
@@ -13412,7 +15726,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 15.117
+      "elapsed_s": 17.963,
+      "reused": false
     },
     {
       "case_id": "F-40",
@@ -13431,7 +15746,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.7294203042984009,
-      "answer": "貂蝉打团思路：以开启大招“绽·风华”为团战爆发前提，在法阵内用一、二技能获得额外冷却缩减，频繁输出；用二技能“缘·心结”连续位移，命中敌人缩短冷却并躲避技能；用技能叠满“语·花印”四层，触发真实伤害与减速，靠被动连爆打出AOE。注意张良硬控和花木兰高爆发，避免走位不慎；可依靠肉装站场，辉月主动效果拖住对方输出节奏；队友可配合庄周解控免伤或白起嘲讽群控创造安全输出环境。面对张飞这类护盾英雄，用被动真实伤害无视护盾持续消耗。",
+      "answer": "貂蝉打团思路（依据资料）：\n- 开团先利用大招【绽·风华】生成法阵，在法阵内一、二技能会获得额外冷却缩减，这是团战爆发前提。\n- 用二技能【缘·心结】瞬移和短暂消失/无敌躲避伤害，命中敌人可缩短二技能冷却，在团战中连续穿梭。\n- 技能命中叠满四层【语·花印】后触发真实伤害与减速，可压制张飞这类护盾英雄并持续打出AOE真实伤害。\n- 注意貂蝉怕控制：张良硬控会打断位移节奏，花木兰高爆发可快速击杀走位不慎的貂蝉。最好配合庄周解控免伤、白起嘲讽群控创造安全输出环境。\n- 出装可偏肉装保证站场时间，配合辉月主动拖住对方输出节奏，配合不死鸟续航持续作战。",
       "citations": [
         {
           "index": 1,
@@ -13556,11 +15871,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 1881,
-        "reasoning_tokens": 1725,
-        "reasoning_chars": 2573,
-        "content_chars": 212,
+        "completion_tokens": 1306,
+        "reasoning_tokens": 1107,
+        "reasoning_chars": 1697,
+        "content_chars": 275,
         "fallback": false,
         "streamed": true
       },
@@ -13572,7 +15889,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 25.08
+      "elapsed_s": 15.319,
+      "reused": false
     },
     {
       "case_id": "F-41",
@@ -13591,7 +15909,7 @@
       "type": "answer",
       "intent": "GAMEPLAY",
       "confidence": 0.7012028694152832,
-      "answer": "资料中提到的铠的技巧有：\n\n- 半肉出装的铠，侵略性不减且生存能力得到提升；暗影战斧和极寒风暴保障前中期续航，宗师之力让铠的强化普攻打出爆发性伤害。\n- 铠凭借被动在面对落单的敌方英雄时，会获得大幅提升伤害能力；全输出装备加成下，可以做到一击必杀。",
+      "answer": "根据资料，铠的技巧包括：\n\n1. 利用被动“修罗之魂”：普攻和“极刃风暴”只命中一个目标时额外造成50%伤害，面对落单敌人时伤害大幅提升。\n2. 半肉出装技巧：半肉出装下侵略性不减且生存能力提升，暗影战斧和极寒风暴保障前中期续航，宗师之力让强化普攻打出爆发性伤害。\n3. 全输出技巧：凭借被动面对落单敌人时伤害大幅提升，全输出装备加成下可以做到一击必杀。\n4. “极刃风暴”第二次挥砍可击飞敌人并强化下次普攻，可冲锋至目标身边造成额外伤害。\n5. “回旋之刃”命中后可回复生命并减少技能冷却，同时增加移速和攻速。",
       "citations": [
         {
           "index": 1,
@@ -13698,11 +16016,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 320,
-        "reasoning_tokens": 237,
-        "reasoning_chars": 379,
-        "content_chars": 124,
+        "completion_tokens": 707,
+        "reasoning_tokens": 532,
+        "reasoning_chars": 821,
+        "content_chars": 256,
         "fallback": false,
         "streamed": true
       },
@@ -13714,7 +16034,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 5.563
+      "elapsed_s": 9.784,
+      "reused": false
     },
     {
       "case_id": "F-42",
@@ -13758,7 +16079,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.015
+      "elapsed_s": 0.018,
+      "reused": false
     },
     {
       "case_id": "F-43",
@@ -13893,10 +16215,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 116,
-        "reasoning_tokens": 112,
-        "reasoning_chars": 187,
+        "completion_tokens": 314,
+        "reasoning_tokens": 310,
+        "reasoning_chars": 508,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -13909,7 +16233,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.236
+      "elapsed_s": 5.389,
+      "reused": false
     },
     {
       "case_id": "F-44",
@@ -14044,10 +16369,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 111,
-        "reasoning_tokens": 107,
-        "reasoning_chars": 161,
+        "completion_tokens": 259,
+        "reasoning_tokens": 255,
+        "reasoning_chars": 390,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -14060,7 +16387,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.942
+      "elapsed_s": 4.768,
+      "reused": false
     },
     {
       "case_id": "F-45",
@@ -14195,10 +16523,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 131,
-        "reasoning_tokens": 127,
-        "reasoning_chars": 209,
+        "completion_tokens": 156,
+        "reasoning_tokens": 152,
+        "reasoning_chars": 252,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -14211,7 +16541,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.498
+      "elapsed_s": 3.349,
+      "reused": false
     },
     {
       "case_id": "F-46",
@@ -14346,10 +16677,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 178,
-        "reasoning_tokens": 174,
-        "reasoning_chars": 257,
+        "completion_tokens": 533,
+        "reasoning_tokens": 529,
+        "reasoning_chars": 813,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -14362,7 +16695,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.927
+      "elapsed_s": 8.193,
+      "reused": false
     },
     {
       "case_id": "F-47",
@@ -14455,7 +16789,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.189
+      "elapsed_s": 0.189,
+      "reused": false
     },
     {
       "case_id": "F-48",
@@ -14472,7 +16807,7 @@
       "type": "answer",
       "intent": "TIER_META",
       "confidence": 0.6089066863059998,
-      "answer": "资料不足。",
+      "answer": "资料不足，未明确列出「版本打野强势」的完整名单。资料中仅明确提到司马懿非常适合打野位置；此外赵云在配合中作为打野出现，宫本武藏有打野出装，但资料未评价其是否为版本强势打野。",
       "citations": [
         {
           "index": 1,
@@ -14594,11 +16929,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 1826,
-        "reasoning_tokens": 1822,
-        "reasoning_chars": 2781,
-        "content_chars": 5,
+        "completion_tokens": 1122,
+        "reasoning_tokens": 1062,
+        "reasoning_chars": 1645,
+        "content_chars": 86,
         "fallback": false,
         "streamed": true
       },
@@ -14610,7 +16947,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 25.716
+      "elapsed_s": 15.173,
+      "reused": false
     },
     {
       "case_id": "F-49",
@@ -14930,10 +17268,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 160,
-        "reasoning_tokens": 156,
-        "reasoning_chars": 246,
+        "completion_tokens": 125,
+        "reasoning_tokens": 121,
+        "reasoning_chars": 176,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -14946,7 +17286,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 3.765
+      "elapsed_s": 2.884,
+      "reused": false
     },
     {
       "case_id": "F-50",
@@ -15266,10 +17607,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 53,
-        "reasoning_tokens": 49,
-        "reasoning_chars": 84,
+        "completion_tokens": 130,
+        "reasoning_tokens": 126,
+        "reasoning_chars": 186,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -15282,7 +17625,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.327
+      "elapsed_s": 2.627,
+      "reused": false
     },
     {
       "case_id": "F-51",
@@ -15328,7 +17672,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.014
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-52",
@@ -15475,10 +17820,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 311,
-        "reasoning_tokens": 307,
-        "reasoning_chars": 449,
+        "completion_tokens": 197,
+        "reasoning_tokens": 193,
+        "reasoning_chars": 299,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -15491,7 +17838,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 5.365
+      "elapsed_s": 3.568,
+      "reused": false
     },
     {
       "case_id": "F-53",
@@ -15511,7 +17859,7 @@
       "type": "answer",
       "intent": "MATCHUP",
       "confidence": 0.6555337905883789,
-      "answer": "后羿克制百里守约。对线时，趁百里守约释放2技能蓄力阶段不会移动的时机，用后羿对他释放大招，然后集火攻击他。",
+      "answer": "后羿克制百里守约：百里守约释放2技能蓄力阶段是不会移动的，利用这个时机对他释放大招，然后集火攻击他。",
       "citations": [
         {
           "index": 1,
@@ -15736,11 +18084,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 282,
-        "reasoning_tokens": 242,
-        "reasoning_chars": 355,
-        "content_chars": 53,
+        "completion_tokens": 214,
+        "reasoning_tokens": 180,
+        "reasoning_chars": 277,
+        "content_chars": 50,
         "fallback": false,
         "streamed": true
       },
@@ -15752,7 +18102,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 4.964
+      "elapsed_s": 3.691,
+      "reused": false
     },
     {
       "case_id": "F-54",
@@ -15959,10 +18310,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 71,
-        "reasoning_tokens": 67,
-        "reasoning_chars": 114,
+        "completion_tokens": 89,
+        "reasoning_tokens": 85,
+        "reasoning_chars": 137,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -15975,7 +18328,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.401
+      "elapsed_s": 2.472,
+      "reused": false
     },
     {
       "case_id": "F-55",
@@ -16296,10 +18650,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 95,
-        "reasoning_tokens": 91,
-        "reasoning_chars": 141,
+        "completion_tokens": 82,
+        "reasoning_tokens": 78,
+        "reasoning_chars": 127,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -16312,7 +18668,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 2.426
+      "elapsed_s": 2.506,
+      "reused": false
     },
     {
       "case_id": "F-56",
@@ -16331,7 +18688,7 @@
       "type": "low_confidence",
       "intent": "MATCHUP",
       "confidence": 0.6406264305114746,
-      "answer": "以下内容依据较少，仅供参考。\n资料中克制东皇太一的英雄有：\n\n- **蔡文姬**：拥有短时间强力回复能力，让东皇太一的大招“伤敌500自损1000”。\n- **牛魔**：敌方集火东皇太一大住的敌人时，牛魔容易找准机会反打控制多个英雄。\n- **扁鹊**：通过普攻和技能不断消耗东皇太一，降低其初期入侵野区能力。",
+      "answer": "以下内容依据较少，仅供参考。\n可用蔡文姬、牛魔、扁鹊克制东皇太一：\n\n- **蔡文姬**：短时间强力回复能力，让东皇太一的大招“伤敌500自损1000”。\n- **牛魔**：敌方集火东皇太一大住的敌人时，牛魔容易找准机会反打控制多个英雄。\n- **扁鹊**：通过普攻和技能持续消耗东皇太一，降低其初期入侵野区能力。",
       "citations": [
         {
           "index": 1,
@@ -16456,11 +18813,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 1094,
-        "reasoning_tokens": 999,
-        "reasoning_chars": 1445,
-        "content_chars": 140,
+        "completion_tokens": 1130,
+        "reasoning_tokens": 1030,
+        "reasoning_chars": 1488,
+        "content_chars": 142,
         "fallback": false,
         "streamed": true
       },
@@ -16472,7 +18831,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 13.383
+      "elapsed_s": 13.242,
+      "reused": false
     },
     {
       "case_id": "F-57",
@@ -16491,7 +18851,7 @@
       "type": "low_confidence",
       "intent": "MATCHUP",
       "confidence": 0.7108234167098999,
-      "answer": "以下内容依据较少，仅供参考。\n针对对面貂蝉，可考虑：\n\n- **张良**：硬控很容易控住貂蝉，打断她的位移节奏。\n- **花木兰**：超高爆发输出能快速击杀走位不慎的貂蝉。\n- **蔡文姬**：二技能追踪的连续两下控制，容易让貂蝉放空技能或自乱阵脚。",
+      "answer": "以下内容依据较少，仅供参考。\n针对对面貂蝉，可选以下英雄：\n\n- **张良**：硬控容易控住貂蝉，打断她的位移节奏。\n- **花木兰**：超高爆发输出，能快速击杀走位不慎的貂蝉。\n- **蔡文姬**：二技能追踪的连续两下控制，容易让貂蝉放空技能或自乱阵脚。",
       "citations": [
         {
           "index": 1,
@@ -16616,11 +18976,13 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 373,
-        "reasoning_tokens": 297,
-        "reasoning_chars": 431,
-        "content_chars": 110,
+        "completion_tokens": 391,
+        "reasoning_tokens": 313,
+        "reasoning_chars": 453,
+        "content_chars": 113,
         "fallback": false,
         "streamed": true
       },
@@ -16632,7 +18994,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 6.039
+      "elapsed_s": 5.058,
+      "reused": false
     },
     {
       "case_id": "F-58",
@@ -16779,10 +19142,12 @@
           "degraded": false
         },
         "guard_degraded": false,
+        "temperature": 0.0,
+        "seed": 42,
         "finish_reason": "stop",
-        "completion_tokens": 680,
-        "reasoning_tokens": 676,
-        "reasoning_chars": 1005,
+        "completion_tokens": 171,
+        "reasoning_tokens": 167,
+        "reasoning_chars": 231,
         "content_chars": 5,
         "fallback": false,
         "streamed": true
@@ -16795,7 +19160,8 @@
       },
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 10.142
+      "elapsed_s": 3.529,
+      "reused": false
     },
     {
       "case_id": "F-59",
@@ -16834,7 +19200,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.013
+      "elapsed_s": 0.015,
+      "reused": false
     },
     {
       "case_id": "F-60",
@@ -16873,7 +19240,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.011
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-61",
@@ -16908,7 +19276,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.018
+      "elapsed_s": 0.019,
+      "reused": false
     },
     {
       "case_id": "F-62",
@@ -16943,7 +19312,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.016
+      "elapsed_s": 0.016,
+      "reused": false
     },
     {
       "case_id": "F-63",
@@ -16987,7 +19357,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-64",
@@ -17022,7 +19393,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.016
+      "elapsed_s": 0.016,
+      "reused": false
     },
     {
       "case_id": "F-65",
@@ -17061,7 +19433,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-66",
@@ -17100,7 +19473,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-67",
@@ -17135,7 +19509,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-68",
@@ -17170,7 +19545,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.023
+      "elapsed_s": 0.013,
+      "reused": false
     },
     {
       "case_id": "F-69",
@@ -17205,7 +19581,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.011,
+      "reused": false
     },
     {
       "case_id": "F-70",
@@ -17240,7 +19617,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.014
+      "elapsed_s": 0.014,
+      "reused": false
     },
     {
       "case_id": "F-71",
@@ -17275,7 +19653,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.011,
+      "reused": false
     },
     {
       "case_id": "F-72",
@@ -17317,7 +19696,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.012,
+      "reused": false
     },
     {
       "case_id": "F-73",
@@ -17352,7 +19732,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.011
+      "elapsed_s": 0.021,
+      "reused": false
     },
     {
       "case_id": "F-74",
@@ -17387,7 +19768,8 @@
       "guard": null,
       "guard_degraded": false,
       "error": null,
-      "elapsed_s": 0.012
+      "elapsed_s": 0.012,
+      "reused": false
     }
   ]
 }

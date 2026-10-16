@@ -1,0 +1,3 @@
+﻿候选 78 条 → 人工臂 39 条 / LLM 判官臂 39 条
+[参考] LLM 判官臂（奇数行）：39/39 = 100.0%（判官失败 0 条剔除）
+工作表已写入：docs\milestones\M6-grounded-human-sample.txt
