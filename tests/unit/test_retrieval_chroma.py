@@ -55,6 +55,27 @@ def test_build_where_operator_mapping():
     assert "$in" not in str(chroma_client.build_where(hero_id=DIAOCHAN))
 
 
+def test_corpus_metadata_omits_empty_list_values():
+    """空列表 metadata 值必须省略键。
+
+    chromadb 1.5.9 对空列表直接抛
+    `ValueError: Expected metadata list value for key 'hero_ids' to be non-empty`，
+    而「不带英雄的通用语料」（版本理解 / 意识类）是合法形态（TIER_META 路径按 patch 过滤即可召回）。
+    故空列表省略键 —— 省略后 `{"hero_ids": {"$contains": id}}` 天然不匹配，语义正确。
+    上传端点与全库重建都经 `corpus_metadata` 转换，本用例把这条约束钉住。
+    """
+    from app.utils.chroma import corpus_metadata
+
+    keys = ["doc_id", "hero_ids", "patch"]
+    assert corpus_metadata({"doc_id": "d1", "hero_ids": [], "patch": "2026-10"}, keys) == {
+        "doc_id": "d1",
+        "patch": "2026-10",
+    }, "空列表必须被省略，写空值会让 chromadb 拒绝整批入库"
+    assert corpus_metadata({"doc_id": "d1", "hero_ids": ["141"], "patch": "2026-10"}, keys)[
+        "hero_ids"
+    ] == ["141"], "非空列表必须原样保留（它是 hero 过滤的依据）"
+
+
 def test_rrf_fuse_ranks_shared_doc_first():
     """RRF：两路都命中的文档融合分最高（只吃排名不吃分数）。"""
     fused = bm25.rrf_fuse([["a", "b", "c"], ["b", "d"]])
