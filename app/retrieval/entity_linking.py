@@ -66,18 +66,43 @@ LANE_ALIASES = {
     "上单": "对抗路", "边路": "对抗路", "对抗路": "对抗路", "坦克": "对抗路",
 }
 
-# 残句里不算「未识别实体候选」的功能词/疑问词（4.9 的 unrecognized 语义是
-# 「疑似实体但没认出来」，若把这类词也算进去，系统会永远走澄清分支）。
-STOPWORDS = {
+# 通用功能词：疑问 / 连接 / 语气 / 程度 / 人称 + 与「话题」无关的口语动词
+# （4.9 的 unrecognized 语义是「疑似实体但没认出来」，这类词显然不是）。
+#
+# **话题词（克制/出装/铭文/关系/搭档…）刻意不在这里维护** —— 它们由意图层
+# `app/retrieval/intent.py` 定义，本模块通过 `stopwords()` 并进来。原因见该函数说明。
+_FUNCTION_WORDS = frozenset({
     "怎么", "如何", "咋样", "咋", "什么", "哪个", "哪些", "谁", "是谁", "我", "你", "他",
     "她", "它", "我们", "你们", "他们", "的", "了", "吗", "呢", "吧", "啊", "呀", "嘛",
     "请", "帮", "帮我", "想", "要", "能", "可以", "有没有", "有", "没有", "是", "不是",
     "和", "跟", "与", "及", "还有", "以及", "这个", "那个", "这", "那", "一个", "一下",
     "告诉", "说", "介绍", "推荐", "求", "问", "问一下", "为什么", "为何", "厉害", "强",
-    "弱", "值得", "好不好", "克制", "压", "压制", "打", "被", "对线", "对位", "怎么玩",
-    "玩法", "打法", "思路", "连招", "意识", "版本", "强度", "上分", "排位", "出装",
-    "装备", "铭文", "搭配", "出什么", "技能", "被动", "属性", "攻略", "怎么打", "好不好用",
-}
+    "弱", "值得", "好不好", "压", "打", "被", "对位", "被动", "属性", "好不好用",
+})
+
+
+def stopwords() -> frozenset[str]:
+    """未识别残句判定的停用词表 = 通用功能词 ∪ **意图层话题词**（唯一真源）。
+
+    为什么必须并集（2026-10-16 D1 缺陷的 L1 根因）：本模块以前**自己维护一份话题词表**，
+    与 `app/retrieval/intent.py` 的意图关键词表构成「同一件事两份维护」。意图表加了词、
+    这边没同步，`_residuals()` 就会把话题名词当成「疑似实体」——「镜的克制关系」的残句
+    冒出「关系」，`unrecognized` 随即失真。
+
+    而 `unrecognized` 是规格书 4.9 区分「实体没认出 → 澄清」与「知识库真没数据 → 拒答」的
+    **唯一判据**，它一失真 4.9 的整条设计就落空。故改为并集：新增意图关键词时无需再手动
+    同步本表（由 `tests/unit/test_d1_relation_clarify.py` 的防漂移测试守住这个机制）。
+
+    刻意不加 `lru_cache`：缓存会让意图词表在运行期被改动时读到陈旧值，
+    而本函数每次只做一次约 180 词的集合构造，相对 jieba 切词的开销可忽略。
+
+    函数内 import：`intent.py` 模块级 import 了本模块的 `normalize`，
+    模块级互相 import 会成环，故延迟到调用时。
+    """
+    from app.retrieval import intent as _intent
+
+    return _FUNCTION_WORDS | frozenset(_intent.topic_words())
+
 
 _WS_RE = re.compile(r"\s+")
 
@@ -244,22 +269,68 @@ def _fuzzy(norm: str, index: _Index) -> LinkedEntity | None:
 # ---------------------------------------------------------------- 未识别残句
 
 
+def _cover_stopwords(norm: str, covered: list[bool]) -> None:
+    """把话题词/功能词自身占用的字符也标记为「已覆盖」（就地修改 covered）。
+
+    为什么：这些词不是实体，它们占的字符不该成为残句候选。否则 jieba 把
+    「核心装是什么」切成 `核心装 | 是 | 什么` 之外的形态时，残句会冒出「装是」
+    这种**跨话题词边界的碎片**（「铠的核心装是什么」实测残句 = ['核心', '装是']）。
+    与实体覆盖同理：既然这些词已确定不是实体，就不该再被当成疑似实体候选。
+
+    只处理长度 ≥2 的词：单字功能词（打/被/压）本来就过不了 `_residuals` 的 ≥2 字门槛。
+    """
+    for word in sorted((s for s in stopwords() if len(s) >= 2), key=len, reverse=True):
+        start = norm.find(word)
+        while start >= 0:
+            for i in range(start, start + len(word)):
+                covered[i] = True
+            start = norm.find(word, start + 1)
+
+
 def _residuals(norm: str, covered: list[bool]) -> list[str]:
+    """未识别残句：切词后**真正没被任何实体或话题词认出来**的中文片段（≥2 字）。
+
+    两层防污染（2026-10-16 D1 缺陷，两层都是实测出来的，不是推测）：
+
+    1. **剥掉已覆盖字符**。jieba 会把「铠符文」整体切成一个词，其中已经含有**已识别的
+       英雄名**。若只判断「这个 token 是否被完全覆盖」，这些 token 会被整块当成未识别实体
+       ——残句里冒出「铠符文」，`unrecognized` 失真。故先按 covered 掩码剥掉已识别字符，
+       只把剩下没认出来的部分当候选：「铠符文」→「符文」（话题词，丢弃）。
+
+    2. **剔掉话题词碎片**。真实问法里话题词常被切开、且**完整词并不出现**，例如
+       「铠打不过的人」——关键词表收的是「打不过谁」，句中只有碎片「不过」，
+       意图不命中 → 残句 ['不过'] → 反问「没认出「不过」」。故：片段若落在某个话题词之内
+       （即它是话题词的子串），同样不是疑似实体，丢弃。
+       安全性已实测：全部话题词的 ≥2 字子串与图谱实体名只有 4 处重叠（发育路/对抗路/打野/游走），
+       而这 4 个本身就在停用词表里，不会因本规则被误删。
+
+    只保留真正的未知片段：「铠的老婆」→「老婆」（保留）。
+    """
     import jieba
 
+    stops = stopwords()
+    stops_ge2 = [s for s in stops if len(s) >= 2]
     out: list[str] = []
     for token in jieba.lcut(norm):
         tok = token.strip()
-        if not tok or tok in STOPWORDS:
+        if not tok:
             continue
-        if all(not c.isalnum() and not ("\u4e00" <= c <= "\u9fff") for c in tok):
-            continue  # 纯标点
-        # 该 token 覆盖的字符若已全部被实体命中，则不算未识别
         start = norm.find(tok)
-        if start >= 0 and all(covered[start : start + len(tok)]):
+        rest = tok
+        if start >= 0:
+            rest = "".join(
+                ch
+                for i, ch in enumerate(tok)
+                if not (start + i < len(covered) and covered[start + i])
+            )
+        if not rest or rest in stops:
             continue
-        if len(tok) >= 2 and any("\u4e00" <= c <= "\u9fff" for c in tok):
-            out.append(tok)
+        if all(not c.isalnum() and not ("\u4e00" <= c <= "\u9fff") for c in rest):
+            continue  # 纯标点
+        if len(rest) >= 2 and any("\u4e00" <= c <= "\u9fff" for c in rest):
+            if any(rest in s for s in stops_ge2):
+                continue  # 话题词的碎片，不是疑似实体
+            out.append(rest)
     return out
 
 
@@ -313,6 +384,9 @@ def link(text: str) -> LinkingResult:
         if fuzzy is not None:
             entities.append(fuzzy)
             covered = [True] * len(norm)
+
+    # 话题词/功能词自身也占位（它们不是实体，字符不该成为残句候选）——见 _cover_stopwords
+    _cover_stopwords(norm, covered)
 
     return LinkingResult(entities, _residuals(norm, covered))
 

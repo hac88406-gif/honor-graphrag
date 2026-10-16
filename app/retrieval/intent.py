@@ -46,6 +46,12 @@ class IntentResult:
     # 需求方 2026-10-15 条件三：多意图命中必须留痕——否则「铠的出装和铭文」只返回 ITEM_BUILD
     # 丢掉 INSCRIPTION 且无任何记录，属静默失败。M6 归因「答案不全」时据此判断是否只取了一个意图。
     matched_intents: list[str] = field(default_factory=list)
+    # 「关系」类无方向问法的澄清类型标记。4.4 的意图枚举封闭、实现方不得新增取值，
+    # 故用标记而非新意图表达「用户想查关系但没说方向」：
+    #   ""                    —— 普通澄清（按既有的未识别残句 / 已认出实体分支）
+    #   "counter_direction"   —— 「XX的克制关系」：反问要「XX克制谁」还是「谁克制XX」
+    #   "relation_direction"  —— 「XX的关系」：反问要哪种关系（两个方向 + 搭档）
+    clarify_kind: str = ""
 
 
 # ---------------------------------------------------------------- 关键词表
@@ -76,6 +82,22 @@ _DOMAIN = (
     "连招", "搭档", "配合", "版本", "上分", "对线", "分路", "排位", "开黑", "打野",
 )
 
+# 「关系」类话题词：只说明「想查英雄之间的某种关系」，**不带方向**，也不区分克制/搭档。
+#
+# 为什么**刻意不并进 _COUNTER_BY / _COUNTER_OF**：那两个表要求**显式方向词**
+# （「克制谁」/「被谁克制」）。把「克制关系」并进去会让 matched 多出一个方向意图、
+# 从而**只答一个方向却看起来像答全了**（「答一半」正是本项目要防的静默失败）。
+# 故这类问法不进意图表，而是标记「方向待定」，由澄清节点反问用户要哪个方向。
+# （4.4 意图枚举封闭、实现方不得新增，故用标记而非新意图——需求方 2026-10-16 裁定。）
+#
+# 为什么**刻意不并进 _DOMAIN**：「关系」单独出现不足以判定与王者有关
+# （「我们之间的关系」应走拒答而非澄清），并进去会把域外问句抬成 ENTITY_UNKNOWN。
+_RELATION_TOPIC = ("克制关系", "英雄关系", "关系", "阵容")
+
+# 「关系」类问法里若含这些词根，说明用户想查的是**克制**关系（只给两个方向即可）；
+# 否则只说「关系」时连是克制还是搭档都不确定，需把搭档一并列为候选。
+_COUNTER_TOPIC = ("克制", "压制")
+
 
 def _hit(text: str, words: tuple[str, ...]) -> bool:
     return any(w in text for w in words)
@@ -98,6 +120,33 @@ _RULES: tuple[tuple[str, tuple[str, ...]], ...] = (
 def _matched_intents(t: str) -> list[str]:
     """命中关键词表的所有意图，按 _RULES 优先级序（条件三：多意图留痕用）。"""
     return [name for name, words in _RULES if _hit(t, words)]
+
+
+def topic_words() -> tuple[str, ...]:
+    """全部「话题词」= 意图关键词表 ∪ 领域词表 ∪ 关系类话题词的并集（**唯一真源**）。
+
+    为什么需要它：实体链接层的「未识别残句」判定需要一份停用词表，而「哪些词只是话题词、
+    不是实体名」这件事在意图层已经有定义。若在实体链接层再手抄一份，两份必然漂移——
+    2026-10-16 D1 缺陷（「镜的克制关系」被当成英雄未识别）的 L1 根因正是这个：
+    意图表里新增了词、停用词表没同步，残句里就冒出假实体。
+
+    故实体链接层**只 union 本函数**，不再自行维护话题词。新增意图关键词时无需手动同步。
+    """
+    words: list[str] = list(_DOMAIN) + list(_RELATION_TOPIC)
+    for _name, table in _RULES:
+        words.extend(table)
+    return tuple(words)
+
+
+def _relation_clarify_kind(t: str) -> str:
+    """「关系」类无方向问法的澄清类型标记（仅在没有意图关键词命中时调用）。
+
+    命中「关系」类话题词但没有任何方向词/搭档词 → 用户想查关系但没说方向，
+    标记为待澄清，由澄清节点反问方向（见 `_RELATION_TOPIC` 处说明）。
+    """
+    if not _hit(t, _RELATION_TOPIC):
+        return ""
+    return "counter_direction" if _hit(t, _COUNTER_TOPIC) else "relation_direction"
 
 
 # ---------------------------------------------------------------- 槽位
@@ -192,10 +241,18 @@ def route_rules(text: str, entities: list[LinkedEntity]) -> IntentResult:
 
     if heroes or roles:
         # 认出了实体但没识别出意图（如只输入「东皇太一」）-> 澄清（4.9「槽位不完整」）
-        return IntentResult("ENTITY_UNKNOWN", _base_slots(heroes, roles), need_clarify=True, method="rule")
+        # 若用户说的是「XX的克制关系」这类**不带方向**的关系问法，额外标记 clarify_kind，
+        # 让澄清节点反问方向而不是反问「你是指哪个英雄」（D1 缺陷 L2/L3）。
+        return IntentResult(
+            "ENTITY_UNKNOWN", _base_slots(heroes, roles), need_clarify=True,
+            method="rule", clarify_kind=_relation_clarify_kind(t),
+        )
     if _hit(t, _DOMAIN):
         # 有王者语境但实体没认出来 -> 澄清（4.3/9.2-5：绝不允许走拒答）
-        return IntentResult("ENTITY_UNKNOWN", {}, need_clarify=True, method="rule")
+        return IntentResult(
+            "ENTITY_UNKNOWN", {}, need_clarify=True,
+            method="rule", clarify_kind=_relation_clarify_kind(t),
+        )
     return IntentResult("OUT_OF_SCOPE", {}, method="rule")
 
 
