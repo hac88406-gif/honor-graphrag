@@ -23,6 +23,15 @@
 #   - 「谁打得过 X」「我拿谁好打 X」这类**倒装/口语**的「求压制者名单」问法；
 #   - 「怎么发育」「怎么抓人」「打野节奏怎么带」这类**不带关键词表词根**的 GAMEPLAY 问法；
 #   它们都是真实用户会说的话，失败就是失败，不做规避。
+#
+# **零提示自然说法准入规则（2026-10-16 · 缺陷 D1 的 L4 交付）**：
+#   任何新功能或新意图，评测集必须包含 ≥3 条「第一次使用者的原话」——不带方向词、不带术语、
+#   不照抄规格书例句，且**每条必须标注可追溯的真实来源（谁在何时打的，`source` 字段）**；
+#   这批用例**不得由实现方自行编写**。
+#   为什么：D1 缺陷（「镜的克制关系」被当成英雄未识别）在意图路由 79 个用例、294 个测试全绿时
+#   依然漏了过去——因为用例是照「设计过的问法」写的，不是照「使用者第一次会怎么打」写的。
+#   规则由 `tests/unit/test_eval_case_policy.py` 强制：零提示类用例必须 ≥3 条且每条带 `source`。
+#   注：本文件 2026-10-16 之前的 74 条用例为**历史存量**，未标注来源，不追溯（如实记录，不补造）。
 
 meta:
   spec: "v1.6"
@@ -502,3 +511,43 @@ cases:
     expected_intent: OUT_OF_SCOPE
     expected_entity_ids: []
     expect_type: reject
+
+  # ---------------- 零提示自然说法（4）· 来源可追溯，非实现方自编 ----------------
+  # 来源：需求方（阿枢）2026-10-16 前端聊天页手测（缺陷报告 D1 §1「发现场景」与实测表）。
+  # 期望类型说明：这四条都**不带方向词**（只说了「关系」），按 2026-10-16 需求方裁定走
+  # **方向澄清**（反问「镜克制谁」还是「谁克制镜」），故 expect_type=clarify 是设计预期，
+  # 不是把缺陷固化成预期。澄清路径在检索之前分流，因此这四条**离线可验**，不需要固化答案集。
+  # 期望的澄清候选必须是锚定该英雄的方向问句（「镜克制谁」/「谁克制镜」），
+  # 断言见 tests/unit/test_d1_relation_clarify.py 与 tests/integration/test_d1_relation_clarify_e2e.py。
+  - id: F-75
+    category: 零提示自然说法
+    question: "镜的克制关系"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: ["531"]
+    expect_type: clarify
+    source: "需求方（阿枢）2026-10-16 前端手测（缺陷报告 D1 §1）"
+    note: "不带方向词的关系问法；期望方向澄清（候选「镜克制谁」/「谁克制镜」），实体必须认出「镜」"
+  - id: F-76
+    category: 零提示自然说法
+    question: "克制关系"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: []
+    expect_type: clarify
+    source: "需求方（阿枢）2026-10-16 前端手测（缺陷报告 D1 §1）"
+    note: "只给话题、没给英雄；期望反问「哪个英雄的克制关系」并给英雄候选清单"
+  - id: F-77
+    category: 零提示自然说法
+    question: "镜的关系"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: ["531"]
+    expect_type: clarify
+    source: "需求方（阿枢）2026-10-16 前端手测（缺陷报告 D1 §1）"
+    note: "连克制还是搭档都不确定；期望方向澄清，候选含搭档一项"
+  - id: F-78
+    category: 零提示自然说法
+    question: "铠的克制关系"
+    expected_intent: ENTITY_UNKNOWN
+    expected_entity_ids: ["193"]
+    expect_type: clarify
+    source: "需求方（阿枢）2026-10-16 前端手测（缺陷报告 D1 §1）"
+    note: "与 F-75 同类，换一个英雄以确认不是「镜」的个例"
