@@ -31,96 +31,21 @@ import yaml  # noqa: E402
 
 from app.utils.chroma import (  # noqa: E402
     COLLECTION_NAME,
+    corpus_metadata,
     get_client,
     load_embedding_function,
 )
 
-GUIDES_DIR = PROJECT_ROOT / "data" / "guides"
+# 切分实现**不在本脚本内**：与 POST /api/docs/upload 共用 app/utils/text_split.py，
+# 避免「重建出来的 chunk」与「接口写进去的 chunk」出现两套口径（见该模块 docstring）。
+from app.utils.text_split import pack, split_atoms  # noqa: E402
 
-# 切分参数（规格书 4.6：目标 300~500 字，重叠 100 字）
-CHUNK_MAX = 500
-CHUNK_MIN = 300
-OVERLAP = 100
+GUIDES_DIR = PROJECT_ROOT / "data" / "guides"
 
 META_KEYS = [
     "doc_id", "hero_ids", "topic", "patch",
     "source_url", "source_type", "publish_date", "data_source",
 ]
-
-
-# ---------------------------------------------------------------- 切分
-
-def split_atoms(body: str) -> list[str]:
-    """把正文拆成语义单元：每个标题行、每个列表项（含其续行）各为一个单元，段落为多行单元。"""
-    atoms: list[str] = []
-    cur: list[str] = []
-
-    def flush() -> None:
-        text = "\n".join(cur).strip()
-        if text:
-            atoms.append(text)
-        cur.clear()
-
-    for raw in body.split("\n"):
-        s = raw.strip()
-        if not s:
-            flush()
-            continue
-        if s.startswith("#") or s.startswith("- "):
-            flush()
-            cur.append(s)
-        else:
-            cur.append(s)
-    flush()
-    return atoms
-
-
-def split_long(text: str) -> list[str]:
-    """单个语义单元超过 CHUNK_MAX 时，按句末标点切成不超过 CHUNK_MAX 的片段。"""
-    import re
-
-    sentences = re.split(r"(?<=[。！？；])", text)
-    pieces: list[str] = []
-    buf = ""
-    for sent in sentences:
-        if not sent:
-            continue
-        if len(buf) + len(sent) <= CHUNK_MAX:
-            buf += sent
-        else:
-            if buf:
-                pieces.append(buf)
-            buf = sent
-    if buf:
-        pieces.append(buf)
-    return pieces
-
-
-def pack(atoms: list[str]) -> list[str]:
-    """把语义单元贪心打包成 chunk，超出上限时以尾部 OVERLAP 字重叠续接。"""
-    chunks: list[str] = []
-    cur = ""
-
-    def emit() -> None:
-        nonlocal cur
-        if cur.strip():
-            chunks.append(cur.strip())
-        tail = cur[-OVERLAP:] if len(cur) > OVERLAP else cur
-        cur = tail
-
-    for atom in atoms:
-        parts = split_long(atom) if len(atom) > CHUNK_MAX else [atom]
-        for part in parts:
-            if not cur.strip():
-                cur = part
-            elif len(cur) + 1 + len(part) <= CHUNK_MAX:
-                cur += "\n" + part
-            else:
-                emit()
-                cur = cur + "\n" + part if cur.strip() else part
-    if cur.strip():
-        chunks.append(cur.strip())
-    return chunks
 
 
 # ---------------------------------------------------------------- 解析
@@ -149,7 +74,7 @@ def build_records() -> tuple[list[str], list[str], list[dict], dict]:
         for idx, chunk in enumerate(chunks):
             ids.append(f"{meta['doc_id']}#{idx}")
             docs.append(chunk)
-            md = {k: meta[k] for k in META_KEYS}
+            md = corpus_metadata(meta, META_KEYS)
             md["chunk_index"] = idx
             metas.append(md)
     return ids, docs, metas, per_doc

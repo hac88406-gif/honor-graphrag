@@ -87,3 +87,27 @@ def get_collection(name: str = COLLECTION_NAME):
     不要改成 `client.get_collection(name)`——裸取会回退默认 ONNX EF，静默改变向量空间。
     """
     return get_client().get_collection(name=name, embedding_function=load_embedding_function())
+
+
+def corpus_metadata(meta: dict, keys: list[str]) -> dict:
+    """语料 front-matter -> chromadb 可接受的 metadata（**入库侧的唯一转换点**）。
+
+    chromadb 1.5.9 **拒绝空列表值**：
+    `ValueError: Expected metadata list value for key 'hero_ids' to be non-empty in add.`
+
+    而「不带英雄的通用语料」在语义上是**合法且必要**的：版本理解 / 通用意识类文档不属于
+    任何单个英雄，`TIER_META` 意图本就不带 hero 槽位、检索时只按 patch 窗口过滤
+    （见 app/agent/nodes/vector_search.py），这类文档照样能被召回。
+    故空列表**省略该键**而不是写空值：省略后 `{"hero_ids": {"$contains": id}}` 天然不匹配，
+    语义恰好等于「与任何英雄都无关联」。
+
+    为什么放在这里：上传端点（app/api/docs.py）与全库重建（scripts/init_chroma.py）
+    是**两个**入库写入方，若各自处理这条约束就会再次分叉成两个口径。
+    """
+    out: dict = {}
+    for k in keys:
+        v = meta[k]
+        if isinstance(v, list) and not v:
+            continue
+        out[k] = v
+    return out
