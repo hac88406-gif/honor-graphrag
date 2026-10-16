@@ -141,7 +141,10 @@ def _template_body(state: AgentState, evidence: list[Evidence]) -> str:
 def _llm_body(state: AgentState, evidence: list[Evidence], writer) -> tuple[str | None, dict]:
     """云端生成 + 生成后校验。返回 `(正文, 调试信息)`；任何失败返回 `(None, info)`。"""
     info: dict = {"mode": "llm", "model": settings.CLOUD_CHAT_MODEL, "guard": None,
-                  "guard_degraded": False}
+                  "guard_degraded": False,
+                  # 采样参数随记录落盘：报告里要能回答「这批答案是用什么温度跑的」，
+                  # 否则「可复现」只是口头声明（M6 审核裁定）。
+                  "temperature": settings.LLM_TEMPERATURE, "seed": settings.LLM_SEED}
 
     client = get_cloud_client()
     if client is None:

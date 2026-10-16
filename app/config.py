@@ -31,12 +31,9 @@ class Settings(BaseSettings):
     CHROMA_PERSIST_DIR: str = "data/chroma"
 
     # ---------- LLM ----------
-    # LLM_MODE: local=全本地（Ollama）；cloud=全部云端；hybrid=意图本地/生成云端
-    LLM_MODE: str = "local"
-    OLLAMA_BASE_URL: str = "http://localhost:11434"
-    # 意图识别模型（Q6 裁定：先用 qwen2.5:3b 走通链路，M6 评测不达标再换 7b）
-    INTENT_MODEL: str = "qwen2.5:3b"
-    # 答案生成：云端 API 参数（Q7 裁定：key 到位前 LLM_MODE=local 可跑但不算验收状态）
+    # 答案生成走云端 API（Q7 裁定：生成质量是演示门面）。
+    # 意图识别**不走 LLM**：确定性关键词规则已达标（M6 实测 85.1% vs 本地 LLM 36.5%），
+    # 故 route_llm / INTENT_MODEL / Ollama 依赖已按 M6 裁定整体移除（见 DECISIONS.md）。
     CLOUD_API_KEY: str = ""
     CLOUD_BASE_URL: str = ""
     CLOUD_CHAT_MODEL: str = ""
@@ -49,6 +46,17 @@ class Settings(BaseSettings):
     # 因 2048 全被思考吃掉而返回空答案（finish_reason=length），答案有据率的分母被迫缩小。
     # 判官的产出只是一小段 JSON，正文不需要空间，缺的是思考空间，故给到 2 倍。
     JUDGE_MAX_TOKENS: int = 4096
+    # 生成温度（M6 审核裁定：**评测必须确定性，否则指标不可复现**）。
+    # 此前本客户端**完全不下发 temperature**，走 API 默认值 —— 随机性高，实测同一问句 +
+    # 同一依据两次跑批的答案可差 47/78 条，导致「答案有据率」的判分对象每次都在变、
+    # 人工抽检臂的 39 条判定无法复用。故默认 0.0（确定性优先）。
+    # 若确需提升表达多样性可调高，但**此时 8.2 指标失去可复现性**，须在评测报告中声明。
+    LLM_TEMPERATURE: float = 0.0
+    # seed：云端**接受**该字段（scripts/measure_determinism.py 实测通过），故固定为常量，
+    # 进一步压缩采样随机性。**但它不能保证确定性** —— 实测 v4-pro 是推理模型，
+    # temperature=0 + seed=42 下同输入连跑 3 次仍只有 2/5 组逐字一致（存在内置非确定性），
+    # 故评测数字的稳定性最终靠「固化答案集」（见 scripts/run_eval.py --reuse-answers）。
+    LLM_SEED: int | None = 42
     # 答案生成方式：llm=云端生成 + 生成后校验；template=确定性证据组装（M3 行为，离线可测）。
     # 测试默认 template（离线、确定性）；M4 生成用例显式置 llm。
     GENERATION_MODE: str = "template"

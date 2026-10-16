@@ -16,6 +16,12 @@
      故成功判定固化为 `LLMResult.is_success`：**`content` 非空 AND `finish_reason != 'length'`**，
      不满足即抛 `LLMGenerationError`，由调用方回落确定性证据组装。
 
+  4. **采样参数必须显式下发**（M6 审核裁定）：此前本客户端**完全不下发 `temperature`**，
+     走 API 默认值，随机性高 —— 同一问句 + 同一依据两次跑批答案可差 47/78 条，
+     导致评测指标不可复现、人工抽检的判定对象每次都在变。故 `temperature`（默认 0.0，
+     取自 `settings.LLM_TEMPERATURE`）**一律随 payload 下发**，并回填进 `LLMResult`
+     留痕（`temperature` / `seed`），便于事后核对「这一批是用什么参数跑的」。
+
 错误分两类，因为**处理方式相同但归因不同**（排查时要知道是「拿不到响应」还是「拿到了但不可用」）：
 `LLMUnavailableError`（未配置 / 网络 / HTTP 非 200）与 `LLMGenerationError`（HTTP 200 但结果不可用）。
 """
@@ -53,6 +59,9 @@ class LLMResult:
     completion_tokens: int | None = None
     reasoning_tokens: int | None = None
     model: str = ""
+    # 本次实际下发的采样参数（M6 审核裁定：评测必须确定性，参数必须留痕可查）。
+    temperature: float | None = None
+    seed: int | None = None
 
     @property
     def is_success(self) -> bool:
@@ -81,12 +90,17 @@ class CloudChatClient:
         model: str,
         timeout: float,
         max_tokens: int,
+        temperature: float = 0.0,
+        seed: int | None = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
         self.max_tokens = max_tokens
+        # 采样参数一律显式下发：**不下发 = 走 API 默认值 = 不可复现**（M6 审核根因）。
+        self.temperature = temperature
+        self.seed = seed
 
     # ---------------------------------------------------------------- 内部
 
@@ -97,19 +111,24 @@ class CloudChatClient:
         return {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
     def _payload(self, messages: list[dict], *, stream: bool, max_tokens: int | None = None) -> dict:
-        return {
+        payload = {
             "model": self.model,
             "messages": messages,
             "max_tokens": max_tokens or self.max_tokens,
             "stream": stream,
+            "temperature": self.temperature,
         }
+        # seed 仅在配置了才下发：云端不支持该字段时，多传一个未知参数会被判为非法请求。
+        if self.seed is not None:
+            payload["seed"] = self.seed
+        return payload
 
     def _finalize(self, result: LLMResult) -> LLMResult:
         """成功判定只有一个出口：不通过即抛，避免调用方漏判（静默失败防御）。"""
         logger.info(
-            "云端生成：model=%s finish=%s completion_tokens=%s reasoning_tokens=%s content_len=%d",
-            result.model, result.finish_reason, result.completion_tokens,
-            result.reasoning_tokens, len(result.content),
+            "云端生成：model=%s temp=%s seed=%s finish=%s completion_tokens=%s reasoning_tokens=%s content_len=%d",
+            result.model, result.temperature, result.seed, result.finish_reason,
+            result.completion_tokens, result.reasoning_tokens, len(result.content),
         )
         if not result.is_success:
             raise LLMGenerationError(f"生成结果不可用：{result.failure_reason()}")
@@ -150,6 +169,8 @@ class CloudChatClient:
             completion_tokens=completion_tokens,
             reasoning_tokens=reasoning_tokens,
             model=body.get("model") or self.model,
+            temperature=self.temperature,
+            seed=self.seed,
         ))
 
     # ---------------------------------------------------------------- 流式
@@ -220,6 +241,8 @@ class CloudChatClient:
             completion_tokens=completion_tokens,
             reasoning_tokens=reasoning_tokens,
             model=model,
+            temperature=self.temperature,
+            seed=self.seed,
         ))
 
     # ---------------------------------------------------------------- 探测
@@ -257,4 +280,6 @@ def get_cloud_client() -> CloudChatClient | None:
         model=settings.CLOUD_CHAT_MODEL,
         timeout=settings.LLM_TIMEOUT,
         max_tokens=settings.LLM_MAX_TOKENS,
+        temperature=settings.LLM_TEMPERATURE,
+        seed=settings.LLM_SEED,
     )
